@@ -858,18 +858,10 @@ img{max-width:100%;display:block}
 }
 
 /* Upload action buttons in compose */
-.compose-upload-btns{
-  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
-}
-.upload-btn{
-  display:flex;align-items:center;gap:4px;
-  padding:5px 10px;border-radius:50px;
-  background:var(--surface);color:var(--muted);
-  border:1.5px solid var(--border);
-  font-size:12px;font-weight:600;cursor:pointer;
-  transition:all .18s;
-}
-.upload-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+
+
+.upload-btn .ubicon{font-size:18px}
 
 /* Lightbox */
 #lightbox{
@@ -927,6 +919,138 @@ img{max-width:100%;display:block}
   display:flex;align-items:center;justify-content:center;
   font-size:18px;color:#fff;pointer-events:none;
 }
+
+
+/* ═══════════════════════════════════════
+   REACTIONS & COMMENTS UPGRADE
+═══════════════════════════════════════ */
+.react-wrap{position:relative;display:inline-flex;align-items:center}
+.react-picker{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:0;
+  background:var(--bg2);border:1.5px solid var(--border-hi);
+  border-radius:50px;padding:6px 10px;gap:2px;align-items:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.65),0 0 20px rgba(0,229,255,.12);
+  z-index:50;white-space:nowrap;
+  animation:popIn .18s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{
+  from{opacity:0;transform:scale(.65) translateY(10px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.react-wrap:hover .react-picker,.react-picker.pinned{display:flex}
+.react-opt{
+  font-size:24px;cursor:pointer;transition:transform .15s;
+  line-height:1;padding:3px;border-radius:50%;background:none;border:none;
+}
+.react-opt:hover{transform:scale(1.5) translateY(-5px)}
+.react-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.react-pill{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:3px 9px;border-radius:50px;font-size:12px;cursor:pointer;
+  border:1.5px solid var(--border);background:var(--surface);
+  transition:all .18s;user-select:none;
+}
+.react-pill:hover{border-color:var(--cyan);background:rgba(0,229,255,.07)}
+.react-pill.mine{border-color:var(--cyan);background:rgba(0,229,255,.12);color:var(--cyan);font-weight:700}
+.react-pill .re{font-size:15px}
+.react-pill .rc{font-size:11px;font-weight:700}
+.react-btn-main{
+  display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:50px;
+  font-size:13px;color:var(--muted);border:1.5px solid transparent;
+  transition:all .18s;cursor:pointer;background:transparent;font-family:var(--font);
+}
+.react-btn-main:hover{background:var(--surface);color:var(--white);border-color:var(--border)}
+.react-btn-main.reacted{color:var(--cyan);font-weight:700}
+/* Comment redesign */
+.cmt-area{margin-top:10px;border-top:1.5px solid var(--border);padding-top:10px}
+.cmt-composer{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px}
+.cmt-box-wrap{
+  flex:1;background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);overflow:hidden;transition:border-color .2s;
+}
+.cmt-box-wrap:focus-within{border-color:var(--cyan)}
+.cmt-ta{
+  width:100%;background:transparent;border:none;color:var(--white);
+  font-size:13px;padding:8px 12px;resize:none;min-height:38px;
+  max-height:100px;outline:none;font-family:var(--font);
+  overflow-y:auto;
+}
+.cmt-ta::placeholder{color:var(--muted)}
+.cmt-foot{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 8px;border-top:1px solid var(--border);
+}
+.cmt-img-btn{
+  font-size:16px;cursor:pointer;background:none;border:none;
+  color:var(--muted);transition:color .18s;padding:2px;
+}
+.cmt-img-btn:hover{color:var(--cyan)}
+.cmt-submit{
+  background:var(--grad-btn);color:#fff;border:none;border-radius:50px;
+  padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;
+  transition:opacity .18s;flex-shrink:0;font-family:var(--font);
+}
+.cmt-submit:hover{opacity:.88}
+.cmt-preview-row{display:flex;gap:5px;flex-wrap:wrap;padding:4px 8px 6px}
+.cmt-th{
+  position:relative;width:54px;height:54px;border-radius:6px;
+  overflow:hidden;border:1.5px solid var(--border);flex-shrink:0;
+}
+.cmt-th img,.cmt-th video{width:100%;height:100%;object-fit:cover}
+.cmt-th-rm{
+  position:absolute;top:1px;right:1px;width:14px;height:14px;
+  border-radius:50%;background:rgba(0,0,0,.8);color:#fff;
+  font-size:9px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:none;line-height:1;
+}
+.cmt-card{display:flex;gap:8px;margin-bottom:8px;animation:fadeSlide .25s ease}
+.cmt-bubble{
+  flex:1;min-width:0;background:var(--bg3);
+  border:1.5px solid var(--border);
+  border-radius:0 var(--r) var(--r) var(--r);padding:8px 12px;
+}
+.cmt-bhead{display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap}
+.cmt-bname{font-size:12px;font-weight:700;color:var(--cyan)}
+.cmt-btime{font-size:10px;color:var(--muted)}
+.cmt-bdel{
+  font-size:10px;color:var(--danger);background:none;border:none;
+  cursor:pointer;margin-left:auto;opacity:0;transition:opacity .18s;padding:1px 4px;
+}
+.cmt-card:hover .cmt-bdel{opacity:1}
+.cmt-btext{font-size:13px;color:#c4cef0;line-height:1.55;word-break:break-word}
+.cmt-bmedia{margin-top:6px;max-width:200px;cursor:pointer;border-radius:6px;overflow:hidden}
+.cmt-bmedia img{width:100%;display:block}
+/* Post media share toolbar */
+.post-share-toolbar{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 0 4px;border-bottom:1.5px solid var(--border);
+  margin-bottom:4px;flex-wrap:wrap;
+}
+.share-btn{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 12px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);font-size:12px;
+  font-weight:600;cursor:pointer;transition:all .18s;
+  font-family:var(--font);
+}
+.share-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+
+.upload-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:50px;
+  background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(123,47,255,.15));
+  color:var(--white);border:2px solid var(--cyan);
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:all .2s;user-select:none;
+}
+.upload-btn:hover{
+  background:linear-gradient(135deg,rgba(0,229,255,.3),rgba(123,47,255,.3));
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,229,255,.35);
+}
+.upload-btn .ubicon{font-size:18px;line-height:1}
 
 </style>
 </head>
@@ -1058,53 +1182,79 @@ img{max-width:100%;display:block}
       <div class="sec-hd" id="feed-title" data-en="Community Feed" data-bm="Suapan Komuniti"></div>
 
       <!-- Compose -->
-      <div class="card card-pad compose" id="compose-wrap">
-        <div class="compose-inner">
-          <div class="avatar av40" id="compose-av"></div>
-          <div class="compose-body">
-            <textarea class="compose-ta" id="compose-ta"
-              data-ph-en="Share a story, event, knowledge or advertisement with the Eastel community…"
-              data-ph-bm="Kongsi cerita, acara, ilmu atau iklan dengan komuniti Eastel…"
-              placeholder="Share a story, event, knowledge or advertisement with the Eastel community…"></textarea>
-            <!-- Ad extra fields (hidden unless ad selected) -->
-            <div id="ad-fields" class="hidden mt8" style="display:none">
-              <div class="frow mt8">
-                <div>
-                  <label class="flabel" data-en="Ad Title" data-bm="Tajuk Iklan"></label>
-                  <input type="text" id="ad-title" data-ph-en="e.g. House for Rent in KK" data-ph-bm="cth. Rumah Sewa di KK"/>
-                </div>
-                <div>
-                  <label class="flabel" data-en="Category" data-bm="Kategori"></label>
-                  <select id="ad-cat">
-                    <option value="property" data-en="Property" data-bm="Hartanah"></option>
-                    <option value="vehicle" data-en="Vehicle" data-bm="Kenderaan"></option>
-                    <option value="services" data-en="Services" data-bm="Perkhidmatan"></option>
-                    <option value="food" data-en="Food & Beverage" data-bm="Makanan & Minuman"></option>
-                    <option value="jobs" data-en="Jobs" data-bm="Pekerjaan"></option>
-                    <option value="electronics" data-en="Electronics" data-bm="Elektronik"></option>
-                    <option value="other" data-en="Other" data-bm="Lain-lain"></option>
-                  </select>
-                </div>
-              </div>
-              <div class="mt8">
-                <label class="flabel" data-en="Contact / Link (optional)" data-bm="Hubungi / Pautan (pilihan)"></label>
-                <input type="text" id="ad-contact" data-ph-en="Phone, WhatsApp or website link" data-ph-bm="Telefon, WhatsApp atau pautan laman web"/>
-              </div>
+      <div class="card compose" id="compose-wrap" style="padding:0;overflow:hidden;margin-bottom:16px">
+
+        <!-- Row 1: Avatar + Text box -->
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 14px 0">
+          <div class="avatar av40" id="compose-av" style="flex-shrink:0;width:40px;height:40px;font-size:15px"></div>
+          <textarea id="compose-ta" rows="3"
+            data-ph-en="What's on your mind? Share with the Eastel community…"
+            data-ph-bm="Apa yang anda fikirkan? Kongsikan dengan komuniti Eastel…"
+            placeholder="What's on your mind? Share with the Eastel community…"
+            style="flex:1;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;color:#eef2ff;font-size:14px;resize:none;min-height:76px;outline:none;font-family:inherit;transition:border-color .2s;width:100%;box-sizing:border-box"
+            onfocus="this.style.borderColor='#00e5ff'" onblur="this.style.borderColor='rgba(255,255,255,.12)'"></textarea>
+        </div>
+
+        <!-- Row 2: Ad fields (hidden unless ad type) -->
+        <div id="ad-fields" class="hidden" style="padding:0 14px">
+          <div class="frow mt8">
+            <div><label class="flabel" data-en="Ad Title" data-bm="Tajuk Iklan"></label><input type="text" id="ad-title" data-ph-en="e.g. House for Rent in KK" data-ph-bm="cth. Rumah Sewa di KK"/></div>
+            <div>
+              <label class="flabel" data-en="Category" data-bm="Kategori"></label>
+              <select id="ad-cat">
+                <option value="property">Property / Hartanah</option>
+                <option value="vehicle">Vehicle / Kenderaan</option>
+                <option value="services">Services / Perkhidmatan</option>
+                <option value="food">Food &amp; Beverage</option>
+                <option value="jobs">Jobs / Pekerjaan</option>
+                <option value="electronics">Electronics / Elektronik</option>
+                <option value="other">Other / Lain-lain</option>
+              </select>
             </div>
           </div>
+          <div class="mt8" style="padding-bottom:8px"><label class="flabel" data-en="Contact / Link" data-bm="Hubungi / Pautan"></label><input type="text" id="ad-contact" placeholder="Phone, WhatsApp or URL"/></div>
         </div>
-        <div class="compose-foot">
-          <div class="type-pills">
-            <button class="tpill sel" data-type="story" onclick="selType(this)">📖 <span data-en="Story" data-bm="Cerita"></span></button>
-            <button class="tpill" data-type="event" onclick="selType(this)">📅 <span data-en="Event" data-bm="Acara"></span></button>
-            <button class="tpill" data-type="knowledge" onclick="selType(this)">💡 <span data-en="Knowledge" data-bm="Ilmu"></span></button>
-            <button class="tpill" data-type="info" onclick="selType(this)">📢 <span data-en="Info" data-bm="Maklumat"></span></button>
-            <button class="tpill" data-type="ad" onclick="selType(this)">📣 <span data-en="Ad" data-bm="Iklan"></span></button>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="submitPost()" data-en="Share →" data-bm="Kongsi →"></button>
-        </div>
-      </div>
 
+        <!-- Row 3: Media previews (shown when files selected) -->
+        <div id="compose-media-row" style="display:flex;gap:8px;flex-wrap:wrap;padding:8px 14px 0;min-height:0"></div>
+        <!-- Upload progress bar -->
+        <div id="compose-upload-prog" style="display:none;padding:4px 14px">
+          <div style="height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden">
+            <div id="compose-upload-bar" style="height:100%;background:linear-gradient(90deg,#00e5ff,#7b2fff);border-radius:4px;width:0%;transition:width .3s"></div>
+          </div>
+          <div id="compose-upload-label" style="font-size:11px;color:#00e5ff;margin-top:3px">Uploading…</div>
+        </div>
+
+        <!-- Row 4: 📸 Photo & 🎬 Video upload buttons — BIG and obvious -->
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1.5px solid rgba(255,255,255,.08);border-bottom:1.5px solid rgba(255,255,255,.08);flex-wrap:wrap;background:rgba(0,0,0,.2)">
+          <label class="upload-btn" id="photo-btn" title="Attach photos to your post">
+            <span class="ubicon">🖼️</span>
+            <span data-en="Add Photo" data-bm="Tambah Foto">Add Photo</span>
+            <input type="file" id="compose-photo-in" accept="image/jpeg,image/png,image/gif,image/webp" multiple style="display:none" onchange="attachMedia(this,'image')"/>
+          </label>
+          <label class="upload-btn" id="video-btn" style="border-color:#7b2fff" title="Attach a short video to your post">
+            <span class="ubicon">🎬</span>
+            <span data-en="Add Video" data-bm="Tambah Video">Add Video</span>
+            <input type="file" id="compose-video-in" accept="video/mp4,video/webm,video/quicktime" style="display:none" onchange="attachMedia(this,'video')"/>
+          </label>
+          <span style="color:rgba(255,255,255,.35);font-size:11px" data-en="Up to 4 files · Stored securely in Supabase" data-bm="Sehingga 4 fail · Disimpan selamat di Supabase">Up to 4 files · Stored in Supabase</span>
+        </div>
+
+        <!-- Row 5: Post type selector + Share button -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;flex-wrap:wrap">
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button class="tpill sel" data-type="story"     onclick="selType(this)">📖 <span data-en="Story"     data-bm="Cerita"></span></button>
+            <button class="tpill"     data-type="event"     onclick="selType(this)">📅 <span data-en="Event"     data-bm="Acara"></span></button>
+            <button class="tpill"     data-type="knowledge" onclick="selType(this)">💡 <span data-en="Knowledge" data-bm="Ilmu"></span></button>
+            <button class="tpill"     data-type="info"      onclick="selType(this)">📢 <span data-en="Info"      data-bm="Maklumat"></span></button>
+            <button class="tpill"     data-type="ad"        onclick="selType(this)">📣 <span data-en="Ad"        data-bm="Iklan"></span></button>
+          </div>
+          <button onclick="submitPost()" style="background:linear-gradient(135deg,#00e5ff,#7b2fff);color:#fff;border:none;border-radius:50px;padding:10px 24px;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s;white-space:nowrap" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+            📤 <span data-en="Share Post" data-bm="Kongsi">Share Post</span>
+          </button>
+        </div>
+
+      </div>
       <!-- Tabs -->
       <div class="tabs">
         <button class="tab on" data-f="all" onclick="tabClick(this)" data-en="All" data-bm="Semua"></button>
@@ -1388,6 +1538,8 @@ img{max-width:100%;display:block}
 /* ─────────────────────────────────────
    CONFIG  — replace with your Supabase
 ───────────────────────────────────── */
+/* SQL: ALTER TABLE posts ADD COLUMN IF NOT EXISTS reactions_data text;
+   SQL: ALTER TABLE comments ADD COLUMN IF NOT EXISTS photo_url text; */
 const SUPA_URL = 'https://tzcelpamcfyexypiwfxx.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6Y2VscGFtY2Z5ZXh5cGl3Znh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2Njg4MjYsImV4cCI6MjA5ODI0NDgyNn0.uaU-tVpN1J76Y6ewzMpizbT2DuAG7I-b5fmlA9sJdv0';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -1466,7 +1618,7 @@ function applyLang(){
 /* ─────────────────────────────────────
    STATE
 ───────────────────────────────────── */
-let user=null, profile=null;
+let user=null, profile=null, currentProfile=null;
 let curFilter='all', curPostType='story';
 let postsData=[], postsPage=0;
 const PAGE=12;
@@ -1520,8 +1672,10 @@ async function doSignOut(){
 
 async function onLogin(u){
   user=u;
-  const{data:p}=await sb.from('profiles').select('*').eq('id',u.id).single();
+  const{data:p}=await sb.from('profiles').select('*,avatar_url,cover_url').eq('id',u.id).single();
   profile=p||{full_name:u.user_metadata?.full_name||u.email,state:'',district:'',bio:''};
+  currentProfile=profile;
+  setTimeout(applyProfilePhotos, 100);
   // Update UI
   document.getElementById('hero').style.display='none';
   document.getElementById('layout').classList.add('open');
@@ -1542,7 +1696,7 @@ async function onLogin(u){
 }
 
 function onLogout(){
-  user=null;profile=null;
+  user=null;profile=null;currentProfile=null;
   document.getElementById('hero').style.display='';
   document.getElementById('layout').classList.remove('open');
   document.getElementById('nav-auth').classList.remove('hidden');
@@ -1559,7 +1713,7 @@ async function loadPosts(reset=true){
   if(reset) wrap.innerHTML='<div class="spin-wrap"><div class="spin"></div> '+(lang==='en'?'Loading…':'Memuatkan…')+'</div>';
 
   let q=sb.from('posts')
-    .select('*,profiles(full_name,state,district)')
+    .select('*,profiles(full_name,state,district,avatar_url)')
     .order('created_at',{ascending:false})
     .range(postsPage*PAGE, postsPage*PAGE+PAGE-1);
 
@@ -1588,6 +1742,9 @@ function renderPost(p){
   const nm=pr.full_name||'Eastel User';
   const loc=[pr.district,pr.state].filter(Boolean).join(', ')||'Malaysia';
   const ini=initials(nm);
+  const avHtml = pr.avatar_url
+    ? `<img src="${esc(pr.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`
+    : ini;
   const tagMap={story:'pt-story',event:'pt-event',knowledge:'pt-knowledge',info:'pt-info'};
   const labelEN={story:'📖 Story',event:'📅 Event',knowledge:'💡 Knowledge',info:'📢 Info'};
   const labelBM={story:'📖 Cerita',event:'📅 Acara',knowledge:'💡 Ilmu',info:'📢 Maklumat'};
@@ -1595,31 +1752,71 @@ function renderPost(p){
   const lbl=lang==='en'?(labelEN[p.post_type]||p.post_type):(labelBM[p.post_type]||p.post_type);
   const isOwn=user&&p.user_id===user.id;
   const likes=p.likes_count||0;
+  // Build reaction summary from reactions_data JSON field
+  const reactData = p.reactions_data ? safeParseJSON(p.reactions_data) : {};
+  const myReact = user ? (reactData[user.id]||null) : null;
+  const reactSummary = buildReactSummary(reactData, p.id);
+  const myIni = currentProfile ? initials(currentProfile.full_name||'U') : 'U';
+  const myAvHtml = currentProfile?.avatar_url
+    ? `<img src="${esc(currentProfile.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="me"/>`
+    : myIni;
   return `
   <div class="card card-pad post" id="post-${p.id}">
     <div class="post-head">
-      <div class="avatar av40">${ini}</div>
+      <div class="avatar av40">${avHtml}</div>
       <div class="post-meta">
         <div class="post-name">${esc(nm)}</div>
         <div class="post-loc">📍 ${esc(loc)}</div>
         <div class="post-when">${timeAgo(p.created_at)}</div>
       </div>
       <span class="ptype-tag ${tag}">${lbl}</span>
+      ${isOwn ? `<button class="act-btn btn-danger" style="margin-left:auto;padding:4px 10px;font-size:12px" onclick="delPost('${p.id}')">🗑️ ${lang==='en'?'Delete':'Padam'}</button>` : ''}
     </div>
-    ${p.title?`<div class="post-title">${esc(p.title)}</div>`:''}
+    ${p.title ? `<div class="post-title">${esc(p.title)}</div>` : ''}
     <div class="post-body">${esc(p.content)}</div>
+    <!-- Reaction summary pills -->
+    ${reactSummary ? `<div class="react-bar" id="rbar-${p.id}">${reactSummary}</div>` : `<div class="react-bar" id="rbar-${p.id}"></div>`}
+    <!-- Action bar -->
     <div class="post-actions">
-      <button class="act-btn" onclick="doLike('${p.id}')">❤️ <span class="cn" id="lk-${p.id}">${likes}</span></button>
-      <button class="act-btn" onclick="toggleCmt('${p.id}')">${lang==='en'?'💬 Comment':'💬 Komen'}</button>
-      <button class="act-btn" onclick="sharePost('${p.id}')">🔗 ${lang==='en'?'Share':'Kongsi'}</button>
-      ${isOwn?`<button class="act-btn btn-danger ml-auto" onclick="delPost('${p.id}')">🗑️</button>`:''}
-    </div>
-    <div class="cmt-box hidden" id="cmts-${p.id}">
-      <div class="cmt-in-row">
-        <div class="avatar av32">${ini}</div>
-        <input class="cmt-in" id="ci-${p.id}" placeholder="${lang==='en'?'Write a comment…':'Tulis komen…'}" onkeydown="if(event.key==='Enter')sendCmt('${p.id}')"/>
-        <button class="cmt-send" onclick="sendCmt('${p.id}')">↑</button>
+      <!-- Reaction button with picker -->
+      <div class="react-wrap">
+        <button class="react-btn-main ${myReact ? 'reacted' : ''}" id="rbtn-${p.id}">
+          ${myReact || '👍'} ${lang==='en'?'React':'Reaksi'}
+        </button>
+        <div class="react-picker" id="rpick-${p.id}">
+          <button class="react-opt" title="Like"     onclick="doReact('${p.id}','👍')">👍</button>
+          <button class="react-opt" title="Love"     onclick="doReact('${p.id}','❤️')">❤️</button>
+          <button class="react-opt" title="Haha"     onclick="doReact('${p.id}','😂')">😂</button>
+          <button class="react-opt" title="Wow"      onclick="doReact('${p.id}','😮')">😮</button>
+          <button class="react-opt" title="Sad"      onclick="doReact('${p.id}','😢')">😢</button>
+          <button class="react-opt" title="Angry"    onclick="doReact('${p.id}','😡')">😡</button>
+        </div>
       </div>
+      <button class="act-btn" onclick="toggleCmt('${p.id}')">💬 ${lang==='en'?'Comment':'Komen'}</button>
+      <button class="act-btn" onclick="sharePost('${p.id}')">🔗 ${lang==='en'?'Share':'Kongsi'}</button>
+    </div>
+    <!-- Comment section -->
+    <div class="cmt-area hidden" id="cmts-${p.id}">
+      <!-- Composer -->
+      <div class="cmt-composer">
+        <div class="avatar av32" style="flex-shrink:0">${myAvHtml}</div>
+        <div style="flex:1;min-width:0">
+          <div class="cmt-box-wrap">
+            <textarea class="cmt-ta" id="cta-${p.id}" rows="1"
+              placeholder="${lang==='en'?'Write a comment…':'Tulis komen…'}"
+              oninput="autoGrow(this)"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitCmt('${p.id}')}"></textarea>
+            <div class="cmt-foot">
+              <label class="cmt-img-btn" title="${lang==='en'?'Add photo':'Tambah foto'}">
+                🖼️ <input type="file" accept="image/*,video/*" style="display:none" onchange="attachCmtMedia('${p.id}',this)"/>
+              </label>
+              <span class="cmt-preview-row" id="cpr-${p.id}"></span>
+              <button class="cmt-submit" onclick="submitCmt('${p.id}')">${lang==='en'?'Send':'Hantar'}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Comments list -->
       <div id="cl-${p.id}"></div>
     </div>
   </div>`;
@@ -1730,13 +1927,140 @@ function setFilter(f){
 /* ─────────────────────────────────────
    LIKES
 ───────────────────────────────────── */
-async function doLike(id){
-  const{data:p}=await sb.from('posts').select('likes_count').eq('id',id).single();
-  const n=(p?.likes_count||0)+1;
-  await sb.from('posts').update({likes_count:n}).eq('id',id);
-  const el=document.getElementById('lk-'+id);
-  if(el) el.textContent=n;
+
+/* ─────────────────────────────────────
+   REACTIONS SYSTEM
+───────────────────────────────────── */
+const REACT_EMOJIS = ['👍','❤️','😂','😮','😢','😡'];
+
+function safeParseJSON(s){
+  try{ return JSON.parse(s); } catch{ return {}; }
 }
+
+function buildReactSummary(reactData, postId){
+  if(!reactData || !Object.keys(reactData).length) return '';
+  const counts = {};
+  Object.values(reactData).forEach(e => { counts[e] = (counts[e]||0)+1; });
+  const myReact = user ? (reactData[user.id]||null) : null;
+  return Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([emoji, cnt]) => {
+      const isMine = emoji === myReact;
+      return `<span class="react-pill ${isMine?'mine':''}" onclick="doReact('${postId}','${emoji}')" title="${cnt} ${lang==='en'?'reaction':'reaksi'}">
+        <span class="re">${emoji}</span><span class="rc">${cnt}</span>
+      </span>`;
+    }).join('');
+}
+
+async function doReact(postId, emoji){
+  if(!user){ toast(lang==='en'?'Please sign in to react.':'Sila log masuk untuk bereaksi.','err'); return; }
+  // Get current reactions_data
+  const { data: post } = await sb.from('posts').select('reactions_data').eq('id',postId).single();
+  let reactData = safeParseJSON(post?.reactions_data||'{}');
+  const prev = reactData[user.id];
+  if(prev === emoji){
+    // Toggle off — remove reaction
+    delete reactData[user.id];
+  } else {
+    reactData[user.id] = emoji;
+  }
+  const { error } = await sb.from('posts').update({ reactions_data: JSON.stringify(reactData) }).eq('id',postId);
+  if(error){ toast('Error: '+error.message,'err'); return; }
+  // Update UI without full reload
+  updateReactUI(postId, reactData);
+  // Close picker
+  const picker = document.getElementById('rpick-'+postId);
+  if(picker) picker.classList.remove('pinned');
+}
+
+function updateReactUI(postId, reactData){
+  const myReact = user ? (reactData[user.id]||null) : null;
+  // Update react button
+  const rbtn = document.getElementById('rbtn-'+postId);
+  if(rbtn){
+    rbtn.textContent = (myReact||'👍') + ' ' + (lang==='en'?'React':'Reaksi');
+    rbtn.classList.toggle('reacted', !!myReact);
+  }
+  // Update reaction bar
+  const rbar = document.getElementById('rbar-'+postId);
+  if(rbar){
+    const summary = buildReactSummary(reactData);
+    rbar.innerHTML = summary;
+  }
+}
+
+/* ─ Comment media attachment ─ */
+const cmtMediaFiles = {}; // postId -> [{file, url, type}]
+
+function attachCmtMedia(postId, input){
+  if(!cmtMediaFiles[postId]) cmtMediaFiles[postId] = [];
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    if(cmtMediaFiles[postId].length >= 2) return;
+    const url = URL.createObjectURL(file);
+    const type = file.type.startsWith('video') ? 'video' : 'image';
+    cmtMediaFiles[postId].push({file, url, type});
+  });
+  renderCmtPreview(postId);
+  input.value = '';
+}
+
+function renderCmtPreview(postId){
+  const row = document.getElementById('cpr-'+postId);
+  if(!row) return;
+  const files = cmtMediaFiles[postId] || [];
+  row.innerHTML = files.map((m,i) => `
+    <div class="cmt-th">
+      ${m.type==='image'
+        ? `<img src="${m.url}" alt=""/>`
+        : `<video src="${m.url}"></video>`}
+      <button class="cmt-th-rm" onclick="removeCmtFile('${postId}',${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeCmtFile(postId, idx){
+  if(!cmtMediaFiles[postId]) return;
+  URL.revokeObjectURL(cmtMediaFiles[postId][idx].url);
+  cmtMediaFiles[postId].splice(idx, 1);
+  renderCmtPreview(postId);
+}
+
+async function submitCmt(postId){
+  const ta = document.getElementById('cta-'+postId);
+  const content = ta ? ta.value.trim() : '';
+  const files = cmtMediaFiles[postId] || [];
+  if(!content && !files.length){ ta && ta.focus(); return; }
+  if(!user){ toast(lang==='en'?'Please sign in.':'Sila log masuk.','err'); return; }
+
+  let photo_url = null;
+  if(files.length > 0){
+    try{ photo_url = await uploadFile(files[0].file, 'comments'); }
+    catch(e){ toast('Upload failed: '+e.message,'err'); return; }
+  }
+
+  const { error } = await sb.from('comments').insert({
+    post_id: postId, user_id: user.id,
+    content: content||'', photo_url,
+    created_at: new Date().toISOString()
+  });
+  if(error){ toast('Error: '+error.message,'err'); return; }
+
+  if(ta) ta.value = '';
+  // Clear media
+  (cmtMediaFiles[postId]||[]).forEach(m=>URL.revokeObjectURL(m.url));
+  cmtMediaFiles[postId] = [];
+  renderCmtPreview(postId);
+  loadCmts(postId);
+}
+
+function autoGrow(el){
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+/* Override doLike to use new doReact */
+async function doLike(id){ doReact(id, '❤️'); }
+
 
 /* ─────────────────────────────────────
    COMMENTS
@@ -1870,7 +2194,7 @@ async function loadProfileView(){
   const{count:ac}=await sb.from('posts').select('*',{count:'exact',head:true}).eq('user_id',user.id).eq('post_type','ad');
   document.getElementById('prof-posts').textContent=pc||0;
   document.getElementById('prof-ads').textContent=ac||0;
-  const{data}=await sb.from('posts').select('*,profiles(full_name,state,district)').eq('user_id',user.id).order('created_at',{ascending:false});
+  const{data}=await sb.from('posts').select('*,profiles(full_name,state,district,avatar_url)').eq('user_id',user.id).order('created_at',{ascending:false});
   const wrap=document.getElementById('prof-posts-wrap');
   if(!data||!data.length){wrap.innerHTML=`<div class="empty"><p>${lang==='en'?'No posts yet.':'Tiada catatan lagi.'}</p></div>`;return;}
   wrap.innerHTML=data.map(p=>p.post_type==='ad'?renderAd(p):renderPost(p)).join('');
@@ -2342,27 +2666,47 @@ let pendingMedia = []; // [{file, type, previewUrl}]
 /* ── Attach media to compose ── */
 function attachMedia(input, type){
   const files = Array.from(input.files);
+  if(!files.length) return;
+  const maxFiles = 4;
+  const maxImgSize = 10 * 1024 * 1024;  // 10MB
+  const maxVidSize = 50 * 1024 * 1024;  // 50MB
   files.forEach(file => {
-    if(pendingMedia.length >= 4){ toast(lang==='en'?'Max 4 files per post.':'Maksimum 4 fail setiap catatan.','err'); return; }
+    if(pendingMedia.length >= maxFiles){
+      toast(lang==='en'?'Maximum 4 files per post.':'Maksimum 4 fail setiap catatan.','err');
+      return;
+    }
+    const maxSize = type==='video' ? maxVidSize : maxImgSize;
+    if(file.size > maxSize){
+      toast(lang==='en'?`${file.name} is too large (max ${type==='video'?'50':'10'}MB)`:
+        `${file.name} terlalu besar.`,'err');
+      return;
+    }
     const url = URL.createObjectURL(file);
     pendingMedia.push({file, type, previewUrl: url});
-    renderComposeMedia();
+    toast(lang==='en'?`${file.name} added — click "Share Post" to upload to Supabase`:
+      `${file.name} ditambah — klik "Kongsi" untuk muat naik`,'ok');
   });
-  input.value = ''; // reset so same file can be re-added
+  input.value = '';
+  renderComposeMedia();
 }
 
 function renderComposeMedia(){
   const row = document.getElementById('compose-media-row');
   if(!row) return;
+  if(!pendingMedia.length){
+    row.innerHTML = '';
+    row.style.display = 'none';
+    return;
+  }
+  row.style.display = 'flex';
   row.innerHTML = pendingMedia.map((m,i) => `
-    <div class="compose-thumb">
+    <div style="position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:2px solid #00e5ff;flex-shrink:0">
       ${m.type==='image'
-        ? `<img src="${m.previewUrl}" alt=""/>`
-        : `<video src="${m.previewUrl}" style="width:100%;height:100%;object-fit:cover"></video>`
-      }
-      <div class="compose-thumb-rm" onclick="removeMedia(${i})">✕</div>
-    </div>
-  `).join('');
+        ? `<img src="${m.previewUrl}" alt="" style="width:100%;height:100%;object-fit:cover"/>`
+        : `<video src="${m.previewUrl}" style="width:100%;height:100%;object-fit:cover" muted></video>`}
+      <button onclick="removeMedia(${i})" style="position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.85);color:#fff;font-size:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);text-align:center;font-size:9px;color:#fff;padding:2px">${m.type==='video'?'🎬 video':'🖼️ photo'}</div>
+    </div>`).join('');
 }
 
 function removeMedia(idx){
@@ -2387,36 +2731,41 @@ async function uploadFile(file, folder, onProgress){
 /* ── Submit post with media ── */
 const _origSubmitPost = submitPost;
 submitPost = async function(){
-  const content = v('compose-ta');
+  const content = document.getElementById('compose-ta')?.value?.trim();
   if(!content && pendingMedia.length===0){
-    toast(lang==='en'?'Please write something or attach a photo/video.':'Sila tulis sesuatu atau lampirkan foto/video.','err');
+    toast(lang==='en'?'Please write something or add a photo/video.':'Sila tulis sesuatu atau tambah foto/video.','err');
     return;
   }
   if(!user){ toast(lang==='en'?'Please sign in first.':'Sila log masuk dahulu.','err'); return; }
 
-  // Upload media first
+  // Show progress
+  const prog = document.getElementById('compose-upload-prog');
+  const bar = document.getElementById('compose-upload-bar');
+  const lbl = document.getElementById('compose-upload-label');
   let mediaUrls = [];
-  if(pendingMedia.length > 0){
-    const prog = document.getElementById('compose-upload-prog');
-    const bar  = document.getElementById('compose-upload-bar');
-    if(prog){ prog.classList.remove('hidden'); bar.style.width='0%'; }
 
-    try {
+  if(pendingMedia.length > 0){
+    if(prog){ prog.style.display='block'; }
+    if(lbl) lbl.textContent = lang==='en'?'Uploading media to Supabase…':'Memuat naik media ke Supabase…';
+    try{
       for(let i=0; i<pendingMedia.length; i++){
         const m = pendingMedia[i];
+        if(lbl) lbl.textContent = `${lang==='en'?'Uploading':'Memuat naik'} ${i+1}/${pendingMedia.length}: ${m.file.name}`;
+        if(bar) bar.style.width = Math.round(i/pendingMedia.length*80)+'%';
         const folder = m.type==='image'?'images':'videos';
         const url = await uploadFile(m.file, folder);
-        mediaUrls.push({url, type:m.type});
-        if(bar) bar.style.width = Math.round((i+1)/pendingMedia.length*100)+'%';
+        mediaUrls.push({url, type: m.type});
       }
+      if(bar) bar.style.width = '100%';
     } catch(err){
-      toast('Upload error: '+err.message,'err');
-      if(prog) prog.classList.add('hidden');
+      toast('Upload failed: '+err.message,'err');
+      if(prog) prog.style.display='none';
       return;
     }
-    if(prog) prog.classList.add('hidden');
+    setTimeout(()=>{ if(prog) prog.style.display='none'; }, 600);
   }
 
+  // Build post row
   const row = {
     user_id: user.id,
     content: content || '',
@@ -2427,22 +2776,32 @@ submitPost = async function(){
   };
 
   if(curPostType==='ad'){
-    const adTitle=v('ad-title'), adCat=document.getElementById('ad-cat').value, adContact=v('ad-contact');
+    const adTitle = document.getElementById('ad-title')?.value?.trim();
+    const adCat = document.getElementById('ad-cat')?.value;
+    const adContact = document.getElementById('ad-contact')?.value?.trim();
     if(!adTitle){ toast(lang==='en'?'Please enter an ad title.':'Sila masukkan tajuk iklan.','err'); return; }
-    row.title=adTitle; row.ad_category=adCat; row.ad_contact=adContact;
+    row.title = adTitle;
+    row.ad_category = adCat;
+    row.ad_contact = adContact;
   }
 
   const {error} = await sb.from('posts').insert(row);
   if(error){ toast('Error: '+error.message,'err'); return; }
 
-  // Reset
-  document.getElementById('compose-ta').value='';
-  document.getElementById('ad-title') && (document.getElementById('ad-title').value='');
-  document.getElementById('ad-contact') && (document.getElementById('ad-contact').value='');
-  pendingMedia.forEach(m=>URL.revokeObjectURL(m.previewUrl));
-  pendingMedia=[];
+  // Reset compose
+  const ta = document.getElementById('compose-ta');
+  if(ta) ta.value = '';
+  const adT = document.getElementById('ad-title');
+  if(adT) adT.value = '';
+  const adC = document.getElementById('ad-contact');
+  if(adC) adC.value = '';
+
+  // Release object URLs
+  pendingMedia.forEach(m => URL.revokeObjectURL(m.previewUrl));
+  pendingMedia = [];
   renderComposeMedia();
-  toast(lang==='en'?'Shared! 🚀':'Dikongsi! 🚀','ok');
+
+  toast(lang==='en'?'🚀 Post shared successfully!':'🚀 Catatan dikongsi!','ok');
   loadPosts(true);
 };
 
@@ -2450,21 +2809,27 @@ submitPost = async function(){
 function renderMediaGrid(mediaJson){
   if(!mediaJson) return '';
   let items;
-  try { items = JSON.parse(mediaJson); } catch{ return ''; }
+  try{ items = JSON.parse(mediaJson); } catch{ return ''; }
   if(!items || !items.length) return '';
   const n = Math.min(items.length, 4);
-  const cls = 'n'+n;
+  const gridStyle = n===1
+    ? 'display:block'
+    : `display:grid;grid-template-columns:repeat(${Math.min(n,2)},1fr);gap:3px`;
   const cells = items.slice(0,4).map((m,i) => {
+    const extra = n===3 && i===0 ? 'grid-column:1/-1' : '';
     if(m.type==='video'){
-      return `<div class="media-video-wrap">
-        <video src="${esc(m.url)}" style="width:100%;max-height:300px;object-fit:cover;border-radius:4px;cursor:pointer"
-          onclick="openLightboxVideo('${esc(m.url)}')" preload="metadata"></video>
-        <div class="media-play-icon">▶</div>
+      return `<div style="${extra};position:relative;border-radius:6px;overflow:hidden;cursor:pointer" onclick="openLightboxVideo('${esc(m.url)}')">
+        <video src="${esc(m.url)}" style="width:100%;max-height:280px;object-fit:cover;display:block" preload="metadata" muted></video>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25)">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff">▶</div>
+        </div>
       </div>`;
     }
-    return `<img src="${esc(m.url)}" alt="post image" loading="lazy" onclick="openLightbox('${esc(m.url)}')"/>`;
+    return `<div style="${extra};border-radius:6px;overflow:hidden;cursor:pointer" onclick="openLightbox('${esc(m.url)}')">
+      <img src="${esc(m.url)}" alt="post media" loading="lazy" style="width:100%;max-height:280px;object-fit:cover;display:block" onerror="this.parentElement.style.display='none'"/>
+    </div>`;
   }).join('');
-  return `<div class="post-media-grid ${cls}">${cells}</div>`;
+  return `<div style="${gridStyle};border-radius:8px;overflow:hidden;margin-bottom:10px">${cells}</div>`;
 }
 
 /* ── Patch renderPost to include media ── */
@@ -2566,30 +2931,37 @@ function hideProfileUploadProgress(){
 }
 
 function applyProfilePhotos(){
-  // Banner
-  const bannerImg = document.getElementById('prof-banner-img');
-  if(bannerImg && currentProfile?.cover_url){
-    bannerImg.src = currentProfile.cover_url;
-    bannerImg.style.display = '';
-  }
-  // Avatar
+  const prof = currentProfile || profile;
+  if(!prof) return;
+  // Nav avatar
+  const navAv = document.getElementById('nav-av');
+  const compAv = document.getElementById('compose-av');
   const profAv = document.getElementById('prof-av');
-  if(profAv){
-    if(currentProfile?.avatar_url){
-      profAv.innerHTML = `<img src="${currentProfile.avatar_url}" class="prof-av-img" alt="avatar"/>`;
+  if(prof.avatar_url){
+    const imgHtml = `<img src="${prof.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
+    if(navAv) navAv.innerHTML = imgHtml;
+    if(compAv) compAv.innerHTML = imgHtml;
+    if(profAv) profAv.innerHTML = imgHtml;
+  } else {
+    const ini = initials(prof.full_name||'U');
+    if(navAv) navAv.textContent = ini;
+    if(compAv) compAv.textContent = ini;
+    if(profAv) profAv.textContent = ini;
+  }
+  // Cover photo
+  const bannerImg = document.getElementById('prof-banner-img');
+  if(bannerImg){
+    if(prof.cover_url){
+      bannerImg.src = prof.cover_url;
+      bannerImg.style.display = '';
     } else {
-      profAv.innerHTML = initials(currentProfile?.full_name||'U');
+      bannerImg.style.display = 'none';
     }
   }
 }
 
 function applyNavAvatar(){
-  const navAv = document.getElementById('nav-av');
-  const compAv = document.getElementById('compose-av');
-  if(currentProfile?.avatar_url){
-    if(navAv) navAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
-    if(compAv) compAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
-  }
+  applyProfilePhotos();
 }
 
 /* ── Edit Profile ── */
@@ -2688,48 +3060,46 @@ function removeCmtImg(postId, url){
 /* ── Patch loadCmts to show comment photos ── */
 const _origLoadCmts = loadCmts;
 loadCmts = async function(id){
-  const {data} = await sb.from('comments')
+  const { data } = await sb.from('comments')
     .select('*,profiles(full_name,avatar_url)')
-    .eq('post_id',id)
-    .order('created_at',{ascending:true});
-  const cl = document.getElementById('cl-'+id); if(!cl) return;
-  if(!data||!data.length){
-    cl.innerHTML=`<p class="text-muted text-sm" style="padding:6px 0">${lang==='en'?'No comments yet.':'Tiada komen lagi.'}</p>`;
+    .eq('post_id', id)
+    .order('created_at', {ascending:true});
+  const cl = document.getElementById('cl-'+id);
+  if(!cl) return;
+  if(!data || !data.length){
+    cl.innerHTML = `<p class="text-muted text-sm" style="padding:6px 0;font-size:12px">${lang==='en'?'No comments yet. Be the first!':'Tiada komen lagi. Jadilah yang pertama!'}</p>`;
     return;
   }
-  const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
-  cl.innerHTML = data.map(c=>{
+  cl.innerHTML = data.map(c => {
     const avHtml = c.profiles?.avatar_url
       ? `<img src="${esc(c.profiles.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`
       : initials(c.profiles?.full_name||'U');
-    return `<div class="cmt-item">
-      <div class="avatar av32">${avHtml}</div>
-      <div style="flex:1;min-width:0">
-        <span class="cmt-who">${esc(c.profiles?.full_name||'User')}</span>
-        <span class="cmt-when">${timeAgo(c.created_at)}</span>
-        ${c.content ? `<div class="cmt-txt">${esc(c.content)}</div>` : ''}
-        ${c.photo_url ? `<div class="cmt-media" onclick="openLightbox('${esc(c.photo_url)}')"><img src="${esc(c.photo_url)}" alt="comment photo"/></div>` : ''}
+    const isOwnCmt = user && c.user_id === user.id;
+    return `<div class="cmt-card" id="cmt-${c.id}">
+      <div class="avatar av32" style="flex-shrink:0">${avHtml}</div>
+      <div class="cmt-bubble">
+        <div class="cmt-bhead">
+          <span class="cmt-bname">${esc(c.profiles?.full_name||'User')}</span>
+          <span class="cmt-btime">${timeAgo(c.created_at)}</span>
+          ${isOwnCmt ? `<button class="cmt-bdel" onclick="deleteCmt('${c.id}','${id}')" title="${lang==='en'?'Delete':'Padam'}">🗑️</button>` : ''}
+        </div>
+        ${c.content ? `<div class="cmt-btext">${esc(c.content)}</div>` : ''}
+        ${c.photo_url ? `<div class="cmt-bmedia" onclick="openLightbox('${esc(c.photo_url)}')"><img src="${esc(c.photo_url)}" alt="comment photo" loading="lazy"/></div>` : ''}
       </div>
     </div>`;
   }).join('');
-  // Re-render comment input with photo button
-  const inputRow = document.querySelector(`#cmts-${id} .cmt-in-row`);
-  if(inputRow){
-    inputRow.outerHTML = buildCmtRow(id, ini);
-  }
 };
 
 /* ── Patch toggleComments to use new buildCmtRow ── */
 const _origToggleCmt = toggleCmt;
 toggleCmt = function(id){
   const el = document.getElementById('cmts-'+id);
+  if(!el) return;
   if(el.classList.contains('hidden')){
     el.classList.remove('hidden');
-    // Rebuild with photo button
-    const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
-    const inputRow = el.querySelector('.cmt-in-row');
-    if(inputRow) inputRow.outerHTML = buildCmtRow(id, ini);
     loadCmts(id);
+    // Focus the textarea
+    setTimeout(()=>{ const ta=document.getElementById('cta-'+id); if(ta) ta.focus(); },100);
   } else {
     el.classList.add('hidden');
   }
@@ -2752,6 +3122,16 @@ loadProfileView = async function(){
   await _origLoadProfileView();
   applyProfilePhotos();
 };
+
+
+async function deleteCmt(cmtId, postId){
+  if(!confirm(lang==='en'?'Delete this comment?':'Padam komen ini?')) return;
+  const { error } = await sb.from('comments').delete().eq('id', cmtId);
+  if(error){ toast('Error: '+error.message,'err'); return; }
+  const el = document.getElementById('cmt-'+cmtId);
+  if(el) el.remove();
+  toast(lang==='en'?'Comment deleted.':'Komen dipadam.','ok');
+}
 
 /* ─────────────────────────────────────
    BOOT
