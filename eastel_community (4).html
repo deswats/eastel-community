@@ -1,0 +1,2941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#06060f"/>
+<title>Eastel Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root{
+  --bg:       #06060f;
+  --bg2:      #0c0c1e;
+  --bg3:      #11112a;
+  --surface:  #161634;
+  --surface2: #1c1c44;
+  --border:   rgba(100,120,255,0.16);
+  --border-hi:rgba(0,229,255,0.28);
+  --cyan:     #00e5ff;
+  --cyan2:    #00bcd4;
+  --purple:   #7b2fff;
+  --purple2:  #5b0fd0;
+  --violet:   #d400ff;
+  --white:    #eef2ff;
+  --muted:    #7880aa;
+  --danger:   #ff4466;
+  --success:  #00e5a0;
+  --warn:     #ffcc44;
+  --grad:     linear-gradient(135deg,#00e5ff 0%,#7b2fff 50%,#d400ff 100%);
+  --grad90:   linear-gradient(90deg,#00e5ff,#7b2fff);
+  --grad-btn: linear-gradient(135deg,#00c8e8,#6b1fee,#c000ee);
+  --r:        12px;
+  --rsm:      8px;
+  --nav-h:    58px;
+  --shadow:   0 8px 40px rgba(0,0,0,0.6);
+  --glow-c:   0 0 24px rgba(0,229,255,0.25);
+  --glow-p:   0 0 24px rgba(123,47,255,0.3);
+  --font:     'Inter',system-ui,sans-serif;
+}
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:var(--font);font-size:15px;line-height:1.6;
+  background:var(--bg);color:var(--white);min-height:100vh;
+  overflow-x:hidden;
+}
+a{color:var(--cyan);text-decoration:none}
+a:hover{opacity:.8}
+button{cursor:pointer;border:none;background:none;font-family:var(--font)}
+input,textarea,select{
+  font-family:var(--font);font-size:14px;
+  background:var(--bg3);color:var(--white);
+  border:1.5px solid var(--border);border-radius:var(--rsm);
+  padding:10px 14px;width:100%;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(0,229,255,.1);
+}
+textarea{resize:vertical;min-height:88px}
+select option{background:var(--bg2)}
+img{max-width:100%;display:block}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+.hidden{display:none!important}
+.grad-text{
+  background:var(--grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.flex{display:flex}.gap4{gap:4px}.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}
+.items-center{align-items:center}.justify-between{justify-content:space-between}
+.w-full{width:100%}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}
+.text-muted{color:var(--muted)}.text-sm{font-size:13px}.text-xs{font-size:12px}
+.fw700{font-weight:700}.fw800{font-weight:800}.fw900{font-weight:900}
+.rounded-full{border-radius:50px}
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 20px;border-radius:50px;font-size:13px;font-weight:700;
+  letter-spacing:.2px;transition:all .18s;white-space:nowrap;cursor:pointer;
+}
+.btn-primary{background:var(--grad-btn);color:#fff;border:none}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:var(--glow-p)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--white)}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-icon{width:36px;height:36px;padding:0;border-radius:50%;background:var(--surface);color:var(--muted);border:1.5px solid var(--border)}
+.btn-icon:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-danger{background:rgba(255,68,102,.15);color:var(--danger);border:1.5px solid rgba(255,68,102,.3)}
+.btn-danger:hover{background:rgba(255,68,102,.25)}
+
+/* ═══════════════════════════════════════
+   AVATAR
+═══════════════════════════════════════ */
+.avatar{
+  flex-shrink:0;border-radius:50%;
+  background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;color:#fff;overflow:hidden;
+  border:2px solid rgba(0,229,255,.25);
+}
+.av32{width:32px;height:32px;font-size:12px}
+.av40{width:40px;height:40px;font-size:15px}
+.av48{width:48px;height:48px;font-size:18px}
+.av72{width:72px;height:72px;font-size:26px}
+
+/* ═══════════════════════════════════════
+   CARD
+═══════════════════════════════════════ */
+.card{
+  background:var(--bg2);border:1.5px solid var(--border);
+  border-radius:var(--r);
+}
+.card-pad{padding:18px 20px}
+
+/* ═══════════════════════════════════════
+   TOPNAV
+═══════════════════════════════════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:var(--nav-h);
+  background:rgba(6,6,15,.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1.5px solid var(--border);
+  display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:8px;
+  font-size:20px;font-weight:900;letter-spacing:.5px;
+  text-decoration:none;color:var(--white);
+  flex-shrink:0;
+}
+.brand-dots{display:flex;align-items:flex-end;gap:2.5px}
+.brand-dots span{
+  display:block;border-radius:50%;
+  animation:dotpulse 2.8s ease-in-out infinite alternate;
+}
+@keyframes dotpulse{0%{opacity:.5;transform:scaleY(.85)}100%{opacity:1;transform:scaleY(1)}}
+.nav-center{flex:1;display:flex;justify-content:center}
+.nav-search{
+  width:100%;max-width:340px;position:relative;
+}
+.nav-search input{
+  padding-left:36px;border-radius:50px;
+  background:var(--surface);border-color:var(--border);
+  font-size:13px;height:36px;
+}
+.nav-search .si{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:15px;pointer-events:none;
+}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.lang-btn{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:50px;
+  font-size:12px;font-weight:700;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);transition:all .18s;
+  cursor:pointer;
+}
+.lang-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.lang-btn.active-lang{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08)}
+.nav-notif{position:relative}
+.notif-badge{
+  position:absolute;top:-3px;right:-3px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--danger);font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+
+/* ═══════════════════════════════════════
+   HERO  (logged-out landing)
+═══════════════════════════════════════ */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 20px 60px;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% -10%,rgba(123,47,255,.2) 0%,transparent 70%),
+    radial-gradient(ellipse 45% 35% at 10% 90%,rgba(0,229,255,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 45% 35% at 90% 85%,rgba(212,0,255,.12) 0%,transparent 65%);
+}
+.hero-arc{
+  display:flex;gap:5px;justify-content:center;align-items:flex-end;
+  margin-bottom:32px;position:relative;z-index:1;
+}
+.hero-arc span{
+  display:block;border-radius:50%;
+  animation:arcbob 3.5s ease-in-out infinite alternate;
+}
+@keyframes arcbob{
+  0%{transform:translateY(0);opacity:.65}
+  100%{transform:translateY(-8px);opacity:1}
+}
+.hero-eyebrow{
+  font-size:11px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:14px;opacity:.85;
+  position:relative;z-index:1;
+}
+#hero h1{
+  font-size:clamp(32px,6.5vw,74px);font-weight:900;line-height:1.05;
+  margin-bottom:18px;position:relative;z-index:1;
+}
+.hero-sub{
+  color:var(--muted);font-size:clamp(15px,2vw,18px);max-width:540px;
+  margin:0 auto 36px;position:relative;z-index:1;line-height:1.7;
+}
+.hero-cta{
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:64px;position:relative;z-index:1;
+}
+.hero-cta .btn{font-size:15px;padding:13px 30px}
+.hero-stats{
+  display:flex;gap:48px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+.hstat .n{
+  font-size:34px;font-weight:900;
+  background:var(--grad90);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.hstat .l{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+
+/* ═══════════════════════════════════════
+   MODALS
+═══════════════════════════════════════ */
+.overlay{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,8,.8);backdrop-filter:blur(12px);
+  align-items:center;justify-content:center;padding:16px;
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--bg2);border:1.5px solid var(--border-hi);
+  border-radius:20px;padding:32px 28px;
+  width:100%;max-width:440px;
+  box-shadow:var(--shadow),0 0 60px rgba(123,47,255,.12);
+  position:relative;max-height:90vh;overflow-y:auto;
+}
+.modal h2{
+  font-size:22px;font-weight:800;margin-bottom:4px;
+  background:var(--grad90);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.modal-sub{color:var(--muted);font-size:13px;margin-bottom:22px}
+.modal-close{
+  position:absolute;top:14px;right:14px;
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:18px;
+  background:var(--surface);transition:all .18s;
+}
+.modal-close:hover{color:var(--white);background:var(--surface2)}
+.fgrp{margin-bottom:14px}
+.flabel{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;letter-spacing:.4px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fmsg{font-size:13px;margin-top:10px;padding:9px 13px;border-radius:var(--rsm)}
+.fmsg.err{background:rgba(255,68,102,.1);color:var(--danger);border:1.5px solid rgba(255,68,102,.25)}
+.fmsg.ok{background:rgba(0,229,160,.08);color:var(--success);border:1.5px solid rgba(0,229,160,.2)}
+.switch-link{font-size:13px;color:var(--muted);text-align:center;margin-top:16px}
+.switch-link a{color:var(--cyan);cursor:pointer}
+
+/* ═══════════════════════════════════════
+   MAIN 3-COLUMN LAYOUT
+═══════════════════════════════════════ */
+#app{padding-top:var(--nav-h);padding-bottom:80px}
+.layout{
+  display:none;
+  max-width:1180px;margin:0 auto;
+  padding:24px 12px;gap:20px;
+}
+.layout.open{display:grid;grid-template-columns:220px 1fr 250px}
+
+/* ─── LEFT SIDEBAR ─── */
+.lsidebar{position:sticky;top:calc(var(--nav-h)+16px);height:fit-content}
+.lsidebar .card{margin-bottom:14px}
+.snav{list-style:none}
+.snav li a{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:var(--rsm);
+  color:var(--muted);font-size:14px;font-weight:500;
+  transition:all .18s;
+}
+.snav li a:hover,.snav li a.on{
+  background:var(--surface);color:var(--white);
+}
+.snav li a.on{color:var(--cyan)}
+.snav .icon{font-size:17px;width:22px;text-align:center}
+.loc-pill{
+  display:flex;align-items:flex-start;gap:8px;
+  background:var(--surface);border-radius:var(--rsm);
+  padding:10px 12px;font-size:13px;margin-top:4px;
+}
+.loc-pill .pin{font-size:18px}
+.loc-strong{color:var(--white);font-weight:700;font-size:13px}
+.loc-sub{color:var(--muted);font-size:12px}
+
+/* ─── CENTRE FEED ─── */
+.feed{min-width:0}
+
+/* Compose */
+.compose{margin-bottom:18px}
+.compose-inner{display:flex;gap:12px;align-items:flex-start}
+.compose-body{flex:1;min-width:0}
+.compose-ta{
+  width:100%;background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:12px 14px;color:var(--white);
+  font-size:14px;resize:none;min-height:80px;
+  transition:border-color .2s;
+}
+.compose-ta:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(0,229,255,.08)}
+.compose-ta::placeholder{color:var(--muted)}
+.compose-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;flex-wrap:wrap;gap:8px;
+}
+.type-pills{display:flex;gap:6px;flex-wrap:wrap}
+.tpill{
+  padding:5px 12px;border-radius:50px;font-size:12px;font-weight:700;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);cursor:pointer;transition:all .18s;
+}
+.tpill:hover,.tpill.sel{
+  border-color:var(--cyan);color:var(--cyan);
+  background:rgba(0,229,255,.07);
+}
+
+/* Tabs */
+.tabs{
+  display:flex;gap:3px;background:var(--bg2);
+  border:1.5px solid var(--border);border-radius:50px;
+  padding:4px;margin-bottom:18px;overflow-x:auto;
+}
+.tab{
+  flex:1;padding:7px 12px;border-radius:50px;
+  font-size:13px;font-weight:700;color:var(--muted);
+  white-space:nowrap;transition:all .2s;
+}
+.tab:hover:not(.on){color:var(--white)}
+.tab.on{background:var(--grad-btn);color:#fff}
+
+/* Post cards */
+.post{
+  margin-bottom:14px;
+  transition:border-color .2s;
+  animation:slideup .3s ease;
+}
+@keyframes slideup{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.post:hover{border-color:rgba(123,47,255,.35)}
+.post-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.post-meta{flex:1;min-width:0}
+.post-name{font-size:14px;font-weight:700}
+.post-loc{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:3px;margin-top:1px}
+.post-when{font-size:11px;color:var(--muted);opacity:.65;margin-top:2px}
+.ptype-tag{
+  font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:3px 10px;border-radius:50px;flex-shrink:0;
+}
+.pt-story   {background:rgba(0,229,255,.1); color:var(--cyan);  border:1px solid rgba(0,229,255,.22)}
+.pt-event   {background:rgba(123,47,255,.12);color:#a882ff;     border:1px solid rgba(123,47,255,.28)}
+.pt-knowledge{background:rgba(0,229,160,.09);color:var(--success);border:1px solid rgba(0,229,160,.22)}
+.pt-info    {background:rgba(255,204,68,.09);color:var(--warn); border:1px solid rgba(255,204,68,.22)}
+.pt-ad      {background:rgba(0,229,255,.08); color:var(--cyan);  border:1px solid rgba(0,229,255,.2)}
+.post-title{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--white)}
+.post-body{font-size:14px;color:#c4cef0;line-height:1.75;margin-bottom:12px}
+.post-actions{
+  display:flex;align-items:center;gap:4px;
+  padding-top:11px;border-top:1.5px solid var(--border);flex-wrap:wrap;
+}
+.act-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:50px;
+  font-size:13px;color:var(--muted);
+  border:1.5px solid transparent;transition:all .18s;
+}
+.act-btn:hover{background:var(--surface);color:var(--white);border-color:var(--border)}
+.act-btn.liked{color:#ff7090}
+.act-btn .cn{font-size:12px}
+.ml-auto{margin-left:auto}
+
+/* Comments */
+.cmt-box{margin-top:12px}
+.cmt-in-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.cmt-in{
+  flex:1;background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:50px;padding:8px 16px;color:var(--white);font-size:13px;
+  transition:border-color .2s;
+}
+.cmt-in:focus{border-color:var(--cyan);outline:none}
+.cmt-send{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:var(--grad-btn);color:#fff;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .18s;
+}
+.cmt-send:hover{opacity:.85}
+.cmt-item{
+  display:flex;gap:8px;margin-bottom:6px;
+  padding:8px 10px;border-radius:var(--rsm);
+  background:var(--bg3);border:1.5px solid var(--border);
+}
+.cmt-txt{font-size:13px;color:#c4cef0}
+.cmt-who{font-size:12px;font-weight:700;color:var(--cyan)}
+.cmt-when{font-size:11px;color:var(--muted);margin-left:6px}
+
+/* Advertisement card (special) */
+.ad-card{
+  background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(123,47,255,.08));
+  border:1.5px solid rgba(0,229,255,.2);
+  border-radius:var(--r);margin-bottom:14px;overflow:hidden;
+  position:relative;
+}
+.ad-ribbon{
+  position:absolute;top:12px;right:12px;
+  font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 8px;border-radius:50px;
+  background:rgba(0,229,255,.15);color:var(--cyan);border:1px solid rgba(0,229,255,.3);
+}
+.ad-img{width:100%;height:180px;object-fit:cover;border-radius:var(--rsm) var(--rsm) 0 0}
+.ad-img-placeholder{
+  width:100%;height:160px;
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;color:var(--muted);
+}
+.ad-body{padding:16px 18px}
+.ad-cat{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.ad-title{font-size:17px;font-weight:800;margin-bottom:6px}
+.ad-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.ad-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ad-contact{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+
+/* Load more / empty */
+.loadmore{
+  display:block;width:100%;padding:12px;
+  background:var(--bg2);border:1.5px dashed var(--border);
+  color:var(--muted);border-radius:var(--r);
+  font-size:13px;transition:all .2s;margin-top:4px;
+}
+.loadmore:hover{border-color:var(--cyan);color:var(--cyan)}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .ei{font-size:44px;margin-bottom:12px}
+.empty p{font-size:14px}
+
+/* Spinner / Loader */
+.spin-wrap{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--muted);font-size:13px}
+.spin{width:20px;height:20px;border-radius:50%;border:2px solid var(--surface2);border-top-color:var(--cyan);animation:spin .65s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── RIGHT SIDEBAR ─── */
+.rsidebar{position:sticky;top:calc(var(--nav-h)+16px);height:fit-content}
+.rsidebar .card{margin-bottom:14px}
+.scard-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:700}
+
+/* Mini map */
+.minimap svg{width:100%;height:auto;opacity:.88}
+.state-rows{margin-top:12px}
+.srow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.srow:last-child{border-bottom:none}
+.srow-name{color:var(--muted);min-width:70px}
+.sbar-wrap{flex:1;height:4px;background:var(--surface);border-radius:2px;overflow:hidden}
+.sbar{height:100%;border-radius:2px;background:var(--grad90)}
+.srow-cnt{color:var(--cyan);font-weight:700;font-size:12px;min-width:20px;text-align:right}
+
+/* Tag cloud */
+.tagcloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.ttag{
+  padding:4px 11px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  font-size:12px;border:1.5px solid var(--border);cursor:pointer;
+  transition:all .18s;
+}
+.ttag:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Spotlight */
+.mrow{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border)}
+.mrow:last-child{border-bottom:none}
+.minfo{flex:1;min-width:0}
+.mname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mloc{font-size:11px;color:var(--muted)}
+
+/* ═══════════════════════════════════════
+   PROFILE PAGE
+═══════════════════════════════════════ */
+.profile-banner{
+  height:140px;border-radius:var(--r) var(--r) 0 0;
+  background:var(--grad);
+}
+.profile-info{padding:0 20px 20px;margin-top:-36px}
+.profile-av{border:3px solid var(--bg2)}
+.prof-name{font-size:20px;font-weight:800;margin-top:10px}
+.prof-loc{font-size:13px;color:var(--cyan);margin-top:3px}
+.prof-bio{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.65}
+.prof-stats{display:flex;gap:28px;margin-top:16px}
+.ps .n{font-size:22px;font-weight:800}
+.ps .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+/* ═══════════════════════════════════════
+   MEMBERS PAGE
+═══════════════════════════════════════ */
+.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.mem-card{padding:20px;text-align:center;transition:border-color .2s}
+.mem-card:hover{border-color:rgba(0,229,255,.3)}
+.mem-card .av{margin:0 auto 10px}
+.mem-card .mn{font-size:15px;font-weight:700}
+.mem-card .ml{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* ═══════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════ */
+.sec-hd{
+  font-size:18px;font-weight:800;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-hd::after{content:'';flex:1;height:1.5px;background:var(--border)}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toasts{
+  position:fixed;bottom:22px;right:22px;z-index:500;
+  display:flex;flex-direction:column;gap:8px;
+}
+.toast{
+  background:var(--bg2);border:1.5px solid var(--border-hi);
+  color:var(--white);border-radius:var(--rsm);
+  padding:11px 16px;font-size:13px;
+  box-shadow:var(--shadow);max-width:320px;
+  animation:tin .3s ease;
+}
+@keyframes tin{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.toast.t-ok{border-color:rgba(0,229,160,.4)}
+.toast.t-err{border-color:rgba(255,68,102,.4)}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:960px){
+  .layout.open{grid-template-columns:1fr}
+  .lsidebar,.rsidebar{position:static}
+  .rsidebar{order:-1}
+  .nav-center{display:none}
+}
+@media(max-width:600px){
+  .topnav{padding:0 10px}
+  #hero h1{font-size:30px}
+  .frow{grid-template-columns:1fr}
+  .hero-stats{gap:28px}
+  .hstat .n{font-size:26px}
+  .modal{padding:24px 18px}
+  .lang-btn span.lang-label{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ═══════════════════════════════════════
+   MUSIC PLAYER
+═══════════════════════════════════════ */
+#music-player{
+  position:fixed;bottom:24px;left:24px;z-index:400;
+  max-width:calc(100vw - 48px);
+  display:flex;align-items:center;gap:10px;
+  background:rgba(12,12,30,0.92);
+  border:1.5px solid rgba(0,229,255,0.25);
+  border-radius:50px;
+  padding:8px 16px 8px 10px;
+  backdrop-filter:blur(16px);
+  box-shadow:0 4px 32px rgba(0,0,0,0.5),0 0 20px rgba(0,229,255,0.08);
+  transition:all .3s;
+  cursor:pointer;
+  user-select:none;
+}
+#music-player:hover{
+  border-color:rgba(0,229,255,0.5);
+  box-shadow:0 4px 32px rgba(0,0,0,0.6),0 0 28px rgba(0,229,255,0.18);
+}
+.mp-disc{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  transition:transform 0.1s;
+  position:relative;overflow:hidden;
+}
+.mp-disc::after{
+  content:'';position:absolute;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--bg);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.mp-disc.spinning{
+  animation:discSpin 3s linear infinite;
+}
+@keyframes discSpin{to{transform:rotate(360deg)}}
+.mp-disc.spinning::after{
+  animation:discSpin 3s linear infinite reverse;
+}
+.mp-info{line-height:1.3;min-width:0}
+.mp-title{
+  font-size:12px;font-weight:700;color:var(--white);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:160px;
+}
+.mp-sub{font-size:10px;color:var(--muted)}
+.mp-btn{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:var(--surface);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--white);
+  transition:all .18s;cursor:pointer;
+}
+.mp-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,0.08)}
+.mp-progress{
+  width:80px;height:3px;background:var(--surface);
+  border-radius:2px;overflow:hidden;cursor:pointer;
+  flex-shrink:0;
+}
+.mp-bar{
+  height:100%;background:var(--grad90);border-radius:2px;
+  width:0%;transition:width .5s linear;
+}
+.mp-vol{
+  display:flex;align-items:center;gap:5px;
+}
+.mp-vol-slider{
+  -webkit-appearance:none;appearance:none;
+  width:55px;height:3px;border-radius:2px;
+  background:var(--surface);outline:none;cursor:pointer;
+  border:none;padding:0;
+}
+.mp-vol-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:11px;height:11px;border-radius:50%;
+  background:var(--cyan);cursor:pointer;
+}
+/* Intro overlay */
+#music-intro{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,8,0.96);
+  backdrop-filter:blur(20px);
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;gap:20px;
+  animation:fadeInIntro .4s ease;
+}
+#music-intro.show{display:flex}
+@keyframes fadeInIntro{from{opacity:0}to{opacity:1}}
+.intro-arc{display:flex;gap:5px;justify-content:center;align-items:flex-end;margin-bottom:8px}
+.intro-arc span{
+  display:block;border-radius:50%;
+  animation:arcbob2 1.8s ease-in-out infinite alternate;
+}
+@keyframes arcbob2{
+  0%{transform:scaleY(.7);opacity:.5}
+  100%{transform:scaleY(1.3);opacity:1}
+}
+.intro-title{
+  font-size:28px;font-weight:900;
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.intro-sub{font-size:14px;color:var(--muted);margin-bottom:8px}
+.intro-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+
+/* ═══════════════════════════════════════
+   LEAFLET MAP DARK THEME
+═══════════════════════════════════════ */
+.leaflet-container{
+  background:#0a0a1e !important;
+  font-family:var(--font);
+}
+.leaflet-tile{filter:brightness(0.55) saturate(0.6) hue-rotate(200deg)}
+.leaflet-control-zoom a{
+  background:var(--bg2) !important;color:var(--cyan) !important;
+  border-color:var(--border) !important;
+}
+.leaflet-control-zoom a:hover{background:var(--surface) !important}
+.leaflet-control-attribution{
+  background:rgba(6,6,15,0.8) !important;
+  color:var(--muted) !important;font-size:9px !important;
+}
+.leaflet-control-attribution a{color:var(--cyan) !important}
+.leaflet-popup-content-wrapper{
+  background:var(--bg2) !important;
+  border:1.5px solid var(--border-hi) !important;
+  border-radius:var(--r) !important;
+  box-shadow:var(--shadow) !important;
+  color:var(--white) !important;
+}
+.leaflet-popup-tip{background:var(--bg2) !important}
+.leaflet-popup-content{margin:12px 14px !important;font-size:13px !important}
+.map-popup-name{font-weight:700;color:var(--cyan);font-size:14px}
+.map-popup-loc{color:var(--muted);font-size:12px;margin-top:2px}
+
+
+/* ═══════════════════════════════════════
+   NEWS FEED
+═══════════════════════════════════════ */
+.ncat-btn{
+  padding:4px 10px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.ncat-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.ncat-btn.active{
+  background:var(--grad-btn);color:#fff;border-color:transparent;
+}
+.news-item{
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.news-item:last-child{border-bottom:none}
+.news-item:hover{opacity:.8}
+.news-cat-tag{
+  display:inline-block;
+  font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:2px 7px;border-radius:50px;margin-bottom:5px;
+}
+.ncat-eastel  {background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.25)}
+.ncat-crime   {background:rgba(255,68,102,.1); color:#ff8899;  border:1px solid rgba(255,68,102,.25)}
+.ncat-accident{background:rgba(255,160,0,.1);  color:#ffaa44;  border:1px solid rgba(255,160,0,.25)}
+.ncat-bizarre {background:rgba(160,0,255,.1);  color:#cc88ff;  border:1px solid rgba(160,0,255,.25)}
+.ncat-war     {background:rgba(255,80,0,.1);   color:#ff8844;  border:1px solid rgba(255,80,0,.25)}
+.news-headline{
+  font-size:13px;font-weight:700;color:var(--white);
+  line-height:1.45;margin-bottom:4px;
+}
+.news-summary{
+  font-size:11px;color:var(--muted);line-height:1.55;
+}
+.news-meta{
+  display:flex;align-items:center;gap:8px;margin-top:5px;
+  font-size:10px;color:var(--muted);opacity:.7;
+}
+.news-source{color:var(--cyan);font-weight:600}
+.news-empty{
+  text-align:center;padding:20px;
+  color:var(--muted);font-size:13px;
+}
+.news-error{
+  text-align:center;padding:16px;
+  color:var(--danger);font-size:12px;
+  background:rgba(255,68,102,.08);
+  border-radius:var(--rsm);border:1px solid rgba(255,68,102,.2);
+}
+
+
+/* ═══════════════════════════════════════
+   MEDIA — PROFILE PHOTOS, POSTS, UPLOADS
+═══════════════════════════════════════ */
+
+/* Profile banner / cover */
+.profile-banner{
+  height:180px;border-radius:var(--r) var(--r) 0 0;
+  background:var(--grad);
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.profile-banner img{
+  width:100%;height:100%;object-fit:cover;
+  transition:opacity .3s;
+}
+.banner-edit-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:all .2s;
+  color:#fff;font-size:13px;font-weight:700;gap:6px;
+}
+.profile-banner:hover .banner-edit-overlay{
+  background:rgba(0,0,0,0.45);opacity:1;
+}
+
+/* Avatar with photo */
+.avatar-wrap{
+  position:relative;width:fit-content;cursor:pointer;
+}
+.avatar-wrap .avatar-edit-btn{
+  position:absolute;bottom:0;right:0;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--grad-btn);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#fff;border:2px solid var(--bg2);
+  opacity:0;transition:opacity .2s;
+}
+.avatar-wrap:hover .avatar-edit-btn{opacity:1}
+
+/* Post media attachments */
+.post-media-grid{
+  display:grid;gap:4px;border-radius:var(--rsm);
+  overflow:hidden;margin-bottom:12px;
+}
+.post-media-grid.n1{grid-template-columns:1fr}
+.post-media-grid.n2{grid-template-columns:1fr 1fr}
+.post-media-grid.n3{grid-template-columns:1fr 1fr; grid-template-rows:auto auto}
+.post-media-grid.n4{grid-template-columns:1fr 1fr}
+.post-media-grid img,.post-media-grid video{
+  width:100%;object-fit:cover;display:block;
+  border-radius:4px;cursor:pointer;
+  transition:opacity .2s;max-height:300px;
+}
+.post-media-grid img:hover,.post-media-grid video:hover{opacity:.88}
+.post-media-grid.n3 img:first-child,.post-media-grid.n3 video:first-child{
+  grid-column:1/-1;
+}
+
+/* Compose media preview */
+.compose-media-row{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;
+}
+.compose-thumb{
+  position:relative;width:64px;height:64px;
+  border-radius:6px;overflow:hidden;
+  border:1.5px solid var(--border);flex-shrink:0;
+}
+.compose-thumb img,.compose-thumb video{
+  width:100%;height:100%;object-fit:cover;
+}
+.compose-thumb-rm{
+  position:absolute;top:2px;right:2px;
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(0,0,0,.7);color:#fff;
+  font-size:10px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;line-height:1;
+}
+
+/* Upload action buttons in compose */
+.compose-upload-btns{
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+}
+.upload-btn{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);
+  font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .18s;
+}
+.upload-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,0.92);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+}
+#lightbox.open{display:flex}
+#lightbox img,#lightbox video{
+  max-width:92vw;max-height:85vh;
+  object-fit:contain;border-radius:8px;
+}
+#lightbox-close{
+  position:fixed;top:16px;right:16px;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.15);color:#fff;
+  font-size:22px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s;
+}
+#lightbox-close:hover{background:rgba(255,255,255,.25)}
+
+/* Upload progress */
+.upload-progress{
+  height:3px;background:var(--surface2);border-radius:2px;
+  margin-top:6px;overflow:hidden;
+}
+.upload-progress-bar{
+  height:100%;background:var(--grad90);border-radius:2px;
+  width:0%;transition:width .3s;
+}
+
+/* Profile photo display */
+.prof-av-img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+}
+.profile-banner-img{
+  width:100%;height:100%;object-fit:cover;
+}
+
+/* Comment with photo */
+.cmt-media{
+  margin-top:6px;border-radius:6px;overflow:hidden;
+  max-width:200px;cursor:pointer;
+}
+.cmt-media img{width:100%;display:block;border-radius:6px}
+
+/* Video play icon overlay */
+.media-video-wrap{position:relative;display:inline-block;width:100%}
+.media-play-icon{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;pointer-events:none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOPNAV ═══════════════════ -->
+<nav class="topnav">
+  <a class="nav-brand" href="#" onclick="goHome();return false">
+    <div class="brand-dots">
+      <span style="width:5px;height:5px;background:#00e5ff;animation-delay:0s"></span>
+      <span style="width:7px;height:7px;background:#44aaff;animation-delay:.12s"></span>
+      <span style="width:9px;height:9px;background:#7b2fff;animation-delay:.24s"></span>
+      <span style="width:7px;height:7px;background:#b030dd;animation-delay:.36s"></span>
+      <span style="width:5px;height:5px;background:#d400ff;animation-delay:.48s"></span>
+    </div>
+    <span class="grad-text">Eastel</span>
+    <span style="color:var(--muted);font-size:13px;font-weight:500" data-en="Community" data-bm="Komuniti"></span>
+  </a>
+
+  <div class="nav-center">
+    <div class="nav-search">
+      <span class="si">🔍</span>
+      <input type="search" id="search-in" data-ph-en="Search community…" data-ph-bm="Cari komuniti…" placeholder="Search community…" oninput="doSearch(this.value)"/>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <!-- Language toggles -->
+    <button class="lang-btn active-lang" id="btn-en" onclick="setLang('en')">
+      🇬🇧 <span class="lang-label">EN</span>
+    </button>
+    <button class="lang-btn" id="btn-bm" onclick="setLang('bm')">
+      🇲🇾 <span class="lang-label">BM</span>
+    </button>
+
+    <!-- Notif (logged in) -->
+    <button class="btn-icon nav-notif hidden" id="nav-notif" title="Notifications">
+      🔔
+    </button>
+
+    <!-- Auth area -->
+    <div id="nav-auth" class="flex gap8 items-center">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('login')" data-en="Sign In" data-bm="Log Masuk"></button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('register')" data-en="Join" data-bm="Sertai"></button>
+    </div>
+    <div id="nav-user" class="flex gap8 items-center hidden">
+      <span class="text-muted text-sm" id="nav-hi"></span>
+      <div class="avatar av36" id="nav-av" style="width:36px;height:36px;font-size:13px;cursor:pointer" onclick="showSection('profile')"></div>
+      <button class="btn btn-ghost btn-sm" onclick="doSignOut()" data-en="Sign Out" data-bm="Log Keluar"></button>
+    </div>
+  </div>
+</nav>
+
+<div id="app">
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Animated dot arc -->
+  <div class="hero-arc">
+    <span style="width:7px;height:7px;background:#00e5ff;animation-delay:0s"></span>
+    <span style="width:9px;height:9px;background:#22d0ff;animation-delay:.08s"></span>
+    <span style="width:12px;height:12px;background:#44aaff;animation-delay:.16s"></span>
+    <span style="width:15px;height:15px;background:#6688ff;animation-delay:.24s"></span>
+    <span style="width:19px;height:19px;background:#7b2fff;animation-delay:.32s"></span>
+    <span style="width:22px;height:22px;background:#9b18ee;animation-delay:.4s"></span>
+    <span style="width:19px;height:19px;background:#b828dd;animation-delay:.48s"></span>
+    <span style="width:15px;height:15px;background:#cc22cc;animation-delay:.56s"></span>
+    <span style="width:12px;height:12px;background:#d800ff;animation-delay:.64s"></span>
+    <span style="width:9px;height:9px;background:#d400ff;animation-delay:.72s"></span>
+    <span style="width:7px;height:7px;background:#c000ee;animation-delay:.8s"></span>
+  </div>
+
+  <p class="hero-eyebrow" data-en="Eastel · Malaysia · Connected" data-bm="Eastel · Malaysia · Bersama"></p>
+  <h1>
+    <span data-en="Where Eastel Users" data-bm="Di Mana Pengguna Eastel"></span><br>
+    <span class="grad-text" data-en="Come Together" data-bm="Bersatu Padu"></span>
+  </h1>
+  <p class="hero-sub" data-en="Share your story, post events, exchange knowledge — connect with Eastel users from Sabah, Sarawak and all across Malaysia."
+     data-bm="Kongsi cerita, siarkan acara, tukar ilmu — berhubung dengan pengguna Eastel dari Sabah, Sarawak dan seluruh Malaysia."></p>
+  <div class="hero-cta">
+    <button class="btn btn-primary" onclick="openModal('register')" data-en="🚀 Join the Community" data-bm="🚀 Sertai Komuniti"></button>
+    <button class="btn btn-ghost" onclick="openModal('login')" data-en="Sign In" data-bm="Log Masuk"></button>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="n" id="stat-mem">—</div><div class="l" data-en="Members" data-bm="Ahli"></div></div>
+    <div class="hstat"><div class="n" id="stat-post">—</div><div class="l" data-en="Posts" data-bm="Catatan"></div></div>
+    <div class="hstat"><div class="n" id="stat-ad">—</div><div class="l" data-en="Ads" data-bm="Iklan"></div></div>
+    <div class="hstat"><div class="n">16</div><div class="l" data-en="States" data-bm="Negeri"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MAIN LAYOUT ═══════════════════ -->
+<div class="layout" id="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="lsidebar">
+    <div class="card card-pad">
+      <p class="scard-title" data-en="Navigate" data-bm="Navigasi"></p>
+      <ul class="snav">
+        <li><a href="#" class="on" id="nav-home" onclick="showSection('feed');setFilter('all');return false"><span class="icon">🏠</span> <span data-en="Home" data-bm="Utama"></span></a></li>
+        <li><a href="#" onclick="showSection('feed');setFilter('story');return false"><span class="icon">📖</span> <span data-en="Stories" data-bm="Cerita"></span></a></li>
+        <li><a href="#" onclick="showSection('feed');setFilter('event');return false"><span class="icon">📅</span> <span data-en="Events" data-bm="Acara"></span></a></li>
+        <li><a href="#" onclick="showSection('feed');setFilter('knowledge');return false"><span class="icon">💡</span> <span data-en="Knowledge" data-bm="Ilmu"></span></a></li>
+        <li><a href="#" onclick="showSection('feed');setFilter('info');return false"><span class="icon">📢</span> <span data-en="Info" data-bm="Maklumat"></span></a></li>
+        <li><a href="#" onclick="showSection('feed');setFilter('ad');return false"><span class="icon">📣</span> <span data-en="Advertisements" data-bm="Iklan"></span></a></li>
+        <li><a href="#" onclick="showSection('members');return false"><span class="icon">👥</span> <span data-en="Members" data-bm="Ahli"></span></a></li>
+        <li><a href="#" onclick="showSection('profile');return false"><span class="icon">👤</span> <span data-en="My Profile" data-bm="Profil Saya"></span></a></li>
+      </ul>
+    </div>
+    <div class="card card-pad">
+      <p class="scard-title" data-en="Your Location" data-bm="Lokasi Anda"></p>
+      <div class="loc-pill">
+        <span class="pin">📍</span>
+        <div>
+          <div class="loc-strong" id="loc-state">—</div>
+          <div class="loc-sub" id="loc-dist"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTRE -->
+  <main class="feed" id="feed-section">
+
+    <!-- FEED VIEW -->
+    <div id="view-feed">
+      <div class="sec-hd" id="feed-title" data-en="Community Feed" data-bm="Suapan Komuniti"></div>
+
+      <!-- Compose -->
+      <div class="card card-pad compose" id="compose-wrap">
+        <div class="compose-inner">
+          <div class="avatar av40" id="compose-av"></div>
+          <div class="compose-body">
+            <textarea class="compose-ta" id="compose-ta"
+              data-ph-en="Share a story, event, knowledge or advertisement with the Eastel community…"
+              data-ph-bm="Kongsi cerita, acara, ilmu atau iklan dengan komuniti Eastel…"
+              placeholder="Share a story, event, knowledge or advertisement with the Eastel community…"></textarea>
+            <!-- Ad extra fields (hidden unless ad selected) -->
+            <div id="ad-fields" class="hidden mt8" style="display:none">
+              <div class="frow mt8">
+                <div>
+                  <label class="flabel" data-en="Ad Title" data-bm="Tajuk Iklan"></label>
+                  <input type="text" id="ad-title" data-ph-en="e.g. House for Rent in KK" data-ph-bm="cth. Rumah Sewa di KK"/>
+                </div>
+                <div>
+                  <label class="flabel" data-en="Category" data-bm="Kategori"></label>
+                  <select id="ad-cat">
+                    <option value="property" data-en="Property" data-bm="Hartanah"></option>
+                    <option value="vehicle" data-en="Vehicle" data-bm="Kenderaan"></option>
+                    <option value="services" data-en="Services" data-bm="Perkhidmatan"></option>
+                    <option value="food" data-en="Food & Beverage" data-bm="Makanan & Minuman"></option>
+                    <option value="jobs" data-en="Jobs" data-bm="Pekerjaan"></option>
+                    <option value="electronics" data-en="Electronics" data-bm="Elektronik"></option>
+                    <option value="other" data-en="Other" data-bm="Lain-lain"></option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt8">
+                <label class="flabel" data-en="Contact / Link (optional)" data-bm="Hubungi / Pautan (pilihan)"></label>
+                <input type="text" id="ad-contact" data-ph-en="Phone, WhatsApp or website link" data-ph-bm="Telefon, WhatsApp atau pautan laman web"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="compose-foot">
+          <div class="type-pills">
+            <button class="tpill sel" data-type="story" onclick="selType(this)">📖 <span data-en="Story" data-bm="Cerita"></span></button>
+            <button class="tpill" data-type="event" onclick="selType(this)">📅 <span data-en="Event" data-bm="Acara"></span></button>
+            <button class="tpill" data-type="knowledge" onclick="selType(this)">💡 <span data-en="Knowledge" data-bm="Ilmu"></span></button>
+            <button class="tpill" data-type="info" onclick="selType(this)">📢 <span data-en="Info" data-bm="Maklumat"></span></button>
+            <button class="tpill" data-type="ad" onclick="selType(this)">📣 <span data-en="Ad" data-bm="Iklan"></span></button>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="submitPost()" data-en="Share →" data-bm="Kongsi →"></button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab on" data-f="all" onclick="tabClick(this)" data-en="All" data-bm="Semua"></button>
+        <button class="tab" data-f="story" onclick="tabClick(this)" data-en="Stories" data-bm="Cerita"></button>
+        <button class="tab" data-f="event" onclick="tabClick(this)" data-en="Events" data-bm="Acara"></button>
+        <button class="tab" data-f="knowledge" onclick="tabClick(this)" data-en="Knowledge" data-bm="Ilmu"></button>
+        <button class="tab" data-f="info" onclick="tabClick(this)" data-en="Info" data-bm="Maklumat"></button>
+        <button class="tab" data-f="ad" onclick="tabClick(this)" data-en="Ads" data-bm="Iklan"></button>
+      </div>
+
+      <div id="posts-wrap"></div>
+    </div>
+
+    <!-- PROFILE VIEW -->
+    <div id="view-profile" class="hidden">
+      <div class="card" style="margin-bottom:16px;overflow:hidden">
+        <!-- Cover / Banner -->
+        <div class="profile-banner" id="prof-banner" onclick="triggerCoverUpload()">
+          <img id="prof-banner-img" src="" style="display:none" alt="cover"/>
+          <div class="banner-edit-overlay">📷 <span data-en="Change Cover Photo" data-bm="Tukar Foto Sampul"></span></div>
+          <input type="file" id="cover-upload-in" accept="image/*" style="display:none" onchange="uploadCoverPhoto(this)"/>
+        </div>
+        <div class="profile-info">
+          <!-- Avatar with upload -->
+          <div class="avatar-wrap" onclick="triggerAvatarUpload()">
+            <div class="avatar av72 profile-av" id="prof-av"></div>
+            <div class="avatar-edit-btn">✏️</div>
+            <input type="file" id="avatar-upload-in" accept="image/*" style="display:none" onchange="uploadAvatarPhoto(this)"/>
+          </div>
+          <!-- Upload progress for profile photos -->
+          <div class="upload-progress hidden" id="profile-upload-prog" style="margin:8px 0">
+            <div class="upload-progress-bar" id="profile-upload-bar"></div>
+          </div>
+          <div class="prof-name" id="prof-name"></div>
+          <div class="prof-loc" id="prof-loc"></div>
+          <div class="prof-bio" id="prof-bio"></div>
+          <div class="prof-stats">
+            <div class="ps"><div class="n" id="prof-posts">0</div><div class="l" data-en="Posts" data-bm="Catatan"></div></div>
+            <div class="ps"><div class="n" id="prof-ads">0</div><div class="l" data-en="Ads" data-bm="Iklan"></div></div>
+          </div>
+          <button class="btn btn-ghost btn-sm mt8" onclick="openEditProfile()" style="width:fit-content">
+            ✏️ <span data-en="Edit Profile" data-bm="Edit Profil"></span>
+          </button>
+        </div>
+      </div>
+      <div class="sec-hd" data-en="My Posts" data-bm="Catatan Saya"></div>
+      <div id="prof-posts-wrap"></div>
+    </div>
+
+    <!-- MEMBERS VIEW -->
+    <div id="view-members" class="hidden">
+      <div class="sec-hd" data-en="All Members" data-bm="Semua Ahli"></div>
+      <div class="members-grid" id="members-grid"></div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="rsidebar">
+    <!-- Mini Malaysia map -->
+    <div class="card card-pad minimap-card">
+      <p class="scard-title" data-en="Community Map" data-bm="Peta Komuniti"></p>
+      <!-- Real SVG Malaysia Map -->
+      <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid rgba(0,229,255,0.18);margin-bottom:12px;background:#06060f">
+        <svg id="my-map" viewBox="0 0 800 420" style="width:100%;display:block;cursor:crosshair">
+          <rect width="800" height="420" fill="#06060f"/>
+          <!-- Grid -->
+          <line x1="200" y1="0" x2="200" y2="420" stroke="rgba(100,120,255,0.05)" stroke-width="0.5"/>
+          <line x1="400" y1="0" x2="400" y2="420" stroke="rgba(100,120,255,0.05)" stroke-width="0.5"/>
+          <line x1="600" y1="0" x2="600" y2="420" stroke="rgba(100,120,255,0.05)" stroke-width="0.5"/>
+          <line x1="0" y1="210" x2="800" y2="210" stroke="rgba(100,120,255,0.05)" stroke-width="0.5"/>
+          <defs>
+            <linearGradient id="pinG" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="100%" stop-color="#7b2fff"/>
+            </linearGradient>
+          </defs>
+          <g id="map-states"></g>
+          <g id="map-pins"></g>
+          <g id="map-labels"></g>
+          <g id="map-tooltip" style="display:none">
+            <rect id="tt-bg" rx="7" fill="#0c0c1e" stroke="rgba(0,229,255,0.4)" stroke-width="1.2"/>
+            <text id="tt-name" font-size="11" font-weight="800" fill="#00e5ff"></text>
+            <text id="tt-count" font-size="9" fill="#7880aa"></text>
+            <text id="tt-m1" font-size="10" fill="#c4cef0"></text>
+            <text id="tt-m2" font-size="10" fill="#c4cef0"></text>
+            <text id="tt-m3" font-size="10" fill="#c4cef0"></text>
+            <text id="tt-more" font-size="9" fill="#7880aa"></text>
+          </g>
+        </svg>
+      </div>
+      <!-- Legend -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)">
+          <div style="width:10px;height:10px;border-radius:2px;background:rgba(0,229,255,.3);border:1px solid #00e5ff"></div>Sabah
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)">
+          <div style="width:10px;height:10px;border-radius:2px;background:rgba(123,47,255,.3);border:1px solid #b060ff"></div>Sarawak
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)">
+          <div style="width:10px;height:10px;border-radius:2px;background:rgba(0,100,220,.25);border:1px solid #4488ff"></div>Peninsular
+        </div>
+      </div>
+      <div class="state-rows" id="state-rows">
+        <div class="srow"><span class="srow-name">Sabah</span><div class="sbar-wrap"><div class="sbar" id="bar-Sabah" style="width:0%"></div></div><span class="srow-cnt" id="cnt-Sabah">0</span></div>
+        <div class="srow"><span class="srow-name">Sarawak</span><div class="sbar-wrap"><div class="sbar" id="bar-Sarawak" style="width:0%"></div></div><span class="srow-cnt" id="cnt-Sarawak">0</span></div>
+        <div class="srow"><span class="srow-name">Selangor</span><div class="sbar-wrap"><div class="sbar" id="bar-Selangor" style="width:0%"></div></div><span class="srow-cnt" id="cnt-Selangor">0</span></div>
+        <div class="srow"><span class="srow-name">W.P. KL</span><div class="sbar-wrap"><div class="sbar" id="bar-Kuala Lumpur" style="width:0%"></div></div><span class="srow-cnt" id="cnt-Kuala Lumpur">0</span></div>
+        <div class="srow"><span class="srow-name" id="others-label">Others</span><div class="sbar-wrap"><div class="sbar" id="bar-others" style="width:0%"></div></div><span class="srow-cnt" id="cnt-others">0</span></div>
+      </div>
+    </div>
+
+    <!-- Trending tags -->
+    <div class="card card-pad" id="news-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px">
+        <p class="scard-title" style="margin-bottom:0" data-en="Live News Feed" data-bm="Suapan Berita Terkini"></p>
+        <button onclick="refreshNews()" id="news-refresh-btn" style="
+          display:flex;align-items:center;gap:5px;
+          padding:4px 10px;border-radius:50px;
+          background:var(--surface);color:var(--cyan);
+          border:1.5px solid var(--border-hi);
+          font-size:11px;font-weight:700;cursor:pointer;
+          transition:all .18s;
+        " title="Refresh news">⟳ <span data-en="Refresh" data-bm="Muat Semula"></span></button>
+      </div>
+
+      <!-- Category tabs -->
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px" id="news-cats">
+        <button class="ncat-btn active" data-cat="eastel" onclick="selectNewsCat(this,'eastel')">📡 Eastel</button>
+        <button class="ncat-btn" data-cat="crime" onclick="selectNewsCat(this,'crime')">🚨 <span data-en="Crime" data-bm="Jenayah"></span></button>
+        <button class="ncat-btn" data-cat="accident" onclick="selectNewsCat(this,'accident')">🚑 <span data-en="Accident" data-bm="Kemalangan"></span></button>
+        <button class="ncat-btn" data-cat="bizarre" onclick="selectNewsCat(this,'bizarre')">😲 <span data-en="Bizarre" data-bm="Pelik"></span></button>
+        <button class="ncat-btn" data-cat="war" onclick="selectNewsCat(this,'war')">⚔️ <span data-en="War" data-bm="Perang"></span></button>
+      </div>
+
+      <!-- News items container -->
+      <div id="news-feed">
+        <div class="spin-wrap" style="padding:20px">
+          <div class="spin"></div>
+          <span style="font-size:12px;color:var(--muted)" data-en="Loading news…" data-bm="Memuatkan berita…"></span>
+        </div>
+      </div>
+
+      <p style="font-size:10px;color:var(--muted);margin-top:10px;opacity:.6;text-align:center">
+        <span data-en="Powered by AI · Updates every 30 min" data-bm="Dikuasai AI · Dikemas kini setiap 30 min"></span>
+      </p>
+    </div>
+
+    <!-- Spotlight -->
+    <div class="card card-pad">
+      <p class="scard-title" data-en="New Members" data-bm="Ahli Baharu"></p>
+      <div id="spotlight"></div>
+    </div>
+  </aside>
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- ═══════════════════ MODAL: LOGIN ═══════════════════ -->
+<div class="overlay" id="ov-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">✕</button>
+    <h2 data-en="Welcome back" data-bm="Selamat kembali"></h2>
+    <p class="modal-sub" data-en="Sign in to your Eastel Community account" data-bm="Log masuk ke akaun Komuniti Eastel anda"></p>
+    <div class="fgrp">
+      <label class="flabel" data-en="Email" data-bm="E-mel"></label>
+      <input type="email" id="l-em" data-ph-en="you@email.com" data-ph-bm="anda@email.com" placeholder="you@email.com"/>
+    </div>
+    <div class="fgrp">
+      <label class="flabel" data-en="Password" data-bm="Kata Laluan"></label>
+      <input type="password" id="l-pw" placeholder="••••••••"/>
+    </div>
+    <div id="l-msg"></div>
+    <button class="btn btn-primary w-full mt12" style="justify-content:center" onclick="doLogin()" data-en="Sign In" data-bm="Log Masuk"></button>
+    <p class="switch-link"><span data-en="No account?" data-bm="Tiada akaun?"></span> <a onclick="switchModal('login','register')" data-en="Join now →" data-bm="Sertai sekarang →"></a></p>
+  </div>
+</div>
+
+<!-- ═══════════════════ MODAL: REGISTER ═══════════════════ -->
+<div class="overlay" id="ov-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('register')">✕</button>
+    <h2 data-en="Join Eastel Community" data-bm="Sertai Komuniti Eastel"></h2>
+    <p class="modal-sub" data-en="Create your profile and connect with Eastel users across Malaysia" data-bm="Bina profil anda dan berhubung dengan pengguna Eastel seluruh Malaysia"></p>
+    <div class="fgrp">
+      <label class="flabel" data-en="Full Name" data-bm="Nama Penuh"></label>
+      <input type="text" id="r-nm" data-ph-en="Your full name" data-ph-bm="Nama penuh anda"/>
+    </div>
+    <div class="frow">
+      <div class="fgrp">
+        <label class="flabel" data-en="Email" data-bm="E-mel"></label>
+        <input type="email" id="r-em" data-ph-en="you@email.com" data-ph-bm="anda@email.com"/>
+      </div>
+      <div class="fgrp">
+        <label class="flabel" data-en="Password" data-bm="Kata Laluan"></label>
+        <input type="password" id="r-pw" data-ph-en="Min. 6 characters" data-ph-bm="Min. 6 aksara"/>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fgrp">
+        <label class="flabel" data-en="State" data-bm="Negeri"></label>
+        <select id="r-st" onchange="fillDistricts('r-st','r-di')"></select>
+      </div>
+      <div class="fgrp">
+        <label class="flabel" data-en="District" data-bm="Daerah"></label>
+        <select id="r-di"></select>
+      </div>
+    </div>
+    <div class="fgrp">
+      <label class="flabel" data-en="Short Bio (optional)" data-bm="Bio Ringkas (pilihan)"></label>
+      <input type="text" id="r-bio" data-ph-en="e.g. Eastel user from KK since 2021" data-ph-bm="cth. Pengguna Eastel dari KK sejak 2021"/>
+    </div>
+    <div id="r-msg"></div>
+    <button class="btn btn-primary w-full mt12" style="justify-content:center" onclick="doRegister()" data-en="Create Account" data-bm="Buat Akaun"></button>
+    <p class="switch-link"><span data-en="Already have an account?" data-bm="Sudah ada akaun?"></span> <a onclick="switchModal('register','login')" data-en="Sign in →" data-bm="Log masuk →"></a></p>
+  </div>
+</div>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer style="text-align:center;padding:32px 20px 28px;border-top:1.5px solid rgba(100,120,255,0.16);margin-top:40px">
+  <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px">
+    <div style="display:flex;gap:2.5px;align-items:flex-end">
+      <span style="display:block;width:5px;height:5px;border-radius:50%;background:#00e5ff"></span>
+      <span style="display:block;width:7px;height:7px;border-radius:50%;background:#44aaff"></span>
+      <span style="display:block;width:9px;height:9px;border-radius:50%;background:#7b2fff"></span>
+      <span style="display:block;width:7px;height:7px;border-radius:50%;background:#b030dd"></span>
+      <span style="display:block;width:5px;height:5px;border-radius:50%;background:#d400ff"></span>
+    </div>
+    <span style="font-size:14px;font-weight:800;letter-spacing:1px;background:linear-gradient(90deg,#00e5ff,#7b2fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Eastel Community</span>
+  </div>
+  <p style="font-size:12px;color:#7880aa;letter-spacing:0.4px">
+    &copy; <span id="footer-year"></span> &nbsp;Created by&nbsp;
+    <strong style="font-weight:800;background:linear-gradient(90deg,#00e5ff,#7b2fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">DW Labs</strong>
+    &nbsp;&middot;&nbsp;
+    <span id="footer-rights">All rights reserved</span>
+  </p>
+  <p style="font-size:11px;color:#7880aa;margin-top:5px;opacity:0.55" id="footer-tagline">Built for the Eastel community across Malaysia</p>
+</footer>
+
+<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
+<div id="lightbox">
+  <div id="lightbox-close" onclick="closeLightbox()">✕</div>
+  <img id="lightbox-img" src="" alt="" style="display:none"/>
+  <video id="lightbox-vid" controls style="display:none"></video>
+</div>
+
+<!-- ═══════════════════ EDIT PROFILE MODAL ═══════════════════ -->
+<div class="overlay" id="ov-editprofile">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('editprofile')">✕</button>
+    <h2 data-en="Edit Profile" data-bm="Edit Profil"></h2>
+    <p class="modal-sub" data-en="Update your name, bio and location" data-bm="Kemas kini nama, bio dan lokasi anda"></p>
+    <div class="fgrp">
+      <label class="flabel" data-en="Full Name" data-bm="Nama Penuh"></label>
+      <input type="text" id="ep-name" />
+    </div>
+    <div class="fgrp">
+      <label class="flabel" data-en="Bio" data-bm="Bio"></label>
+      <textarea id="ep-bio" style="min-height:60px"></textarea>
+    </div>
+    <div class="frow">
+      <div class="fgrp">
+        <label class="flabel" data-en="State" data-bm="Negeri"></label>
+        <select id="ep-state" onchange="fillDistricts('ep-state','ep-district')"></select>
+      </div>
+      <div class="fgrp">
+        <label class="flabel" data-en="District" data-bm="Daerah"></label>
+        <select id="ep-district"></select>
+      </div>
+    </div>
+    <div id="ep-msg"></div>
+    <button class="btn btn-primary w-full mt12" style="justify-content:center" onclick="saveProfile()"
+      data-en="Save Changes" data-bm="Simpan Perubahan"></button>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOASTS ═══════════════════ -->
+<div id="toasts"></div>
+
+<!-- ═══════════════════ JS ═══════════════════ -->
+<script>
+/* ─────────────────────────────────────
+   CONFIG  — replace with your Supabase
+───────────────────────────────────── */
+const SUPA_URL = 'https://tzcelpamcfyexypiwfxx.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6Y2VscGFtY2Z5ZXh5cGl3Znh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2Njg4MjYsImV4cCI6MjA5ODI0NDgyNn0.uaU-tVpN1J76Y6ewzMpizbT2DuAG7I-b5fmlA9sJdv0';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+/* ─────────────────────────────────────
+   MALAYSIA DATA
+───────────────────────────────────── */
+const MY = {
+  'Sabah':['Kota Kinabalu','Sandakan','Tawau','Lahad Datu','Keningau','Semporna','Kudat','Ranau','Kunak','Beluran','Tuaran','Penampang','Kota Belud','Papar','Beaufort','Kota Marudu','Pitas','Tongod','Nabawan'],
+  'Sarawak':['Kuching','Miri','Sibu','Bintulu','Kota Samarahan','Sri Aman','Limbang','Sarikei','Kapit','Mukah','Betong','Serian','Marudi','Lawas','Tatau','Asajaya','Meradong','Pakan','Julau'],
+  'Selangor':['Petaling Jaya','Shah Alam','Klang','Subang Jaya','Gombak','Hulu Langat','Sepang','Kuala Langat','Sabak Bernam','Hulu Selangor','Kuala Selangor'],
+  'Kuala Lumpur':['Chow Kit','Wangsa Maju','Kepong','Setiawangsa','Titiwangsa','Batu','Segambut','Lembah Pantai','Seputeh','Cheras','Bandar Tun Razak'],
+  'Johor':['Johor Bahru','Batu Pahat','Muar','Kluang','Mersing','Segamat','Pontian','Kota Tinggi','Kulai','Tangkak','Iskandar Puteri'],
+  'Perak':['Ipoh','Taiping','Teluk Intan','Manjung','Kuala Kangsar','Kampar','Batu Gajah','Hilir Perak','Hulu Perak','Kerian','Larut Matang','Lenggong'],
+  'Pahang':['Kuantan','Temerloh','Bentong','Jerantut','Raub','Rompin','Maran','Lipis','Cameron Highlands','Pekan','Bera','Chini'],
+  'Kedah':['Alor Setar','Sungai Petani','Kulim','Langkawi','Baling','Yan','Pendang','Kubang Pasu','Padang Terap','Kuala Muda','Bandar Baharu','Pokok Sena'],
+  'Pulau Pinang':['George Town','Seberang Perai Utara','Seberang Perai Tengah','Seberang Perai Selatan','Timur Laut','Barat Daya'],
+  'Kelantan':['Kota Bharu','Gua Musang','Kuala Krai','Tanah Merah','Machang','Tumpat','Pasir Mas','Bachok','Jeli','Pasir Puteh'],
+  'Terengganu':['Kuala Terengganu','Kemaman','Dungun','Besut','Setiu','Hulu Terengganu','Marang','Kuala Nerus'],
+  'Negeri Sembilan':['Seremban','Port Dickson','Rembau','Jempol','Jelebu','Tampin','Kuala Pilah'],
+  'Melaka':['Melaka Tengah','Alor Gajah','Jasin'],
+  'Perlis':['Kangar','Arau','Padang Besar','Simpang Empat'],
+  'Putrajaya':['Presint 1','Presint 2','Presint 3','Presint 4','Presint 5'],
+  'Labuan':['Labuan'],
+};
+
+function fillStates(selId){
+  const s=document.getElementById(selId);
+  s.innerHTML=`<option value="">${lang==='en'?'Select State':'Pilih Negeri'}</option>`;
+  Object.keys(MY).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o)});
+}
+function fillDistricts(stSel,diSel){
+  const st=document.getElementById(stSel).value;
+  const s=document.getElementById(diSel);
+  s.innerHTML=`<option value="">${lang==='en'?'Select District':'Pilih Daerah'}</option>`;
+  if(st&&MY[st]) MY[st].forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;s.appendChild(o)});
+}
+
+/* ─────────────────────────────────────
+   LANGUAGE
+───────────────────────────────────── */
+let lang = localStorage.getItem('ec-lang')||'en';
+
+function setLang(l){
+  lang=l;
+  localStorage.setItem('ec-lang',l);
+  document.getElementById('btn-en').classList.toggle('active-lang',l==='en');
+  document.getElementById('btn-bm').classList.toggle('active-lang',l==='bm');
+  applyLang();
+}
+
+function applyLang(){
+  // text nodes
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') return;
+    el.textContent=el.getAttribute('data-'+lang)||el.getAttribute('data-en');
+  });
+  // placeholders
+  document.querySelectorAll('[data-ph-en]').forEach(el=>{
+    el.placeholder=el.getAttribute('data-ph-'+lang)||el.getAttribute('data-ph-en');
+  });
+  // select options
+  document.querySelectorAll('select option[data-en]').forEach(o=>{
+    o.textContent=o.getAttribute('data-'+lang)||o.getAttribute('data-en');
+  });
+  // re-fill state/district dropdowns if open
+  if(document.getElementById('r-st').options.length>1) fillStates('r-st');
+  // footer
+  const fr=document.getElementById('footer-rights');
+  const ft=document.getElementById('footer-tagline');
+  if(fr) fr.textContent=lang==='bm'?'Hak cipta terpelihara':'All rights reserved';
+  if(ft) ft.textContent=lang==='bm'?'Dibina untuk komuniti Eastel seluruh Malaysia':'Built for the Eastel community across Malaysia';
+  updateMusicLang();
+}
+
+/* ─────────────────────────────────────
+   STATE
+───────────────────────────────────── */
+let user=null, profile=null;
+let curFilter='all', curPostType='story';
+let postsData=[], postsPage=0;
+const PAGE=12;
+
+/* ─────────────────────────────────────
+   INIT
+───────────────────────────────────── */
+async function init(){
+  setLang(lang);
+  fillStates('r-st');
+  const {data:{session}}=await sb.auth.getSession();
+  if(session?.user) await onLogin(session.user);
+  loadPublicStats();
+  sb.auth.onAuthStateChange(async(ev,ses)=>{
+    if(ev==='SIGNED_IN'&&ses?.user) await onLogin(ses.user);
+    if(ev==='SIGNED_OUT') onLogout();
+  });
+}
+
+/* ─────────────────────────────────────
+   AUTH
+───────────────────────────────────── */
+async function doLogin(){
+  const em=v('l-em'), pw=v('l-pw');
+  msg('l-msg',lang==='en'?'Signing in…':'Sedang log masuk…','');
+  const{error}=await sb.auth.signInWithPassword({email:em,password:pw});
+  if(error){msg('l-msg',error.message,'err');return;}
+  closeModal('login');
+  toast(lang==='en'?'Welcome back! 👋':'Selamat kembali! 👋','ok');
+}
+
+async function doRegister(){
+  const nm=v('r-nm'),em=v('r-em'),pw=v('r-pw');
+  const st=v('r-st'),di=v('r-di'),bio=v('r-bio');
+  if(!nm||!em||!pw||!st){msg('r-msg',lang==='en'?'Please fill all required fields.':'Sila isi semua medan yang diperlukan.','err');return;}
+  msg('r-msg',lang==='en'?'Creating account…':'Sedang buat akaun…','');
+  const{data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:nm,state:st,district:di,bio}}});
+  if(error){msg('r-msg',error.message,'err');return;}
+  if(data.user){
+    await sb.from('profiles').upsert({id:data.user.id,full_name:nm,email:em,state:st,district:di,bio,created_at:new Date().toISOString()});
+  }
+  msg('r-msg',lang==='en'?'Account created! Check your email to verify.':'Akaun dibuat! Semak e-mel anda untuk pengesahan.','ok');
+  toast(lang==='en'?'Welcome to Eastel Community! 🎉':'Selamat datang ke Komuniti Eastel! 🎉','ok');
+  setTimeout(()=>closeModal('register'),2200);
+}
+
+async function doSignOut(){
+  await sb.auth.signOut();
+  toast(lang==='en'?'Signed out. See you soon!':'Log keluar. Jumpa lagi!','ok');
+}
+
+async function onLogin(u){
+  user=u;
+  const{data:p}=await sb.from('profiles').select('*').eq('id',u.id).single();
+  profile=p||{full_name:u.user_metadata?.full_name||u.email,state:'',district:'',bio:''};
+  // Update UI
+  document.getElementById('hero').style.display='none';
+  document.getElementById('layout').classList.add('open');
+  document.getElementById('nav-auth').classList.add('hidden');
+  document.getElementById('nav-user').classList.remove('hidden');
+  document.getElementById('nav-notif').classList.remove('hidden');
+  const ini=initials(profile.full_name);
+  document.getElementById('nav-av').textContent=ini;
+  document.getElementById('compose-av').textContent=ini;
+  document.getElementById('nav-hi').textContent=(lang==='en'?'Hi, ':'Hai, ')+(profile.full_name||'').split(' ')[0];
+  document.getElementById('loc-state').textContent=profile.state||'—';
+  document.getElementById('loc-dist').textContent=profile.district||'';
+  loadPosts(true);
+  loadSpotlight();
+  loadStateCounts();
+  applyLang();
+  setTimeout(()=>{ drawMalaysiaMap(); loadMapMemberData(); initNewsPanel(); }, 300);
+}
+
+function onLogout(){
+  user=null;profile=null;
+  document.getElementById('hero').style.display='';
+  document.getElementById('layout').classList.remove('open');
+  document.getElementById('nav-auth').classList.remove('hidden');
+  document.getElementById('nav-user').classList.add('hidden');
+  document.getElementById('nav-notif').classList.add('hidden');
+}
+
+/* ─────────────────────────────────────
+   POSTS
+───────────────────────────────────── */
+async function loadPosts(reset=true){
+  if(reset){postsData=[];postsPage=0;}
+  const wrap=document.getElementById('posts-wrap');
+  if(reset) wrap.innerHTML='<div class="spin-wrap"><div class="spin"></div> '+(lang==='en'?'Loading…':'Memuatkan…')+'</div>';
+
+  let q=sb.from('posts')
+    .select('*,profiles(full_name,state,district)')
+    .order('created_at',{ascending:false})
+    .range(postsPage*PAGE, postsPage*PAGE+PAGE-1);
+
+  if(curFilter!=='all') q=q.eq('post_type',curFilter);
+
+  const{data,error}=await q;
+  if(error){wrap.innerHTML=`<div class="empty"><p>${error.message}</p></div>`;return;}
+
+  postsData=reset?(data||[]): [...postsData,...(data||[])];
+  renderPosts(reset);
+  postsPage++;
+}
+
+function renderPosts(reset){
+  const wrap=document.getElementById('posts-wrap');
+  if(!postsData.length){
+    wrap.innerHTML=`<div class="empty"><div class="ei">💬</div><p>${lang==='en'?'No posts yet. Be the first to share!':'Tiada catatan lagi. Jadilah yang pertama berkongsi!'}</p></div>`;
+    return;
+  }
+  const html=postsData.map(p=>p.post_type==='ad'?renderAd(p):renderPost(p)).join('');
+  wrap.innerHTML=html+`<button class="loadmore" onclick="loadPosts(false)">${lang==='en'?'Load more…':'Muatkan lebih…'}</button>`;
+}
+
+function renderPost(p){
+  const pr=p.profiles||{};
+  const nm=pr.full_name||'Eastel User';
+  const loc=[pr.district,pr.state].filter(Boolean).join(', ')||'Malaysia';
+  const ini=initials(nm);
+  const tagMap={story:'pt-story',event:'pt-event',knowledge:'pt-knowledge',info:'pt-info'};
+  const labelEN={story:'📖 Story',event:'📅 Event',knowledge:'💡 Knowledge',info:'📢 Info'};
+  const labelBM={story:'📖 Cerita',event:'📅 Acara',knowledge:'💡 Ilmu',info:'📢 Maklumat'};
+  const tag=tagMap[p.post_type]||'pt-story';
+  const lbl=lang==='en'?(labelEN[p.post_type]||p.post_type):(labelBM[p.post_type]||p.post_type);
+  const isOwn=user&&p.user_id===user.id;
+  const likes=p.likes_count||0;
+  return `
+  <div class="card card-pad post" id="post-${p.id}">
+    <div class="post-head">
+      <div class="avatar av40">${ini}</div>
+      <div class="post-meta">
+        <div class="post-name">${esc(nm)}</div>
+        <div class="post-loc">📍 ${esc(loc)}</div>
+        <div class="post-when">${timeAgo(p.created_at)}</div>
+      </div>
+      <span class="ptype-tag ${tag}">${lbl}</span>
+    </div>
+    ${p.title?`<div class="post-title">${esc(p.title)}</div>`:''}
+    <div class="post-body">${esc(p.content)}</div>
+    <div class="post-actions">
+      <button class="act-btn" onclick="doLike('${p.id}')">❤️ <span class="cn" id="lk-${p.id}">${likes}</span></button>
+      <button class="act-btn" onclick="toggleCmt('${p.id}')">${lang==='en'?'💬 Comment':'💬 Komen'}</button>
+      <button class="act-btn" onclick="sharePost('${p.id}')">🔗 ${lang==='en'?'Share':'Kongsi'}</button>
+      ${isOwn?`<button class="act-btn btn-danger ml-auto" onclick="delPost('${p.id}')">🗑️</button>`:''}
+    </div>
+    <div class="cmt-box hidden" id="cmts-${p.id}">
+      <div class="cmt-in-row">
+        <div class="avatar av32">${ini}</div>
+        <input class="cmt-in" id="ci-${p.id}" placeholder="${lang==='en'?'Write a comment…':'Tulis komen…'}" onkeydown="if(event.key==='Enter')sendCmt('${p.id}')"/>
+        <button class="cmt-send" onclick="sendCmt('${p.id}')">↑</button>
+      </div>
+      <div id="cl-${p.id}"></div>
+    </div>
+  </div>`;
+}
+
+function renderAd(p){
+  const pr=p.profiles||{};
+  const nm=pr.full_name||'Eastel User';
+  const ini=initials(nm);
+  const isOwn=user&&p.user_id===user.id;
+  const catIcons={property:'🏠',vehicle:'🚗',services:'🛠️',food:'🍜',jobs:'💼',electronics:'📱',other:'📦'};
+  const catLabelsEN={property:'Property',vehicle:'Vehicle',services:'Services',food:'Food & Beverage',jobs:'Jobs',electronics:'Electronics',other:'Other'};
+  const catLabelsBM={property:'Hartanah',vehicle:'Kenderaan',services:'Perkhidmatan',food:'Makanan & Minuman',jobs:'Pekerjaan',electronics:'Elektronik',other:'Lain-lain'};
+  const cat=p.ad_category||'other';
+  const catIcon=catIcons[cat]||'📦';
+  const catLabel=lang==='en'?(catLabelsEN[cat]||cat):(catLabelsBM[cat]||cat);
+  const likes=p.likes_count||0;
+  return `
+  <div class="ad-card post" id="post-${p.id}">
+    <span class="ad-ribbon">${lang==='en'?'AD':'IKLAN'}</span>
+    <div class="ad-img-placeholder">${catIcon}</div>
+    <div class="ad-body">
+      <div class="ad-cat">${catIcon} ${esc(catLabel)}</div>
+      <div class="ad-title">${esc(p.title||p.content.substring(0,60))}</div>
+      <div class="ad-desc">${esc(p.content)}</div>
+      <div class="ad-footer">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="avatar av32">${ini}</div>
+          <div>
+            <div style="font-size:12px;font-weight:700">${esc(nm)}</div>
+            <div style="font-size:11px;color:var(--muted)">📍 ${esc([pr.district,pr.state].filter(Boolean).join(', ')||'Malaysia')}</div>
+          </div>
+        </div>
+        ${p.ad_contact?`<a href="${esc(p.ad_contact.startsWith('http')?p.ad_contact:'tel:'+p.ad_contact)}" target="_blank" class="btn btn-primary btn-sm">📞 ${lang==='en'?'Contact':'Hubungi'}</a>`:''}
+      </div>
+      <div class="post-actions" style="margin-top:10px">
+        <button class="act-btn" onclick="doLike('${p.id}')">❤️ <span class="cn" id="lk-${p.id}">${likes}</span></button>
+        <button class="act-btn" onclick="sharePost('${p.id}')">🔗 ${lang==='en'?'Share':'Kongsi'}</button>
+        ${isOwn?`<button class="act-btn btn-danger ml-auto" onclick="delPost('${p.id}')">🗑️ ${lang==='en'?'Delete':'Padam'}</button>`:''}
+        <span class="text-muted text-xs ml-auto" style="margin-left:auto">${timeAgo(p.created_at)}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ─────────────────────────────────────
+   SUBMIT POST
+───────────────────────────────────── */
+async function submitPost(){
+  const content=v('compose-ta');
+  if(!content){toast(lang==='en'?'Please write something first!':'Sila tulis sesuatu dahulu!','err');return;}
+  if(!user){toast(lang==='en'?'Please sign in first.':'Sila log masuk dahulu.','err');return;}
+
+  const row={
+    user_id:user.id, content,
+    post_type:curPostType,
+    likes_count:0,
+    created_at:new Date().toISOString()
+  };
+
+  if(curPostType==='ad'){
+    const adTitle=v('ad-title');
+    const adCat=document.getElementById('ad-cat').value;
+    const adContact=v('ad-contact');
+    if(!adTitle){toast(lang==='en'?'Please enter an ad title.':'Sila masukkan tajuk iklan.','err');return;}
+    row.title=adTitle;
+    row.ad_category=adCat;
+    row.ad_contact=adContact;
+  }
+
+  const{error}=await sb.from('posts').insert(row);
+  if(error){toast('Error: '+error.message,'err');return;}
+
+  document.getElementById('compose-ta').value='';
+  document.getElementById('ad-title').value='';
+  document.getElementById('ad-contact').value='';
+  toast(lang==='en'?'Shared! 🚀':'Dikongsi! 🚀','ok');
+  loadPosts(true);
+}
+
+/* ─────────────────────────────────────
+   POST TYPE SELECT
+───────────────────────────────────── */
+function selType(btn){
+  document.querySelectorAll('.tpill').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  curPostType=btn.dataset.type;
+  const af=document.getElementById('ad-fields');
+  if(curPostType==='ad'){af.style.display='';af.classList.remove('hidden');}
+  else{af.style.display='none';af.classList.add('hidden');}
+}
+
+/* ─────────────────────────────────────
+   TABS & FILTER
+───────────────────────────────────── */
+function tabClick(btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  curFilter=btn.dataset.f;
+  loadPosts(true);
+}
+function setFilter(f){
+  curFilter=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.f===f));
+  loadPosts(true);
+}
+
+/* ─────────────────────────────────────
+   LIKES
+───────────────────────────────────── */
+async function doLike(id){
+  const{data:p}=await sb.from('posts').select('likes_count').eq('id',id).single();
+  const n=(p?.likes_count||0)+1;
+  await sb.from('posts').update({likes_count:n}).eq('id',id);
+  const el=document.getElementById('lk-'+id);
+  if(el) el.textContent=n;
+}
+
+/* ─────────────────────────────────────
+   COMMENTS
+───────────────────────────────────── */
+function toggleCmt(id){
+  const el=document.getElementById('cmts-'+id);
+  if(el.classList.contains('hidden')){el.classList.remove('hidden');loadCmts(id);}
+  else el.classList.add('hidden');
+}
+async function loadCmts(id){
+  const{data}=await sb.from('comments').select('*,profiles(full_name)').eq('post_id',id).order('created_at',{ascending:true});
+  const cl=document.getElementById('cl-'+id); if(!cl) return;
+  if(!data||!data.length){cl.innerHTML=`<p class="text-muted text-sm" style="padding:6px 0">${lang==='en'?'No comments yet.':'Tiada komen lagi.'}</p>`;return;}
+  cl.innerHTML=data.map(c=>`
+    <div class="cmt-item">
+      <div class="avatar av32">${initials(c.profiles?.full_name||'U')}</div>
+      <div>
+        <span class="cmt-who">${esc(c.profiles?.full_name||'User')}</span>
+        <span class="cmt-when">${timeAgo(c.created_at)}</span>
+        <div class="cmt-txt">${esc(c.content)}</div>
+      </div>
+    </div>`).join('');
+}
+async function sendCmt(id){
+  const inp=document.getElementById('ci-'+id);
+  const content=inp?.value.trim();
+  if(!content||!user) return;
+  await sb.from('comments').insert({post_id:id,user_id:user.id,content,created_at:new Date().toISOString()});
+  inp.value='';
+  loadCmts(id);
+}
+
+/* ─────────────────────────────────────
+   DELETE POST
+───────────────────────────────────── */
+async function delPost(id){
+  if(!confirm(lang==='en'?'Delete this post?':'Padam catatan ini?')) return;
+  await sb.from('posts').delete().eq('id',id);
+  document.getElementById('post-'+id)?.remove();
+  toast(lang==='en'?'Post deleted.':'Catatan dipadam.','ok');
+}
+
+function sharePost(id){
+  navigator.clipboard?.writeText(location.href+'#post-'+id);
+  toast(lang==='en'?'Link copied! 🔗':'Pautan disalin! 🔗','ok');
+}
+
+/* ─────────────────────────────────────
+   SEARCH
+───────────────────────────────────── */
+function doSearch(q){
+  if(!q.trim()){loadPosts(true);return;}
+  const wrap=document.getElementById('posts-wrap');
+  const filtered=postsData.filter(p=>
+    (p.content||'').toLowerCase().includes(q.toLowerCase())||
+    (p.title||'').toLowerCase().includes(q.toLowerCase())
+  );
+  if(!filtered.length){wrap.innerHTML=`<div class="empty"><div class="ei">🔍</div><p>${lang==='en'?'No results found.':'Tiada keputusan ditemui.'}</p></div>`;return;}
+  wrap.innerHTML=filtered.map(p=>p.post_type==='ad'?renderAd(p):renderPost(p)).join('');
+}
+
+/* ─────────────────────────────────────
+   SIDEBAR: SPOTLIGHT & STATES
+───────────────────────────────────── */
+async function loadSpotlight(){
+  const{data}=await sb.from('profiles').select('full_name,state,district').order('created_at',{ascending:false}).limit(5);
+  const sp=document.getElementById('spotlight');if(!sp) return;
+  if(!data||!data.length){sp.innerHTML=`<p class="text-muted text-sm">${lang==='en'?'No members yet.':'Tiada ahli lagi.'}</p>`;return;}
+  sp.innerHTML=data.map(m=>`
+    <div class="mrow">
+      <div class="avatar av32">${initials(m.full_name||'U')}</div>
+      <div class="minfo">
+        <div class="mname">${esc(m.full_name||'Eastel User')}</div>
+        <div class="mloc">📍 ${esc([m.district,m.state].filter(Boolean).join(', ')||'Malaysia')}</div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadStateCounts(){
+  const{data}=await sb.from('profiles').select('state');
+  if(!data) return;
+  const cnts={};
+  data.forEach(r=>{const s=r.state||'Other';cnts[s]=(cnts[s]||0)+1;});
+  const main=['Sabah','Sarawak','Selangor','Kuala Lumpur'];
+  const max=Math.max(...Object.values(cnts),1);
+  main.forEach(s=>{
+    const c=cnts[s]||0;
+    const ce=document.getElementById('cnt-'+s);
+    const be=document.getElementById('bar-'+s);
+    if(ce) ce.textContent=c;
+    if(be) be.style.width=Math.round(c/max*100)+'%';
+  });
+  const others=Object.entries(cnts).filter(([k])=>!main.includes(k)).reduce((a,[,v])=>a+v,0);
+  const oc=document.getElementById('cnt-others'),ob=document.getElementById('bar-others');
+  if(oc) oc.textContent=others;
+  if(ob) ob.style.width=Math.round(others/max*100)+'%';
+}
+
+async function loadPublicStats(){
+  const[{count:mc},{count:pc},{count:ac}]=await Promise.all([
+    sb.from('profiles').select('*',{count:'exact',head:true}),
+    sb.from('posts').select('*',{count:'exact',head:true}),
+    sb.from('posts').select('*',{count:'exact',head:true}).eq('post_type','ad'),
+  ]);
+  const sm=document.getElementById('stat-mem');
+  const sp=document.getElementById('stat-post');
+  const sa=document.getElementById('stat-ad');
+  if(sm) sm.textContent=mc||0;
+  if(sp) sp.textContent=pc||0;
+  if(sa) sa.textContent=ac||0;
+}
+
+/* ─────────────────────────────────────
+   SECTION VIEWS
+───────────────────────────────────── */
+function showSection(s){
+  document.getElementById('view-feed').classList.toggle('hidden',s!=='feed');
+  document.getElementById('view-profile').classList.toggle('hidden',s!=='profile');
+  document.getElementById('view-members').classList.toggle('hidden',s!=='members');
+  if(s==='profile') loadProfileView();
+  if(s==='members') loadMembersView();
+}
+
+async function loadProfileView(){
+  if(!user||!profile) return;
+  document.getElementById('prof-av').textContent=initials(profile.full_name||'U');
+  document.getElementById('prof-name').textContent=profile.full_name||'Eastel User';
+  document.getElementById('prof-loc').textContent='📍 '+([profile.district,profile.state].filter(Boolean).join(', ')||'Malaysia');
+  document.getElementById('prof-bio').textContent=profile.bio||'';
+  const{count:pc}=await sb.from('posts').select('*',{count:'exact',head:true}).eq('user_id',user.id).neq('post_type','ad');
+  const{count:ac}=await sb.from('posts').select('*',{count:'exact',head:true}).eq('user_id',user.id).eq('post_type','ad');
+  document.getElementById('prof-posts').textContent=pc||0;
+  document.getElementById('prof-ads').textContent=ac||0;
+  const{data}=await sb.from('posts').select('*,profiles(full_name,state,district)').eq('user_id',user.id).order('created_at',{ascending:false});
+  const wrap=document.getElementById('prof-posts-wrap');
+  if(!data||!data.length){wrap.innerHTML=`<div class="empty"><p>${lang==='en'?'No posts yet.':'Tiada catatan lagi.'}</p></div>`;return;}
+  wrap.innerHTML=data.map(p=>p.post_type==='ad'?renderAd(p):renderPost(p)).join('');
+}
+
+async function loadMembersView(){
+  const{data}=await sb.from('profiles').select('full_name,state,district').order('created_at',{ascending:false}).limit(50);
+  const g=document.getElementById('members-grid');
+  if(!data||!data.length){g.innerHTML=`<p class="text-muted text-sm">${lang==='en'?'No members yet.':'Tiada ahli lagi.'}</p>`;return;}
+  g.innerHTML=data.map(m=>`
+    <div class="card mem-card">
+      <div class="avatar av48 av" style="margin:0 auto 10px">${initials(m.full_name||'U')}</div>
+      <div class="mn">${esc(m.full_name||'Eastel User')}</div>
+      <div class="ml">📍 ${esc([m.district,m.state].filter(Boolean).join(', ')||'Malaysia')}</div>
+    </div>`).join('');
+}
+
+function goHome(){
+  if(user){showSection('feed');setFilter('all');}
+}
+
+/* ─────────────────────────────────────
+   MODALS
+───────────────────────────────────── */
+function openModal(n){
+  if(n==='register') fillStates('r-st');
+  document.getElementById('ov-'+n).classList.add('open');
+}
+function closeModal(n){document.getElementById('ov-'+n).classList.remove('open')}
+function switchModal(a,b){closeModal(a);openModal(b)}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+/* ─────────────────────────────────────
+   TOAST
+───────────────────────────────────── */
+function toast(txt,type=''){
+  const tc=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast t-'+type;t.textContent=txt;
+  tc.appendChild(t);
+  setTimeout(()=>t.remove(),3500);
+}
+
+/* ─────────────────────────────────────
+   MSG
+───────────────────────────────────── */
+function msg(id,txt,cls){
+  const el=document.getElementById(id);if(!el) return;
+  el.textContent=txt;el.className='fmsg '+(cls||'');
+}
+
+/* ─────────────────────────────────────
+   UTILS
+───────────────────────────────────── */
+function v(id){return(document.getElementById(id)?.value||'').trim()}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function initials(n){return String(n||'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'U'}
+function timeAgo(iso){
+  const d=new Date(iso),now=new Date(),s=Math.floor((now-d)/1000);
+  if(s<60) return lang==='en'?'Just now':'Baru sahaja';
+  if(s<3600) return Math.floor(s/60)+(lang==='en'?' min ago':' min lalu');
+  if(s<86400) return Math.floor(s/3600)+(lang==='en'?' hr ago':' jam lalu');
+  if(s<604800) return Math.floor(s/86400)+(lang==='en'?' days ago':' hari lalu');
+  return d.toLocaleDateString('ms-MY',{day:'numeric',month:'short',year:'numeric'});
+}
+
+
+/* ─────────────────────────────────────
+   REAL MALAYSIA SVG MAP
+───────────────────────────────────── */
+const MAP_STATES=[{"name":"Federal Territory of Kuala Lumpur","path":"M 81.9,255.0 L 83.0,254.1 L 83.3,255.0 L 84.5,255.3 L 84.5,255.7 L 85.2,255.8 L 85.6,254.7 L 86.1,254.8 L 86.0,255.8 L 86.5,256.3 L 86.8,257.3 L 86.4,258.2 L 85.8,258.1 L 85.9,258.9 L 86.4,259.0 L 85.8,260.6 L 85.9,261.8 L 86.5,262.3 L 86.3,263.6 L 86.4,264.3 L 86.4,265.4 L 85.7,265.4 L 85.7,266.5 L 85.0,265.5 L 84.7,265.9 L 83.2,266.3 L 83.1,265.9 L 82.8,265.8 L 82.8,265.2 L 82.4,265.2 L 82.3,264.4 L 82.9,263.8 L 82.7,262.1 L 82.9,261.8 L 82.9,260.8 L 82.5,260.6 L 82.2,261.1 L 81.3,260.2 L 81.0,259.5 L 81.1,259.0 L 81.2,256.8 L 81.6,256.2 L 81.9,255.0 Z"},{"name":"Perlis","path":"M 24.0,74.1 L 22.9,72.2 L 20.9,64.7 L 22.4,61.1 L 22.5,55.1 L 23.4,55.1 L 22.7,50.8 L 23.2,50.4 L 22.9,47.9 L 24.2,46.2 L 25.4,48.4 L 27.9,47.2 L 29.1,49.9 L 28.6,53.5 L 30.8,57.2 L 30.8,62.4 L 28.3,65.2 L 25.3,70.7 L 24.0,74.1 Z"},{"name":"Sabah","path":"M 635.4,151.3 L 641.4,141.2 L 633.2,130.4 L 643.1,112.5 L 648.4,118.4 L 654.2,114.4 L 654.6,105.3 L 660.6,100.4 L 663.5,80.5 L 685.8,46.3 L 689.5,27.1 L 691.9,34.6 L 689.5,54.4 L 699.0,48.9 L 701.9,31.3 L 705.0,29.7 L 709.4,34.2 L 711.6,53.5 L 717.8,55.7 L 720.2,53.1 L 728.6,63.6 L 728.6,75.9 L 722.6,79.5 L 726.6,95.8 L 740.5,86.1 L 744.7,98.1 L 780.9,124.9 L 784.5,121.6 L 789.3,126.2 L 790.7,137.6 L 782.0,145.8 L 759.3,154.3 L 753.1,148.1 L 744.7,155.9 L 750.7,170.6 L 770.6,182.4 L 760.6,187.6 L 738.1,195.8 L 724.4,186.3 L 725.5,192.9 L 723.4,198.7 L 717.7,197.9 L 709.4,186.6 L 700.1,189.4 L 681.9,186.5 L 676.6,191.4 L 673.6,186.0 L 665.6,186.1 L 662.4,192.7 L 654.6,186.0 L 651.6,195.8 L 649.5,194.3 L 645.9,202.3 L 644.0,198.4 L 645.9,190.1 L 642.3,187.3 L 640.8,172.6 L 645.5,162.8 L 643.4,150.2 L 635.4,151.3 Z"},{"name":"Federal Territory of Putrajaya","path":"M 83.6,270.4 L 83.6,271.1 L 84.0,271.0 L 84.0,270.3 L 84.3,270.1 L 84.5,270.1 L 84.4,270.3 L 84.5,271.1 L 85.1,270.8 L 85.0,271.3 L 85.7,271.3 L 85.7,272.9 L 84.7,272.9 L 84.7,273.8 L 84.4,273.9 L 84.3,274.2 L 84.5,274.3 L 84.3,275.0 L 84.0,275.1 L 83.8,275.7 L 83.4,276.0 L 83.3,275.6 L 83.1,275.8 L 82.8,274.6 L 83.0,274.1 L 83.2,274.0 L 83.2,273.8 L 83.3,273.7 L 83.3,273.3 L 83.2,272.8 L 83.2,271.9 L 83.4,271.9 L 83.4,271.6 L 83.0,271.2 L 82.9,270.8 L 83.3,270.4 L 83.6,270.4 Z"},{"name":"Kedah","path":"M 29.7,114.7 L 29.4,109.7 L 29.8,109.2 L 31.1,109.3 L 32.1,110.4 L 31.2,108.5 L 30.6,108.2 L 30.1,107.0 L 31.0,102.4 L 30.0,91.0 L 29.1,86.7 L 27.3,83.5 L 26.8,79.4 L 25.1,75.6 L 24.0,74.1 L 25.3,70.7 L 28.3,65.2 L 30.8,62.4 L 30.8,57.2 L 32.9,58.5 L 36.0,58.1 L 36.0,59.3 L 38.1,60.7 L 38.8,59.9 L 42.4,62.9 L 43.6,62.4 L 45.7,59.1 L 46.2,62.2 L 48.7,63.0 L 49.3,65.5 L 49.1,68.4 L 50.2,70.7 L 49.5,72.2 L 50.3,75.5 L 51.1,75.2 L 51.1,74.0 L 52.2,75.5 L 54.0,74.9 L 55.2,72.7 L 57.6,75.0 L 60.1,73.7 L 61.2,78.0 L 59.8,78.9 L 58.5,81.3 L 61.4,83.0 L 60.3,86.6 L 60.9,87.1 L 60.5,90.2 L 61.1,91.0 L 59.5,95.0 L 57.4,94.5 L 56.6,98.5 L 55.8,102.5 L 54.1,103.3 L 55.4,106.6 L 55.1,110.4 L 52.9,113.1 L 54.2,114.8 L 53.4,119.5 L 50.8,120.8 L 50.4,128.8 L 48.9,130.3 L 45.8,130.3 L 45.0,133.5 L 43.7,134.7 L 42.5,138.6 L 41.2,139.3 L 40.6,141.5 L 39.5,143.4 L 38.2,144.3 L 36.6,143.3 L 36.7,142.6 L 37.0,142.1 L 35.9,141.5 L 35.9,140.0 L 37.5,141.0 L 38.2,140.6 L 37.1,128.0 L 37.3,116.0 L 32.7,115.4 L 31.1,114.4 L 30.9,115.2 L 29.7,114.7 Z"},{"name":"Sarawak","path":"M 403.8,325.1 L 404.4,332.7 L 416.8,347.8 L 437.5,344.8 L 437.8,352.7 L 448.6,356.6 L 450.6,352.0 L 458.3,357.9 L 459.0,348.7 L 464.3,345.5 L 462.3,341.5 L 466.3,322.5 L 466.3,305.1 L 469.3,303.2 L 470.0,281.9 L 472.9,282.9 L 474.4,290.4 L 484.8,279.3 L 504.2,272.4 L 538.0,260.3 L 557.0,223.3 L 571.2,201.7 L 577.8,189.6 L 577.6,173.9 L 582.4,173.9 L 588.8,177.8 L 592.1,193.8 L 596.8,192.9 L 603.8,208.2 L 611.3,201.0 L 614.9,184.7 L 612.0,182.7 L 609.4,165.4 L 617.7,159.8 L 620.0,155.9 L 620.5,160.0 L 621.2,161.9 L 620.2,164.2 L 623.1,186.5 L 630.9,188.9 L 632.1,191.4 L 633.8,188.4 L 630.3,182.9 L 630.0,174.8 L 630.5,170.9 L 628.5,163.5 L 628.5,160.7 L 625.4,156.7 L 625.2,154.5 L 624.2,153.9 L 626.2,152.7 L 626.1,151.1 L 628.6,150.7 L 628.9,153.6 L 632.3,154.6 L 634.3,153.6 L 635.4,151.3 L 643.4,150.2 L 645.5,162.8 L 640.8,172.6 L 642.3,187.3 L 645.9,190.1 L 644.0,198.4 L 645.9,202.3 L 644.7,212.5 L 641.0,214.0 L 643.9,216.7 L 642.5,232.9 L 645.2,243.1 L 642.0,242.3 L 639.8,256.5 L 641.9,258.8 L 639.2,267.3 L 631.9,270.7 L 630.9,266.7 L 628.5,271.4 L 625.5,272.2 L 622.6,278.6 L 625.3,280.7 L 622.7,286.1 L 622.5,293.5 L 629.1,296.3 L 627.2,299.6 L 622.7,302.4 L 618.6,307.6 L 617.4,306.1 L 617.3,310.2 L 615.2,313.2 L 611.3,312.0 L 610.1,321.7 L 611.1,327.3 L 614.3,326.1 L 612.9,332.3 L 614.4,333.3 L 610.5,336.8 L 607.7,336.9 L 606.7,339.6 L 607.6,345.6 L 603.8,353.8 L 601.5,362.2 L 594.7,357.4 L 587.2,363.8 L 585.2,360.5 L 571.0,365.9 L 571.7,370.4 L 563.1,375.6 L 561.4,370.2 L 555.7,371.0 L 552.3,365.9 L 544.7,365.1 L 543.2,362.2 L 536.9,363.7 L 541.9,355.6 L 534.1,353.0 L 532.0,355.6 L 517.8,353.2 L 506.9,362.0 L 504.6,380.2 L 495.5,381.4 L 491.8,388.6 L 484.8,386.3 L 479.7,390.7 L 477.7,385.9 L 466.9,383.3 L 454.4,386.9 L 450.9,392.0 L 446.8,393.8 L 441.4,396.3 L 435.2,393.0 L 433.8,388.4 L 429.4,388.2 L 425.7,376.9 L 420.9,375.6 L 420.7,372.7 L 417.3,370.2 L 416.2,364.1 L 411.7,362.5 L 411.8,359.2 L 410.2,359.9 L 404.4,351.0 L 405.4,341.4 L 401.1,340.2 L 399.1,333.0 L 399.9,330.2 L 402.8,329.4 L 403.8,325.1 Z"},{"name":"Penang","path":"M 32.0,141.7 L 33.2,139.1 L 32.9,138.7 L 33.1,136.7 L 33.4,136.7 L 33.1,136.4 L 32.9,134.1 L 32.4,133.3 L 33.0,132.5 L 32.3,129.9 L 32.5,128.9 L 31.2,127.4 L 30.6,125.4 L 31.4,122.7 L 31.2,118.2 L 30.6,115.8 L 29.6,115.2 L 29.7,114.7 L 30.9,115.2 L 31.1,114.4 L 32.7,115.4 L 37.3,116.0 L 37.1,128.0 L 38.2,140.6 L 37.5,141.0 L 35.9,140.0 L 35.9,141.5 L 32.5,141.9 L 32.0,141.7 Z M 26.4,120.5 L 28.6,121.7 L 28.4,122.8 L 28.8,123.5 L 30.0,124.2 L 28.9,126.4 L 28.7,128.4 L 28.1,130.7 L 27.9,132.0 L 27.4,133.0 L 27.4,133.9 L 27.1,133.9 L 26.7,132.7 L 26.3,132.5 L 26.0,132.9 L 25.4,132.1 L 25.1,132.1 L 25.0,132.6 L 24.5,132.4 L 24.3,132.6 L 24.0,132.5 L 23.7,132.5 L 23.5,133.4 L 23.2,132.4 L 23.5,131.0 L 24.0,130.8 L 23.5,126.8 L 23.9,124.1 L 23.7,124.0 L 23.7,123.6 L 23.2,123.3 L 23.4,121.6 L 23.1,121.1 L 23.6,120.7 L 23.6,121.0 L 24.0,121.0 L 24.3,121.3 L 24.2,121.8 L 24.8,121.7 L 25.7,121.5 L 26.4,120.5 Z"},{"name":"Johor","path":"M 162.3,289.1 L 163.1,289.0 L 163.3,288.6 L 164.4,289.7 L 165.7,290.6 L 166.7,290.3 L 166.8,289.7 L 167.0,289.5 L 167.4,289.8 L 167.1,291.0 L 167.8,292.0 L 169.2,293.7 L 169.5,293.4 L 169.8,293.7 L 169.5,294.3 L 169.9,295.7 L 169.7,295.8 L 169.9,297.0 L 170.6,298.1 L 169.5,298.9 L 170.1,300.2 L 170.3,302.3 L 171.0,302.6 L 171.3,303.7 L 172.2,305.4 L 173.5,307.8 L 174.4,308.1 L 175.1,309.7 L 174.9,310.4 L 175.5,312.2 L 176.2,313.3 L 176.0,313.4 L 175.3,313.5 L 175.1,315.3 L 175.2,316.1 L 177.0,319.3 L 177.5,320.5 L 178.7,324.4 L 179.1,324.8 L 179.3,325.8 L 179.7,326.5 L 180.8,328.5 L 180.8,328.9 L 181.4,330.0 L 181.7,331.0 L 181.6,331.6 L 182.2,332.9 L 182.0,333.2 L 181.8,332.9 L 181.6,332.1 L 181.3,332.1 L 181.1,332.4 L 181.4,332.7 L 181.2,333.0 L 181.1,334.0 L 181.1,335.4 L 182.2,337.6 L 182.7,337.8 L 182.9,337.6 L 183.0,336.9 L 183.3,337.5 L 183.2,337.6 L 183.2,338.6 L 183.7,339.9 L 184.4,341.0 L 184.7,342.4 L 184.9,344.0 L 185.8,345.6 L 185.5,346.0 L 185.5,346.6 L 186.6,348.8 L 186.9,349.2 L 186.6,349.7 L 186.8,350.5 L 187.5,351.7 L 187.2,352.0 L 187.0,352.6 L 187.3,353.4 L 187.1,354.3 L 187.5,355.6 L 188.0,356.2 L 188.4,357.3 L 188.3,357.7 L 187.9,357.8 L 187.8,358.9 L 188.8,361.4 L 188.8,362.1 L 188.4,361.8 L 188.0,362.2 L 187.9,363.3 L 188.3,365.3 L 188.1,366.3 L 187.1,366.6 L 187.0,366.0 L 186.7,365.9 L 185.9,367.3 L 185.6,367.1 L 185.0,368.0 L 184.8,367.4 L 184.3,367.2 L 183.4,367.7 L 183.2,367.3 L 182.4,367.7 L 182.1,366.9 L 180.6,366.1 L 180.6,365.5 L 181.4,364.8 L 181.6,363.8 L 181.8,363.3 L 181.1,363.9 L 180.8,362.8 L 179.9,361.8 L 178.5,361.3 L 179.1,361.0 L 178.5,360.4 L 179.3,359.0 L 179.2,358.0 L 179.9,357.3 L 180.4,357.5 L 180.3,356.9 L 179.8,356.6 L 179.0,357.2 L 178.6,358.6 L 178.3,357.5 L 178.0,356.1 L 178.3,354.9 L 177.4,352.9 L 176.7,352.4 L 176.0,351.1 L 175.9,350.1 L 175.4,351.6 L 175.7,353.1 L 176.8,354.0 L 177.2,355.0 L 177.2,355.6 L 177.5,356.7 L 176.9,357.4 L 177.3,357.9 L 177.1,359.2 L 177.2,359.8 L 177.3,359.9 L 177.1,361.3 L 176.7,362.0 L 176.3,362.2 L 175.8,362.5 L 175.2,362.6 L 174.4,362.2 L 173.7,362.0 L 173.7,362.3 L 172.5,362.0 L 171.7,360.7 L 171.7,360.4 L 171.5,360.0 L 170.9,359.9 L 170.5,359.4 L 170.2,359.3 L 169.9,359.4 L 169.6,359.1 L 168.9,359.1 L 168.7,358.9 L 168.8,358.5 L 168.7,358.2 L 168.6,358.6 L 168.6,359.2 L 168.4,359.7 L 167.7,360.7 L 167.2,361.0 L 166.2,360.5 L 165.9,360.1 L 165.9,359.8 L 165.6,359.4 L 165.3,359.4 L 165.2,359.7 L 165.5,359.7 L 165.5,360.3 L 164.5,360.9 L 164.7,361.0 L 164.4,361.6 L 164.2,361.5 L 163.8,361.9 L 163.5,362.9 L 163.0,363.9 L 162.4,365.7 L 160.9,367.4 L 160.2,367.5 L 158.7,366.6 L 158.3,363.2 L 158.1,365.2 L 158.2,367.0 L 158.7,368.4 L 157.4,369.6 L 157.3,371.4 L 157.2,372.5 L 155.7,369.8 L 155.1,369.2 L 154.4,368.9 L 154.2,366.7 L 153.4,364.4 L 153.2,362.3 L 152.2,359.1 L 151.1,355.9 L 149.5,354.2 L 148.3,353.3 L 147.7,352.6 L 147.2,352.5 L 144.7,351.3 L 142.7,349.7 L 141.4,348.0 L 140.1,346.5 L 138.1,344.9 L 135.8,343.6 L 134.9,343.7 L 134.3,343.9 L 133.1,342.3 L 132.1,340.7 L 132.5,340.4 L 132.4,339.0 L 132.1,339.3 L 131.8,339.0 L 129.3,336.9 L 127.5,336.3 L 125.9,336.2 L 125.5,336.7 L 125.0,337.1 L 124.0,336.0 L 122.6,333.0 L 121.8,331.2 L 118.5,326.7 L 118.3,326.1 L 118.7,325.5 L 119.2,325.7 L 118.9,325.0 L 118.1,324.7 L 117.5,323.7 L 116.1,322.4 L 116.1,322.0 L 116.3,322.0 L 116.3,321.8 L 116.1,321.7 L 116.2,321.2 L 116.6,321.3 L 116.9,321.1 L 117.1,321.1 L 117.3,321.3 L 117.7,321.2 L 118.0,320.5 L 118.1,320.0 L 117.8,318.7 L 117.6,318.4 L 116.8,318.4 L 116.7,317.9 L 116.3,317.8 L 116.3,317.3 L 116.0,317.7 L 115.5,317.3 L 115.7,317.1 L 115.6,316.8 L 115.5,316.5 L 115.3,316.5 L 115.4,316.0 L 115.8,315.8 L 116.3,315.3 L 116.4,314.9 L 116.4,314.2 L 116.2,313.0 L 116.7,310.9 L 116.8,310.7 L 116.9,309.7 L 117.0,309.3 L 117.2,308.7 L 116.9,308.1 L 117.1,307.1 L 117.2,307.2 L 117.6,306.9 L 117.6,306.6 L 118.0,306.3 L 118.0,306.0 L 118.1,305.9 L 118.0,305.6 L 118.2,305.1 L 119.0,304.7 L 119.1,304.8 L 120.4,303.9 L 120.4,303.7 L 120.5,303.5 L 120.2,303.2 L 120.4,301.2 L 120.6,300.9 L 121.2,300.4 L 121.2,299.4 L 120.8,298.3 L 121.4,297.3 L 121.3,296.9 L 121.2,296.9 L 121.0,295.8 L 121.1,295.7 L 120.9,294.7 L 121.0,294.4 L 121.1,294.4 L 121.3,293.6 L 121.5,293.5 L 121.6,293.2 L 121.9,293.3 L 122.2,292.0 L 121.9,291.8 L 121.6,290.7 L 124.7,278.7 L 128.6,280.5 L 135.5,293.0 L 142.8,297.4 L 150.9,293.2 L 161.1,300.9 L 162.4,299.4 L 160.6,296.4 L 162.3,289.1 Z"},{"name":"Kelantan","path":"M 100.2,75.3 L 103.1,77.7 L 106.2,76.9 L 107.9,78.3 L 109.8,79.0 L 111.2,81.3 L 115.9,95.8 L 118.0,98.8 L 116.2,102.0 L 113.8,104.7 L 113.2,106.2 L 112.5,107.7 L 112.3,107.5 L 111.7,107.9 L 111.8,108.6 L 112.0,108.9 L 112.1,111.6 L 112.7,112.8 L 112.4,114.7 L 112.9,116.8 L 112.6,116.8 L 112.5,117.6 L 112.2,118.0 L 111.8,118.2 L 111.8,118.6 L 112.0,118.8 L 112.3,119.6 L 112.1,120.9 L 112.5,121.6 L 112.7,123.0 L 112.3,123.8 L 112.0,123.7 L 111.9,124.8 L 112.2,124.9 L 113.8,127.2 L 114.1,127.1 L 114.2,128.1 L 113.7,128.0 L 113.7,128.4 L 113.7,130.2 L 113.5,130.4 L 113.2,135.7 L 113.4,136.1 L 113.4,137.8 L 113.1,137.9 L 113.1,138.5 L 114.0,138.6 L 114.3,139.3 L 115.0,139.2 L 116.0,140.6 L 115.9,141.1 L 117.1,141.8 L 117.7,142.8 L 117.1,144.4 L 116.8,144.3 L 116.5,145.0 L 116.8,145.2 L 117.3,148.0 L 117.0,148.8 L 116.6,148.9 L 116.5,149.8 L 117.5,151.7 L 117.0,152.3 L 117.4,152.7 L 117.1,153.0 L 116.9,155.1 L 117.8,155.6 L 118.1,154.9 L 119.7,155.9 L 120.4,157.0 L 120.9,156.9 L 121.3,157.7 L 122.6,158.4 L 122.7,159.1 L 122.3,160.2 L 122.7,160.6 L 123.4,162.5 L 122.9,163.6 L 122.6,163.4 L 121.0,162.4 L 120.6,163.2 L 120.8,167.9 L 119.6,167.7 L 118.6,166.5 L 117.6,168.5 L 116.7,168.9 L 114.6,166.5 L 111.0,166.6 L 111.5,168.0 L 109.8,170.9 L 107.5,169.6 L 105.7,170.2 L 105.7,171.5 L 103.5,169.5 L 103.5,168.4 L 101.5,166.1 L 101.3,163.6 L 98.4,165.3 L 97.2,165.1 L 96.6,163.6 L 95.9,163.6 L 95.9,164.7 L 95.0,163.5 L 94.4,163.7 L 94.2,169.7 L 93.5,169.8 L 93.1,172.7 L 92.4,172.6 L 92.0,170.7 L 92.3,169.5 L 91.8,168.5 L 90.5,168.0 L 90.0,165.9 L 89.3,166.1 L 89.3,163.8 L 88.4,163.4 L 87.7,163.8 L 87.0,171.8 L 86.4,172.5 L 85.7,171.8 L 85.3,172.5 L 83.1,173.6 L 83.1,174.9 L 82.3,175.9 L 82.0,175.5 L 81.3,176.4 L 81.0,175.4 L 79.9,175.9 L 79.0,174.4 L 78.4,174.6 L 78.0,173.3 L 77.1,172.5 L 75.6,173.2 L 75.3,174.8 L 74.3,174.7 L 74.0,173.6 L 72.6,172.0 L 71.2,172.3 L 71.4,171.2 L 70.7,169.6 L 69.6,168.2 L 69.9,166.5 L 71.8,166.5 L 71.4,163.7 L 72.2,162.9 L 73.0,160.8 L 72.3,159.2 L 72.7,158.2 L 74.1,157.6 L 74.2,154.4 L 73.2,150.6 L 74.3,149.3 L 74.8,146.4 L 75.5,144.0 L 75.9,139.0 L 77.3,133.5 L 79.2,131.9 L 79.6,129.7 L 81.1,128.4 L 83.2,129.7 L 85.8,128.3 L 86.5,126.8 L 86.0,125.9 L 85.8,122.2 L 86.5,121.0 L 86.1,119.0 L 82.7,118.2 L 83.9,114.1 L 82.6,112.9 L 82.8,109.6 L 84.2,107.2 L 84.1,104.2 L 84.4,104.3 L 85.2,103.7 L 85.3,102.4 L 86.1,102.5 L 86.3,101.9 L 86.8,101.6 L 87.5,102.4 L 87.4,103.3 L 89.2,105.6 L 89.6,105.5 L 89.2,104.0 L 89.9,102.2 L 91.0,102.1 L 90.9,101.4 L 91.3,101.4 L 91.6,100.9 L 91.6,99.6 L 92.4,98.8 L 93.0,99.0 L 94.3,97.3 L 93.8,95.0 L 93.3,95.0 L 93.8,92.6 L 94.3,92.2 L 94.0,91.2 L 95.4,89.0 L 95.5,87.8 L 97.1,86.3 L 98.6,84.7 L 100.3,80.7 L 99.7,79.2 L 99.8,76.1 L 100.2,75.3 Z"},{"name":"Melaka","path":"M 116.1,322.4 L 115.5,321.9 L 115.1,321.7 L 114.4,321.5 L 114.1,321.5 L 112.7,320.5 L 111.9,320.4 L 111.7,320.5 L 110.7,319.8 L 110.5,319.4 L 110.0,319.1 L 109.3,319.0 L 108.9,318.4 L 108.7,318.3 L 108.0,318.1 L 107.2,317.4 L 107.0,317.5 L 106.5,317.3 L 106.1,317.2 L 105.7,316.5 L 105.2,316.3 L 104.8,315.8 L 104.4,315.6 L 104.0,315.5 L 103.3,315.4 L 103.0,315.6 L 102.7,315.4 L 101.8,313.2 L 101.0,312.1 L 100.7,312.0 L 100.5,312.1 L 100.0,311.0 L 99.8,310.9 L 99.6,310.6 L 99.2,309.0 L 98.7,307.9 L 98.0,307.6 L 97.4,306.7 L 96.9,306.4 L 96.4,306.4 L 96.3,306.5 L 95.5,306.3 L 95.3,305.9 L 95.4,305.9 L 95.2,305.3 L 95.5,305.1 L 95.8,304.6 L 96.3,304.4 L 97.0,303.9 L 97.6,302.9 L 97.7,302.1 L 98.0,302.5 L 97.9,302.6 L 97.9,303.0 L 98.3,303.3 L 98.6,303.1 L 98.5,302.8 L 98.6,302.4 L 99.0,302.4 L 99.1,301.9 L 98.9,301.8 L 99.1,301.0 L 99.8,301.2 L 100.1,301.7 L 101.4,300.7 L 102.2,301.1 L 103.6,298.6 L 104.3,299.2 L 104.9,299.7 L 105.2,300.2 L 105.4,300.1 L 105.8,300.5 L 107.7,301.0 L 109.8,299.2 L 111.1,298.8 L 113.8,300.2 L 113.8,300.8 L 118.0,302.8 L 119.3,303.4 L 120.1,303.6 L 120.4,303.9 L 119.1,304.8 L 119.0,304.7 L 118.2,305.1 L 118.0,305.6 L 118.1,305.9 L 118.0,306.0 L 118.0,306.3 L 117.6,306.6 L 117.6,306.9 L 117.2,307.2 L 117.1,307.1 L 116.9,308.1 L 117.2,308.7 L 117.0,309.3 L 116.9,309.7 L 116.8,310.7 L 116.7,310.9 L 116.2,313.0 L 116.4,314.2 L 116.4,314.9 L 116.3,315.3 L 115.8,315.8 L 115.4,316.0 L 115.3,316.5 L 115.5,316.5 L 115.6,316.8 L 115.7,317.1 L 115.5,317.3 L 116.0,317.7 L 116.3,317.3 L 116.3,317.8 L 116.7,317.9 L 116.8,318.4 L 117.6,318.4 L 117.8,318.7 L 118.1,320.0 L 118.0,320.5 L 117.7,321.2 L 117.3,321.3 L 117.1,321.1 L 116.9,321.1 L 116.6,321.3 L 116.2,321.2 L 116.1,321.7 L 116.3,321.8 L 116.3,322.0 L 116.1,322.0 L 116.1,322.4 Z"},{"name":"Negeri Sembilan","path":"M 95.5,305.1 L 95.3,304.5 L 95.0,304.3 L 94.7,304.3 L 94.2,303.9 L 94.2,303.5 L 93.8,303.0 L 93.3,303.0 L 92.7,303.2 L 92.3,303.4 L 91.1,303.3 L 90.9,303.6 L 90.7,304.0 L 90.7,304.2 L 90.6,304.3 L 90.4,303.8 L 90.6,303.6 L 90.7,303.6 L 90.7,302.0 L 90.6,301.8 L 90.7,301.5 L 90.5,300.8 L 90.4,300.8 L 90.4,300.3 L 90.6,300.2 L 90.5,300.0 L 90.3,300.1 L 90.3,299.9 L 90.4,299.8 L 90.1,299.0 L 89.9,298.3 L 89.7,298.2 L 89.3,297.3 L 89.0,297.1 L 88.6,297.2 L 88.1,297.2 L 88.0,296.6 L 88.2,296.5 L 88.4,295.9 L 88.1,295.2 L 88.4,294.8 L 88.2,294.0 L 88.0,293.8 L 87.8,293.9 L 87.7,293.3 L 87.1,292.5 L 86.4,292.3 L 85.8,292.6 L 85.6,292.9 L 85.0,292.9 L 84.9,292.6 L 84.4,292.3 L 84.9,291.5 L 85.4,291.4 L 85.7,291.4 L 85.4,290.5 L 85.8,289.5 L 86.3,289.3 L 86.0,288.3 L 86.3,287.6 L 86.5,287.6 L 86.9,286.2 L 86.5,276.4 L 91.8,276.6 L 93.4,270.1 L 93.7,268.8 L 94.7,267.1 L 95.3,267.1 L 94.4,261.9 L 95.0,260.4 L 94.1,257.6 L 94.4,256.4 L 94.2,254.9 L 93.7,254.0 L 93.9,253.6 L 93.5,253.2 L 93.0,253.1 L 93.8,251.3 L 95.5,252.5 L 95.4,254.0 L 96.8,254.9 L 98.2,255.0 L 99.0,258.7 L 100.9,257.0 L 102.4,256.9 L 103.0,258.1 L 112.3,261.7 L 115.2,267.6 L 123.2,275.3 L 123.9,274.7 L 124.4,275.7 L 124.7,278.7 L 121.6,290.7 L 121.9,291.8 L 122.2,292.0 L 121.9,293.3 L 121.6,293.2 L 121.5,293.5 L 121.3,293.6 L 121.1,294.4 L 121.0,294.4 L 120.9,294.7 L 121.1,295.7 L 121.0,295.8 L 121.2,296.9 L 121.3,296.9 L 121.4,297.3 L 120.8,298.3 L 121.2,299.4 L 121.2,300.4 L 120.6,300.9 L 120.4,301.2 L 120.2,303.2 L 120.5,303.5 L 120.4,303.7 L 120.4,303.9 L 120.1,303.6 L 119.3,303.4 L 118.0,302.8 L 113.8,300.8 L 113.8,300.2 L 111.1,298.8 L 109.8,299.2 L 107.7,301.0 L 105.8,300.5 L 105.4,300.1 L 105.2,300.2 L 104.9,299.7 L 104.3,299.2 L 103.6,298.6 L 102.2,301.1 L 101.4,300.7 L 100.1,301.7 L 99.8,301.2 L 99.1,301.0 L 98.9,301.8 L 99.1,301.9 L 99.0,302.4 L 98.6,302.4 L 98.5,302.8 L 98.6,303.1 L 98.3,303.3 L 97.9,303.0 L 97.9,302.6 L 98.0,302.5 L 97.7,302.1 L 97.6,302.9 L 97.0,303.9 L 96.3,304.4 L 95.8,304.6 L 95.5,305.1 Z"},{"name":"Pahang","path":"M 153.6,198.5 L 152.8,201.2 L 152.2,201.8 L 154.3,211.3 L 153.0,210.8 L 151.4,213.8 L 152.0,221.0 L 150.5,220.5 L 149.9,225.2 L 155.9,238.3 L 153.2,247.7 L 154.8,256.8 L 154.1,272.3 L 155.7,279.1 L 162.3,289.1 L 160.6,296.4 L 162.4,299.4 L 161.1,300.9 L 150.9,293.2 L 142.8,297.4 L 135.5,293.0 L 128.6,280.5 L 124.7,278.7 L 124.4,275.7 L 123.9,274.7 L 123.2,275.3 L 115.2,267.6 L 112.3,261.7 L 103.0,258.1 L 102.4,256.9 L 100.9,257.0 L 99.0,258.7 L 98.2,255.0 L 96.8,254.9 L 95.4,254.0 L 95.5,252.5 L 93.8,251.3 L 93.0,253.1 L 92.3,252.7 L 92.1,253.1 L 91.5,252.4 L 90.6,252.2 L 89.1,250.6 L 88.4,248.8 L 87.7,248.4 L 87.7,247.3 L 86.8,246.4 L 87.1,245.6 L 86.9,244.7 L 87.6,244.2 L 88.1,243.3 L 87.6,241.7 L 86.9,238.7 L 87.5,237.0 L 87.9,236.1 L 88.7,235.8 L 89.0,232.6 L 87.8,230.7 L 87.0,228.0 L 86.0,227.0 L 86.0,226.1 L 85.1,226.3 L 84.0,226.4 L 83.5,225.7 L 82.5,225.3 L 81.4,223.0 L 81.4,222.6 L 80.2,220.8 L 80.0,218.6 L 80.4,218.1 L 80.6,216.5 L 79.4,214.3 L 79.3,209.1 L 78.6,207.6 L 79.6,205.0 L 79.4,203.2 L 77.0,201.9 L 76.2,199.3 L 76.8,196.8 L 74.6,195.8 L 74.5,194.4 L 75.0,193.6 L 74.3,192.5 L 74.1,189.1 L 73.1,188.3 L 73.6,187.9 L 73.9,185.7 L 72.1,184.6 L 70.6,185.0 L 70.4,183.4 L 69.5,182.7 L 70.7,181.6 L 70.8,179.4 L 71.8,178.7 L 71.6,177.7 L 70.9,177.3 L 70.3,173.8 L 71.2,172.3 L 72.6,172.0 L 74.0,173.6 L 74.3,174.7 L 75.3,174.8 L 75.6,173.2 L 77.1,172.5 L 78.0,173.3 L 78.4,174.6 L 79.0,174.4 L 79.9,175.9 L 81.0,175.4 L 81.3,176.4 L 82.0,175.5 L 82.3,175.9 L 83.1,174.9 L 83.1,173.6 L 85.3,172.5 L 85.7,171.8 L 86.4,172.5 L 87.0,171.8 L 87.7,163.8 L 88.4,163.4 L 89.3,163.8 L 89.3,166.1 L 90.0,165.9 L 90.5,168.0 L 91.8,168.5 L 92.3,169.5 L 92.0,170.7 L 92.4,172.6 L 93.1,172.7 L 93.5,169.8 L 94.2,169.7 L 94.4,163.7 L 95.0,163.5 L 95.9,164.7 L 95.9,163.6 L 96.6,163.6 L 97.2,165.1 L 98.4,165.3 L 101.3,163.6 L 101.5,166.1 L 103.5,168.4 L 103.5,169.5 L 105.7,171.5 L 105.7,170.2 L 107.5,169.6 L 109.8,170.9 L 111.5,168.0 L 111.0,166.6 L 114.6,166.5 L 116.7,168.9 L 117.6,168.5 L 118.6,166.5 L 119.6,167.7 L 120.8,167.9 L 120.6,163.2 L 121.0,162.4 L 122.6,163.4 L 122.9,163.6 L 123.1,163.7 L 124.2,166.5 L 127.8,168.8 L 130.5,168.5 L 132.1,172.5 L 131.5,175.3 L 130.4,174.7 L 130.7,179.4 L 131.9,181.0 L 135.7,181.1 L 136.9,182.6 L 137.2,184.5 L 137.7,184.6 L 136.8,186.1 L 137.3,189.6 L 135.8,188.9 L 134.9,191.8 L 133.9,191.9 L 134.0,194.3 L 133.2,196.3 L 133.6,199.7 L 132.1,200.8 L 133.9,203.2 L 136.9,201.4 L 139.5,202.1 L 139.9,203.5 L 141.6,204.1 L 143.5,207.0 L 145.0,206.8 L 145.1,208.2 L 146.3,208.1 L 147.9,210.9 L 147.6,212.1 L 149.1,216.1 L 149.0,213.8 L 149.8,213.1 L 150.1,212.2 L 149.9,209.6 L 149.8,206.4 L 149.4,205.2 L 149.0,205.3 L 148.7,203.9 L 149.0,203.7 L 149.0,201.9 L 149.7,201.5 L 149.7,200.5 L 150.0,200.5 L 149.5,198.6 L 149.5,197.5 L 150.2,197.7 L 150.5,198.4 L 153.5,198.4 L 153.6,198.5 Z"},{"name":"Perak","path":"M 48.9,217.9 L 46.7,218.4 L 44.3,215.7 L 44.2,208.6 L 46.5,209.3 L 47.1,204.0 L 43.5,198.7 L 40.9,199.1 L 38.9,190.0 L 39.4,183.4 L 40.6,183.5 L 41.0,175.6 L 39.1,174.7 L 40.2,170.3 L 41.9,169.1 L 39.8,168.8 L 39.2,163.5 L 40.8,162.1 L 38.8,162.0 L 38.1,157.8 L 38.0,156.6 L 36.7,157.7 L 35.1,156.5 L 35.5,154.7 L 36.1,154.2 L 35.1,153.5 L 33.6,154.5 L 32.8,149.3 L 31.4,146.7 L 30.9,145.0 L 30.6,143.8 L 30.7,143.1 L 31.4,142.8 L 32.0,141.7 L 32.5,141.9 L 35.9,141.5 L 37.0,142.1 L 36.7,142.6 L 36.6,143.3 L 38.2,144.3 L 39.5,143.4 L 40.6,141.5 L 41.2,139.3 L 42.5,138.6 L 43.7,134.7 L 45.0,133.5 L 45.8,130.3 L 48.9,130.3 L 50.4,128.8 L 50.8,120.8 L 53.4,119.5 L 54.2,114.8 L 52.9,113.1 L 55.1,110.4 L 55.4,106.6 L 54.1,103.3 L 55.8,102.5 L 57.5,105.2 L 58.6,104.8 L 59.7,106.3 L 61.9,112.6 L 65.1,109.1 L 66.9,106.2 L 66.2,103.9 L 67.5,100.6 L 70.2,100.9 L 72.1,97.1 L 75.8,97.1 L 76.5,96.2 L 77.2,95.4 L 79.8,93.3 L 80.4,94.8 L 81.6,97.0 L 82.8,97.3 L 82.8,100.7 L 83.4,102.6 L 84.1,104.2 L 84.2,107.2 L 82.8,109.6 L 82.6,112.9 L 83.9,114.1 L 82.7,118.2 L 86.1,119.0 L 86.5,121.0 L 85.8,122.2 L 86.0,125.9 L 86.5,126.8 L 85.8,128.3 L 83.2,129.7 L 81.1,128.4 L 79.6,129.7 L 79.2,131.9 L 77.3,133.5 L 75.9,139.0 L 75.5,144.0 L 74.8,146.4 L 74.3,149.3 L 73.2,150.6 L 74.2,154.4 L 74.1,157.6 L 72.7,158.2 L 72.3,159.2 L 73.0,160.8 L 72.2,162.9 L 71.4,163.7 L 71.8,166.5 L 69.9,166.5 L 69.6,168.2 L 70.7,169.6 L 71.4,171.2 L 71.2,172.3 L 70.3,173.8 L 70.9,177.3 L 71.6,177.7 L 71.8,178.7 L 70.8,179.4 L 70.7,181.6 L 69.5,182.7 L 70.4,183.4 L 70.6,185.0 L 72.1,184.6 L 73.9,185.7 L 73.6,187.9 L 73.1,188.3 L 74.1,189.1 L 74.3,192.5 L 75.0,193.6 L 74.5,194.4 L 74.6,195.8 L 76.8,196.8 L 76.2,199.3 L 77.0,201.9 L 79.4,203.2 L 79.6,205.0 L 78.6,207.6 L 79.3,209.1 L 79.4,214.3 L 80.6,216.5 L 80.4,218.1 L 80.0,218.6 L 80.2,220.8 L 81.4,222.6 L 80.6,222.4 L 78.7,226.7 L 77.3,227.7 L 75.3,226.3 L 74.1,223.9 L 71.9,222.5 L 71.4,220.9 L 69.3,221.6 L 69.4,223.7 L 70.2,226.2 L 69.9,227.4 L 67.5,228.8 L 66.2,228.3 L 66.2,225.8 L 64.8,226.2 L 61.8,224.7 L 59.2,224.8 L 59.9,222.0 L 58.6,223.7 L 58.6,221.1 L 57.6,221.6 L 57.4,220.7 L 55.9,220.9 L 55.5,222.9 L 54.5,221.2 L 55.4,220.4 L 55.3,219.4 L 53.8,219.0 L 54.1,216.7 L 48.9,217.9 Z"},{"name":"Selangor","path":"M 85.0,292.9 L 84.1,292.9 L 83.6,291.8 L 75.4,287.0 L 72.5,280.3 L 68.0,278.4 L 67.7,275.9 L 67.1,275.0 L 69.2,270.3 L 70.8,268.7 L 70.7,264.2 L 69.1,261.7 L 68.5,255.2 L 68.2,253.3 L 66.8,250.0 L 65.4,248.6 L 63.8,247.7 L 63.1,245.2 L 61.5,242.0 L 59.9,238.7 L 58.5,232.9 L 55.5,228.6 L 53.4,227.5 L 52.1,223.8 L 50.8,222.6 L 49.0,222.2 L 48.5,220.6 L 48.9,217.9 L 54.1,216.7 L 53.8,219.0 L 55.3,219.4 L 55.4,220.4 L 54.5,221.2 L 55.5,222.9 L 55.9,220.9 L 57.4,220.7 L 57.6,221.6 L 58.6,221.1 L 58.6,223.7 L 59.9,222.0 L 59.2,224.8 L 61.8,224.7 L 64.8,226.2 L 66.2,225.8 L 66.2,228.3 L 67.5,228.8 L 69.9,227.4 L 70.2,226.2 L 69.4,223.7 L 69.3,221.6 L 71.4,220.9 L 71.9,222.5 L 74.1,223.9 L 75.3,226.3 L 77.3,227.7 L 78.7,226.7 L 80.6,222.4 L 81.4,222.6 L 81.4,223.0 L 82.5,225.3 L 83.5,225.7 L 84.0,226.4 L 85.1,226.3 L 86.0,226.1 L 86.0,227.0 L 87.0,228.0 L 87.8,230.7 L 89.0,232.6 L 88.7,235.8 L 87.9,236.1 L 87.5,237.0 L 86.9,238.7 L 87.6,241.7 L 88.1,243.3 L 87.6,244.2 L 86.9,244.7 L 87.1,245.6 L 86.8,246.4 L 87.7,247.3 L 87.7,248.4 L 88.4,248.8 L 89.1,250.6 L 90.6,252.2 L 91.5,252.4 L 92.1,253.1 L 92.3,252.7 L 93.0,253.1 L 93.5,253.2 L 93.9,253.6 L 93.7,254.0 L 94.2,254.9 L 94.4,256.4 L 94.1,257.6 L 95.0,260.4 L 94.4,261.9 L 95.3,267.1 L 94.7,267.1 L 93.7,268.8 L 93.4,270.1 L 91.8,276.6 L 86.5,276.4 L 86.9,286.2 L 86.5,287.6 L 86.3,287.6 L 86.0,288.3 L 86.3,289.3 L 85.8,289.5 L 85.4,290.5 L 85.7,291.4 L 85.4,291.4 L 84.9,291.5 L 84.4,292.3 L 84.9,292.6 L 85.0,292.9 Z M 81.9,255.0 L 81.6,256.2 L 81.2,256.8 L 81.1,259.0 L 81.0,259.5 L 81.3,260.2 L 82.2,261.1 L 82.5,260.6 L 82.9,260.8 L 82.9,261.8 L 82.7,262.1 L 82.9,263.8 L 82.3,264.4 L 82.4,265.2 L 82.8,265.2 L 82.8,265.8 L 83.1,265.9 L 83.2,266.3 L 84.7,265.9 L 85.0,265.5 L 85.7,266.5 L 85.7,265.4 L 86.4,265.4 L 86.4,264.3 L 86.3,263.6 L 86.5,262.3 L 85.9,261.8 L 85.8,260.6 L 86.4,259.0 L 85.9,258.9 L 85.8,258.1 L 86.4,258.2 L 86.8,257.3 L 86.5,256.3 L 86.0,255.8 L 86.1,254.8 L 85.6,254.7 L 85.2,255.8 L 84.5,255.7 L 84.5,255.3 L 83.3,255.0 L 83.0,254.1 L 81.9,255.0 Z M 83.6,270.4 L 83.3,270.4 L 82.9,270.8 L 83.0,271.2 L 83.4,271.6 L 83.4,271.9 L 83.2,271.9 L 83.2,272.8 L 83.3,273.3 L 83.3,273.7 L 83.2,273.8 L 83.2,274.0 L 83.0,274.1 L 82.8,274.6 L 83.1,275.8 L 83.3,275.6 L 83.4,276.0 L 83.8,275.7 L 84.0,275.1 L 84.3,275.0 L 84.5,274.3 L 84.3,274.2 L 84.4,273.9 L 84.7,273.8 L 84.7,272.9 L 85.7,272.9 L 85.7,271.3 L 85.0,271.3 L 85.1,270.8 L 84.5,271.1 L 84.4,270.3 L 84.5,270.1 L 84.3,270.1 L 84.0,270.3 L 84.0,271.0 L 83.6,271.1 L 83.6,270.4 Z"},{"name":"Terengganu","path":"M 118.0,98.8 L 119.1,99.7 L 120.7,101.1 L 121.7,102.6 L 123.8,106.9 L 126.8,110.4 L 130.0,114.3 L 133.4,117.3 L 134.6,117.3 L 135.9,118.3 L 140.7,124.9 L 142.2,128.2 L 141.2,129.7 L 142.5,128.9 L 144.3,133.2 L 143.9,133.7 L 145.5,137.3 L 149.7,149.9 L 153.8,160.4 L 153.7,160.7 L 154.4,162.3 L 153.5,162.0 L 152.4,162.6 L 153.7,162.5 L 153.6,163.3 L 154.6,166.7 L 154.7,167.8 L 154.6,168.6 L 154.8,169.8 L 154.3,169.6 L 154.0,169.9 L 154.2,170.6 L 155.5,175.4 L 155.8,177.5 L 155.5,178.1 L 154.9,178.2 L 154.5,180.8 L 155.0,183.1 L 155.0,185.5 L 156.5,189.6 L 156.1,191.6 L 155.8,191.9 L 155.8,193.6 L 155.3,193.6 L 155.1,194.8 L 154.9,194.8 L 154.6,194.4 L 154.4,196.3 L 154.6,198.1 L 154.4,198.7 L 154.2,198.4 L 153.6,198.5 L 153.5,198.4 L 150.5,198.4 L 150.2,197.7 L 149.5,197.5 L 149.5,198.6 L 150.0,200.5 L 149.7,200.5 L 149.7,201.5 L 149.0,201.9 L 149.0,203.7 L 148.7,203.9 L 149.0,205.3 L 149.4,205.2 L 149.8,206.4 L 149.9,209.6 L 150.1,212.2 L 149.8,213.1 L 149.0,213.8 L 149.1,216.1 L 147.6,212.1 L 147.9,210.9 L 146.3,208.1 L 145.1,208.2 L 145.0,206.8 L 143.5,207.0 L 141.6,204.1 L 139.9,203.5 L 139.5,202.1 L 136.9,201.4 L 133.9,203.2 L 132.1,200.8 L 133.6,199.7 L 133.2,196.3 L 134.0,194.3 L 133.9,191.9 L 134.9,191.8 L 135.8,188.9 L 137.3,189.6 L 136.8,186.1 L 137.7,184.6 L 137.2,184.5 L 136.9,182.6 L 135.7,181.1 L 131.9,181.0 L 130.7,179.4 L 130.4,174.7 L 131.5,175.3 L 132.1,172.5 L 130.5,168.5 L 127.8,168.8 L 124.2,166.5 L 123.1,163.7 L 122.9,163.6 L 123.4,162.5 L 122.7,160.6 L 122.3,160.2 L 122.7,159.1 L 122.6,158.4 L 121.3,157.7 L 120.9,156.9 L 120.4,157.0 L 119.7,155.9 L 118.1,154.9 L 117.8,155.6 L 116.9,155.1 L 117.1,153.0 L 117.4,152.7 L 117.0,152.3 L 117.5,151.7 L 116.5,149.8 L 116.6,148.9 L 117.0,148.8 L 117.3,148.0 L 116.8,145.2 L 116.5,145.0 L 116.8,144.3 L 117.1,144.4 L 117.7,142.8 L 117.1,141.8 L 115.9,141.1 L 116.0,140.6 L 115.0,139.2 L 114.3,139.3 L 114.0,138.6 L 113.1,138.5 L 113.1,137.9 L 113.4,137.8 L 113.4,136.1 L 113.2,135.7 L 113.5,130.4 L 113.7,130.2 L 113.7,128.4 L 113.7,128.0 L 114.2,128.1 L 114.1,127.1 L 113.8,127.2 L 112.2,124.9 L 111.9,124.8 L 112.0,123.7 L 112.3,123.8 L 112.7,123.0 L 112.5,121.6 L 112.1,120.9 L 112.3,119.6 L 112.0,118.8 L 111.8,118.6 L 111.8,118.2 L 112.2,118.0 L 112.5,117.6 L 112.6,116.8 L 112.9,116.8 L 112.4,114.7 L 112.7,112.8 L 112.1,111.6 L 112.0,108.9 L 111.8,108.6 L 111.7,107.9 L 112.3,107.5 L 112.5,107.7 L 113.2,106.2 L 113.8,104.7 L 116.2,102.0 L 118.0,98.8 Z"}];
+
+const MAP_MEMBERS_CACHE = {};
+const MAP_LABEL_POS = {
+  'Sabah': [712,155],
+  'Sarawak': [515,310],
+  'Selangor': [72,255],
+  'Johor': [155,340],
+  'Perak': [58,185],
+  'Kedah': [42,98],
+  'Penang': [26,128],
+  'Kelantan': [100,128],
+  'Terengganu': [138,170],
+  'Pahang': [125,228],
+  'Negeri Sembilan': [98,282],
+  'Melaka': [106,316],
+  'Federal Territory of Kuala Lumpur': [84,248],
+};
+
+function getMapFill(name, hovered){
+  const a = hovered ? 0.5 : 0.18;
+  if(name==='Sabah') return `rgba(0,229,255,${a})`;
+  if(name==='Sarawak') return `rgba(123,47,255,${a})`;
+  return `rgba(0,100,220,${a})`;
+}
+function getMapStroke(name){
+  if(name==='Sabah') return '#00e5ff';
+  if(name==='Sarawak') return '#b060ff';
+  return '#4488ff';
+}
+
+function drawMalaysiaMap(){
+  const svg = document.getElementById('my-map');
+  if(!svg) return;
+  const statesG = document.getElementById('map-states');
+  const pinsG   = document.getElementById('map-pins');
+  const labelsG = document.getElementById('map-labels');
+  if(!statesG) return;
+
+  // Clear
+  statesG.innerHTML=''; pinsG.innerHTML=''; labelsG.innerHTML='';
+
+  // Draw state paths
+  MAP_STATES.forEach(s=>{
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d', s.path);
+    p.setAttribute('fill', getMapFill(s.name, false));
+    p.setAttribute('stroke', getMapStroke(s.name));
+    p.setAttribute('stroke-width', s.name==='Sabah'||s.name==='Sarawak'?'1.5':'0.8');
+    p.style.transition = 'fill 0.2s';
+    p.style.cursor = 'default';
+
+    p.addEventListener('mouseenter', ()=>{
+      p.setAttribute('fill', getMapFill(s.name, true));
+      showMapTooltip(s.name, null);
+    });
+    p.addEventListener('mousemove', e=>{
+      const rect = svg.getBoundingClientRect();
+      const scaleX = 800 / rect.width;
+      const scaleY = 420 / rect.height;
+      const mx = (e.clientX - rect.left) * scaleX;
+      const my = (e.clientY - rect.top) * scaleY;
+      showMapTooltip(s.name, {x:mx, y:my});
+    });
+    p.addEventListener('mouseleave', ()=>{
+      p.setAttribute('fill', getMapFill(s.name, false));
+      hideMapTooltip();
+    });
+    statesG.appendChild(p);
+  });
+
+  // Draw member pins from live data
+  drawMapPins();
+
+  // State labels
+  [
+    {name:'Sabah',    x:712, y:175, c:'#00e5ff'},
+    {name:'Sarawak',  x:515, y:330, c:'#b060ff'},
+  ].forEach(l=>{
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',l.x); t.setAttribute('y',l.y);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');
+    t.setAttribute('font-weight','800');
+    t.setAttribute('fill',l.c);
+    t.setAttribute('opacity','0.7');
+    t.setAttribute('letter-spacing','1.5');
+    t.style.pointerEvents='none';
+    t.style.userSelect='none';
+    t.textContent=l.name.toUpperCase();
+    labelsG.appendChild(t);
+  });
+}
+
+function drawMapPins(){
+  const pinsG = document.getElementById('map-pins');
+  if(!pinsG) return;
+  pinsG.innerHTML='';
+
+  Object.entries(MAP_MEMBERS_CACHE).forEach(([state, members])=>{
+    const pos = MAP_LABEL_POS[state];
+    if(!pos || !members.length) return;
+    const count = members.length;
+    const r = Math.min(10 + count*3, 22);
+    const svg = document.getElementById('my-map');
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', pos[0]);
+    circle.setAttribute('cy', pos[1]);
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill','url(#pinG)');
+    circle.setAttribute('stroke','rgba(0,229,255,0.8)');
+    circle.setAttribute('stroke-width','1.5');
+    circle.style.cursor='pointer';
+    circle.style.filter='drop-shadow(0 0 6px rgba(0,229,255,0.5))';
+
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', pos[0]);
+    txt.setAttribute('y', pos[1]);
+    txt.setAttribute('text-anchor','middle');
+    txt.setAttribute('dominant-baseline','central');
+    txt.setAttribute('font-size', count>9?'9':'11');
+    txt.setAttribute('font-weight','900');
+    txt.setAttribute('fill','#fff');
+    txt.style.pointerEvents='none';
+    txt.style.userSelect='none';
+    txt.textContent=count;
+
+    g.addEventListener('mouseenter',()=>{
+      circle.setAttribute('stroke','#ffffff');
+      circle.style.filter='drop-shadow(0 0 12px rgba(0,229,255,0.9))';
+    });
+    g.addEventListener('mousemove', e=>{
+      const rect = svg.getBoundingClientRect();
+      const scaleX = 800/rect.width, scaleY=420/rect.height;
+      const mx=(e.clientX-rect.left)*scaleX;
+      const my=(e.clientY-rect.top)*scaleY;
+      showMapTooltip(state,{x:mx,y:my});
+    });
+    g.addEventListener('mouseleave',()=>{
+      circle.setAttribute('stroke','rgba(0,229,255,0.8)');
+      circle.style.filter='drop-shadow(0 0 6px rgba(0,229,255,0.5))';
+      hideMapTooltip();
+    });
+
+    g.appendChild(circle);
+    g.appendChild(txt);
+    pinsG.appendChild(g);
+  });
+}
+
+function showMapTooltip(stateName, pos){
+  const g  = document.getElementById('map-tooltip');
+  const bg = document.getElementById('tt-bg');
+  const tn = document.getElementById('tt-name');
+  const tc = document.getElementById('tt-count');
+  const m1 = document.getElementById('tt-m1');
+  const m2 = document.getElementById('tt-m2');
+  const m3 = document.getElementById('tt-m3');
+  const tm = document.getElementById('tt-more');
+  if(!g) return;
+
+  const members = MAP_MEMBERS_CACHE[stateName]||[];
+  const label = stateName.replace('Federal Territory of ','FT ');
+
+  tn.textContent = label;
+  tc.textContent = members.length>0 ? members.length+' member'+(members.length>1?'s':'') : 'No members yet';
+  [m1,m2,m3].forEach((el,i)=>{ el.textContent = members[i] ? '👤 '+members[i] : ''; });
+  tm.textContent = members.length>3 ? '+'+(members.length-3)+' more' : '';
+
+  const rows = 2 + Math.min(members.length,3) + (members.length>3?1:0);
+  const th = 14 + rows*16;
+  const tw = 155;
+
+  if(pos){
+    let tx = Math.min(pos.x+14, 800-tw-4);
+    let ty = Math.max(pos.y-th-10, 4);
+    bg.setAttribute('x',tx); bg.setAttribute('y',ty);
+    bg.setAttribute('width',tw); bg.setAttribute('height',th);
+    tn.setAttribute('x',tx+8); tn.setAttribute('y',ty+14);
+    tc.setAttribute('x',tx+8); tc.setAttribute('y',ty+26);
+    [m1,m2,m3].forEach((el,i)=>{ el.setAttribute('x',tx+8); el.setAttribute('y',ty+40+i*16); });
+    tm.setAttribute('x',tx+8); tm.setAttribute('y',ty+40+Math.min(members.length,3)*16);
+  }
+  g.style.display='';
+}
+
+function hideMapTooltip(){
+  const g = document.getElementById('map-tooltip');
+  if(g) g.style.display='none';
+}
+
+async function loadMapMemberData(){
+  if(!user) return;
+  const {data} = await sb.from('profiles').select('full_name,state');
+  if(!data) return;
+  // Clear cache
+  Object.keys(MAP_MEMBERS_CACHE).forEach(k=>delete MAP_MEMBERS_CACHE[k]);
+  data.forEach(p=>{
+    if(!p.state) return;
+    if(!MAP_MEMBERS_CACHE[p.state]) MAP_MEMBERS_CACHE[p.state]=[];
+    MAP_MEMBERS_CACHE[p.state].push(p.full_name||'Eastel User');
+  });
+  drawMapPins();
+}
+
+
+/* ─────────────────────────────────────
+   LIVE NEWS FEED (Claude API powered)
+───────────────────────────────────── */
+let currentNewsCat = 'eastel';
+let newsCache = {};
+let newsLoading = false;
+
+
+// ── Fallback news (shown when API unreachable) ──
+const NEWS_FALLBACK = {
+  eastel: [
+    {headline:"Eastel Expands Fibre Coverage to Rural Sabah Districts",summary:"Eastel continues its infrastructure rollout, bringing high-speed fibre broadband to underserved communities across interior Sabah, targeting 50,000 new households.",source:"Borneo Post",time:"2 hours ago",url:"#",category:"eastel"},
+    {headline:"Eastel Users Report Fastest Speeds in East Malaysia",summary:"Community reports and speed tests show Eastel delivering consistent 500Mbps+ speeds across Kota Kinabalu and Kuching service areas.",source:"Digital News Asia",time:"5 hours ago",url:"#",category:"eastel"},
+    {headline:"Eastel Launches New Community App for Malaysian Borneo Users",summary:"Eastel introduces a community platform connecting users across Sabah and Sarawak, featuring local news, events, and knowledge sharing.",source:"The Star",time:"1 day ago",url:"#",category:"eastel"},
+    {headline:"Malaysia's Broadband Penetration Reaches 95% in Urban Areas",summary:"MCMC reports record broadband adoption rates in Malaysia, with telcos like Eastel contributing to East Malaysia's digital transformation.",source:"MCMC",time:"2 days ago",url:"#",category:"eastel"},
+  ],
+  crime: [
+    {headline:"PDRM Busts RM2.4 Million Online Scam Syndicate in KL",summary:"Police arrested 12 suspects linked to a sophisticated job scam operation targeting victims across Southeast Asia, seizing computers and cash.",source:"Bernama",time:"3 hours ago",url:"#",category:"crime"},
+    {headline:"Drug Trafficking Ring Dismantled in Sabah, 8 Arrested",summary:"Sabah police seized over 10kg of methamphetamine and arrested eight individuals in a series of coordinated raids across Kota Kinabalu.",source:"Daily Express",time:"6 hours ago",url:"#",category:"crime"},
+    {headline:"Elderly Couple Loses RM180,000 to Macau Scam",summary:"A retired couple in Selangor fell victim to a Macau scam after fraudsters posed as Bank Negara officers, draining their life savings.",source:"NST",time:"8 hours ago",url:"#",category:"crime"},
+    {headline:"Parcel Thief Caught on CCTV in Kuching Neighbourhood",summary:"A serial parcel thief was identified and arrested after viral CCTV footage showed him stealing deliveries from multiple apartment blocks.",source:"Sarawak Tribune",time:"1 day ago",url:"#",category:"crime"},
+  ],
+  accident: [
+    {headline:"Three Killed in Highway Crash Near Ipoh, Traffic Disrupted",summary:"A three-vehicle collision on the North-South Expressway claimed three lives and injured five others, causing a 12km traffic backup during morning rush hour.",source:"Bernama",time:"2 hours ago",url:"#",category:"accident"},
+    {headline:"Flash Floods Hit Kelantan, 200 Families Evacuated",summary:"Heavy overnight rain triggered flash floods in Kota Bharu and surrounding districts, forcing evacuation of over 200 families to relief centres.",source:"The Star",time:"4 hours ago",url:"#",category:"accident"},
+    {headline:"Construction Worker Falls from 8th Floor in JB, Critical",summary:"A foreign construction worker is in critical condition after falling from scaffolding on the 8th floor of a commercial building in Johor Bahru.",source:"NST",time:"7 hours ago",url:"#",category:"accident"},
+    {headline:"Boat Engine Fire Leaves 12 Stranded off Sabah Coast",summary:"A tourist speedboat engine caught fire near Pulau Mamutik, leaving 12 passengers stranded before coast guard vessels reached them.",source:"Daily Express",time:"1 day ago",url:"#",category:"accident"},
+  ],
+  bizarre: [
+    {headline:"Giant Python Found Nesting Inside Penang Restaurant Kitchen",summary:"Staff at a popular Penang eatery discovered a 4-metre reticulated python coiled behind the refrigerator, prompting an emergency call to wildlife authorities.",source:"NST",time:"3 hours ago",url:"#",category:"bizarre"},
+    {headline:"Man Claims He Was Abducted by 'Glowing Orbs' in Sabah Jungle",summary:"A hiker in the Crocker Range reported a 6-hour memory blackout and strange marks on his body after encountering mysterious lights, baffling investigators.",source:"Borneo Post",time:"6 hours ago",url:"#",category:"bizarre"},
+    {headline:"Durian Tree Produces Fruit Mid-Year, Attracts Hundreds to Pahang Village",summary:"An unusual off-season durian bloom in Raub has drawn crowds from across the peninsula, with some calling it a sign of good fortune.",source:"Utusan",time:"1 day ago",url:"#",category:"bizarre"},
+    {headline:"Japanese Man Swims Full Strait of Malacca to Set World Record",summary:"An endurance swimmer completed the 50km crossing of the Strait of Malacca in under 18 hours, claiming a new unofficial world record.",source:"The Star",time:"2 days ago",url:"#",category:"bizarre"},
+  ],
+  war: [
+    {headline:"Ukraine Strikes Russian Fuel Depot Deep Inside Enemy Territory",summary:"Ukrainian forces used long-range drones to hit a major Russian fuel storage facility, disrupting supply lines ahead of a renewed offensive push.",source:"Reuters",time:"1 hour ago",url:"#",category:"war"},
+    {headline:"Gaza Ceasefire Talks Resume in Cairo, Progress Reported",summary:"Mediators from Egypt and Qatar report cautious progress in ceasefire negotiations between Israel and Hamas, with a new framework under discussion.",source:"Al Jazeera",time:"3 hours ago",url:"#",category:"war"},
+    {headline:"China Conducts Military Drills Near Taiwan Strait",summary:"The PLA launched 72-hour naval and air exercises in the Taiwan Strait, drawing protests from Taipei and statements of concern from Washington.",source:"Reuters",time:"5 hours ago",url:"#",category:"war"},
+    {headline:"South China Sea Tensions Rise After Philippine Vessel Incident",summary:"A Philippine Coast Guard vessel reported being water-cannoned by Chinese ships near Scarborough Shoal, escalating an ongoing territorial dispute.",source:"AFP",time:"8 hours ago",url:"#",category:"war"},
+  ],
+};
+
+const NEWS_PROMPTS = {
+  eastel: `Search the web for the latest news about "Eastel" broadband/telco Malaysia, OR "Eastel Borneo" OR "Eastel internet provider Sabah Sarawak". Return ONLY a JSON array of up to 6 news items. Each item: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 2 hours ago","url":"#","category":"eastel"}. If no specific Eastel news found, return latest Malaysian broadband/telco news. Return ONLY valid JSON, no markdown.`,
+
+  crime: `Search the web for the latest crime news in Malaysia today — murders, robberies, scams, drug busts, arrests. Return ONLY a JSON array of up to 6 news items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 3 hours ago","url":"#","category":"crime"}. Return ONLY valid JSON, no markdown, no explanation.`,
+
+  accident: `Search the web for latest accident news in Malaysia today — road accidents, floods, fires, industrial accidents, disasters. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 1 hour ago","url":"#","category":"accident"}. Return ONLY valid JSON, no markdown.`,
+
+  bizarre: `Search the web for the latest bizarre, weird, unusual or shocking news from Malaysia or worldwide — strange events, unexplained phenomena, viral oddities. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 5 hours ago","url":"#","category":"bizarre"}. Return ONLY valid JSON, no markdown.`,
+
+  war: `Search the web for the latest war, military conflict, and geopolitical tensions news today — Ukraine, Middle East, South China Sea, any active conflicts worldwide. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 1 hour ago","url":"#","category":"war"}. Return ONLY valid JSON, no markdown.`
+};
+
+const CAT_ICONS = {eastel:'📡',crime:'🚨',accident:'🚑',bizarre:'😲',war:'⚔️'};
+const CAT_LABELS_EN = {eastel:'Eastel',crime:'Crime',accident:'Accident',bizarre:'Bizarre',war:'War'};
+const CAT_LABELS_BM = {eastel:'Eastel',crime:'Jenayah',accident:'Kemalangan',bizarre:'Pelik',war:'Perang'};
+
+function selectNewsCat(btn, cat){
+  document.querySelectorAll('.ncat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentNewsCat = cat;
+  loadNews(cat);
+}
+
+async function loadNews(cat){
+  if(newsLoading) return;
+
+  // Check cache (30 min TTL)
+  const now = Date.now();
+  if(newsCache[cat] && (now - newsCache[cat].ts) < 30*60*1000){
+    renderNews(newsCache[cat].items, cat);
+    return;
+  }
+
+  newsLoading = true;
+  const feed = document.getElementById('news-feed');
+  const loadMsg = lang==='bm' ? 'Mencari berita '+cat+'…' : 'Fetching latest '+cat+' news…';
+  if(feed) feed.innerHTML = `<div class="spin-wrap" style="padding:24px"><div class="spin"></div><span style="font-size:12px;color:var(--muted)">${loadMsg}</span></div>`;
+
+  const btn = document.getElementById('news-refresh-btn');
+  if(btn) btn.style.opacity='0.5';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1200,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: NEWS_PROMPTS[cat]
+        }]
+      })
+    });
+
+    if(!res.ok) throw new Error('API error: '+res.status);
+    const data = await res.json();
+
+    // Extract ALL text blocks — including after tool_use
+    const textBlocks = (data.content || []).filter(b => b.type === 'text');
+    const rawText = textBlocks.map(b => b.text).join('\n');
+
+    if(!rawText.trim()) throw new Error('Empty response');
+
+    // Aggressive JSON extraction — find first [ and last ]
+    const start = rawText.indexOf('[');
+    const end   = rawText.lastIndexOf(']');
+    if(start === -1 || end === -1 || end <= start) throw new Error('No JSON array in response');
+
+    const jsonStr = rawText.slice(start, end+1)
+      .replace(/[\x00-\x1f\x7f]/g, ' ') // strip control chars
+      .replace(/,\s*]/g, ']')                  // trailing commas
+      .replace(/,\s*}/g, '}');
+
+    const items = JSON.parse(jsonStr);
+    if(!Array.isArray(items) || items.length === 0) throw new Error('Empty array');
+
+    newsCache[cat] = { items, ts: Date.now() };
+    renderNews(items, cat);
+
+  } catch(err) {
+    console.warn('News fetch error:', err.message);
+    // Show fallback static news instead of blank error
+    const fallback = NEWS_FALLBACK[cat] || NEWS_FALLBACK.eastel;
+    renderNews(fallback, cat);
+    // Show subtle notice
+    const feed = document.getElementById('news-feed');
+    if(feed){
+      const notice = document.createElement('div');
+      notice.style.cssText='font-size:10px;color:var(--muted);text-align:center;padding:8px 0;opacity:.6';
+      notice.innerHTML = (lang==='bm'?'Berita tempatan · ':'Local news · ')
+        +'<a onclick="refreshNews()" style="color:var(--cyan);cursor:pointer">'+(lang==='bm'?'Cuba semula':'Retry live')+'</a>';
+      feed.appendChild(notice);
+    }
+  } finally {
+    newsLoading = false;
+    const btn = document.getElementById('news-refresh-btn');
+    if(btn) btn.style.opacity='1';
+  }
+}
+
+function renderNews(items, cat){
+  const feed = document.getElementById('news-feed');
+  if(!feed) return;
+  if(!items || !items.length){
+    feed.innerHTML = '<div class="news-empty">No news found for this category.</div>';
+    return;
+  }
+
+  const catClass = 'ncat-'+cat;
+  const catLabel = lang==='bm' ? (CAT_LABELS_BM[cat]||cat) : (CAT_LABELS_EN[cat]||cat);
+  const icon = CAT_ICONS[cat]||'📰';
+
+  feed.innerHTML = items.map(item => `
+    <div class="news-item" onclick="window.open('${esc(item.url||'#')}','_blank')">
+      <span class="news-cat-tag ${catClass}">${icon} ${catLabel}</span>
+      <div class="news-headline">${esc(item.headline||'')}</div>
+      <div class="news-summary">${esc(item.summary||'')}</div>
+      <div class="news-meta">
+        <span class="news-source">${esc(item.source||'')}</span>
+        <span>·</span>
+        <span>${esc(item.time||'')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function refreshNews(){
+  // Clear cache for current cat and reload
+  delete newsCache[currentNewsCat];
+  loadNews(currentNewsCat);
+}
+
+// Auto-load news on sidebar render
+function initNewsPanel(){
+  // Only load if the news-feed element is visible
+  const feed = document.getElementById('news-feed');
+  if(feed) loadNews('eastel');
+}
+
+
+/* ─────────────────────────────────────
+   MEDIA & STORAGE
+───────────────────────────────────── */
+const BUCKET = 'eastel-media';
+let pendingMedia = []; // [{file, type, previewUrl}]
+
+/* ── Attach media to compose ── */
+function attachMedia(input, type){
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    if(pendingMedia.length >= 4){ toast(lang==='en'?'Max 4 files per post.':'Maksimum 4 fail setiap catatan.','err'); return; }
+    const url = URL.createObjectURL(file);
+    pendingMedia.push({file, type, previewUrl: url});
+    renderComposeMedia();
+  });
+  input.value = ''; // reset so same file can be re-added
+}
+
+function renderComposeMedia(){
+  const row = document.getElementById('compose-media-row');
+  if(!row) return;
+  row.innerHTML = pendingMedia.map((m,i) => `
+    <div class="compose-thumb">
+      ${m.type==='image'
+        ? `<img src="${m.previewUrl}" alt=""/>`
+        : `<video src="${m.previewUrl}" style="width:100%;height:100%;object-fit:cover"></video>`
+      }
+      <div class="compose-thumb-rm" onclick="removeMedia(${i})">✕</div>
+    </div>
+  `).join('');
+}
+
+function removeMedia(idx){
+  URL.revokeObjectURL(pendingMedia[idx].previewUrl);
+  pendingMedia.splice(idx,1);
+  renderComposeMedia();
+}
+
+/* ── Upload file to Supabase Storage ── */
+async function uploadFile(file, folder, onProgress){
+  const ext = file.name.split('.').pop();
+  const fname = folder+'/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'.'+ext;
+  const { data, error } = await sb.storage.from(BUCKET).upload(fname, file, {
+    cacheControl:'3600', upsert:false,
+    contentType: file.type,
+  });
+  if(error) throw error;
+  const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fname);
+  return urlData.publicUrl;
+}
+
+/* ── Submit post with media ── */
+const _origSubmitPost = submitPost;
+submitPost = async function(){
+  const content = v('compose-ta');
+  if(!content && pendingMedia.length===0){
+    toast(lang==='en'?'Please write something or attach a photo/video.':'Sila tulis sesuatu atau lampirkan foto/video.','err');
+    return;
+  }
+  if(!user){ toast(lang==='en'?'Please sign in first.':'Sila log masuk dahulu.','err'); return; }
+
+  // Upload media first
+  let mediaUrls = [];
+  if(pendingMedia.length > 0){
+    const prog = document.getElementById('compose-upload-prog');
+    const bar  = document.getElementById('compose-upload-bar');
+    if(prog){ prog.classList.remove('hidden'); bar.style.width='0%'; }
+
+    try {
+      for(let i=0; i<pendingMedia.length; i++){
+        const m = pendingMedia[i];
+        const folder = m.type==='image'?'images':'videos';
+        const url = await uploadFile(m.file, folder);
+        mediaUrls.push({url, type:m.type});
+        if(bar) bar.style.width = Math.round((i+1)/pendingMedia.length*100)+'%';
+      }
+    } catch(err){
+      toast('Upload error: '+err.message,'err');
+      if(prog) prog.classList.add('hidden');
+      return;
+    }
+    if(prog) prog.classList.add('hidden');
+  }
+
+  const row = {
+    user_id: user.id,
+    content: content || '',
+    post_type: curPostType,
+    likes_count: 0,
+    media_urls: mediaUrls.length ? JSON.stringify(mediaUrls) : null,
+    created_at: new Date().toISOString()
+  };
+
+  if(curPostType==='ad'){
+    const adTitle=v('ad-title'), adCat=document.getElementById('ad-cat').value, adContact=v('ad-contact');
+    if(!adTitle){ toast(lang==='en'?'Please enter an ad title.':'Sila masukkan tajuk iklan.','err'); return; }
+    row.title=adTitle; row.ad_category=adCat; row.ad_contact=adContact;
+  }
+
+  const {error} = await sb.from('posts').insert(row);
+  if(error){ toast('Error: '+error.message,'err'); return; }
+
+  // Reset
+  document.getElementById('compose-ta').value='';
+  document.getElementById('ad-title') && (document.getElementById('ad-title').value='');
+  document.getElementById('ad-contact') && (document.getElementById('ad-contact').value='');
+  pendingMedia.forEach(m=>URL.revokeObjectURL(m.previewUrl));
+  pendingMedia=[];
+  renderComposeMedia();
+  toast(lang==='en'?'Shared! 🚀':'Dikongsi! 🚀','ok');
+  loadPosts(true);
+};
+
+/* ── Render post media grid ── */
+function renderMediaGrid(mediaJson){
+  if(!mediaJson) return '';
+  let items;
+  try { items = JSON.parse(mediaJson); } catch{ return ''; }
+  if(!items || !items.length) return '';
+  const n = Math.min(items.length, 4);
+  const cls = 'n'+n;
+  const cells = items.slice(0,4).map((m,i) => {
+    if(m.type==='video'){
+      return `<div class="media-video-wrap">
+        <video src="${esc(m.url)}" style="width:100%;max-height:300px;object-fit:cover;border-radius:4px;cursor:pointer"
+          onclick="openLightboxVideo('${esc(m.url)}')" preload="metadata"></video>
+        <div class="media-play-icon">▶</div>
+      </div>`;
+    }
+    return `<img src="${esc(m.url)}" alt="post image" loading="lazy" onclick="openLightbox('${esc(m.url)}')"/>`;
+  }).join('');
+  return `<div class="post-media-grid ${cls}">${cells}</div>`;
+}
+
+/* ── Patch renderPost to include media ── */
+const _origRenderPost = renderPost;
+renderPost = function(p){
+  const html = _origRenderPost(p);
+  if(!p.media_urls) return html;
+  const mediaHtml = renderMediaGrid(p.media_urls);
+  // Insert media grid before post-body
+  return html.replace('<div class="post-body">', mediaHtml+'<div class="post-body">');
+};
+
+/* ── Lightbox ── */
+function openLightbox(url){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lightbox-img');
+  const vid=document.getElementById('lightbox-vid');
+  if(!lb||!img||!vid) return;
+  img.src=url; img.style.display='';
+  vid.style.display='none'; vid.src='';
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openLightboxVideo(url){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lightbox-img');
+  const vid=document.getElementById('lightbox-vid');
+  if(!lb||!img||!vid) return;
+  vid.src=url; vid.style.display='';
+  img.style.display='none'; img.src='';
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeLightbox(){
+  const lb=document.getElementById('lightbox');
+  const vid=document.getElementById('lightbox-vid');
+  if(lb) lb.classList.remove('open');
+  if(vid){ vid.pause(); vid.src=''; }
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); });
+
+/* ── Profile cover photo ── */
+function triggerCoverUpload(){
+  document.getElementById('cover-upload-in')?.click();
+}
+
+async function uploadCoverPhoto(input){
+  const file = input.files[0]; if(!file||!user) return;
+  showProfileUploadProgress();
+  try {
+    const url = await uploadFile(file, 'covers');
+    const { error } = await sb.from('profiles').update({ cover_url: url }).eq('id', user.id);
+    if(error) throw error;
+    if(currentProfile) currentProfile.cover_url = url;
+    applyProfilePhotos();
+    toast(lang==='en'?'Cover photo updated! 🖼️':'Foto sampul dikemas kini! 🖼️','ok');
+  } catch(e){ toast('Error: '+e.message,'err'); }
+  hideProfileUploadProgress();
+  input.value='';
+}
+
+/* ── Profile avatar photo ── */
+function triggerAvatarUpload(){
+  document.getElementById('avatar-upload-in')?.click();
+}
+
+async function uploadAvatarPhoto(input){
+  const file = input.files[0]; if(!file||!user) return;
+  showProfileUploadProgress();
+  try {
+    const url = await uploadFile(file, 'avatars');
+    const { error } = await sb.from('profiles').update({ avatar_url: url }).eq('id', user.id);
+    if(error) throw error;
+    if(currentProfile) currentProfile.avatar_url = url;
+    applyProfilePhotos();
+    // Also update nav avatar
+    applyNavAvatar();
+    toast(lang==='en'?'Profile photo updated! 📸':'Foto profil dikemas kini! 📸','ok');
+  } catch(e){ toast('Error: '+e.message,'err'); }
+  hideProfileUploadProgress();
+  input.value='';
+}
+
+function showProfileUploadProgress(){
+  const p=document.getElementById('profile-upload-prog');
+  const b=document.getElementById('profile-upload-bar');
+  if(p) p.classList.remove('hidden');
+  if(b){ b.style.width='0%'; let w=0; window._profProg=setInterval(()=>{ w=Math.min(w+8,85); b.style.width=w+'%'; },120); }
+}
+function hideProfileUploadProgress(){
+  clearInterval(window._profProg);
+  const p=document.getElementById('profile-upload-prog');
+  const b=document.getElementById('profile-upload-bar');
+  if(b) b.style.width='100%';
+  setTimeout(()=>{ if(p) p.classList.add('hidden'); },400);
+}
+
+function applyProfilePhotos(){
+  // Banner
+  const bannerImg = document.getElementById('prof-banner-img');
+  if(bannerImg && currentProfile?.cover_url){
+    bannerImg.src = currentProfile.cover_url;
+    bannerImg.style.display = '';
+  }
+  // Avatar
+  const profAv = document.getElementById('prof-av');
+  if(profAv){
+    if(currentProfile?.avatar_url){
+      profAv.innerHTML = `<img src="${currentProfile.avatar_url}" class="prof-av-img" alt="avatar"/>`;
+    } else {
+      profAv.innerHTML = initials(currentProfile?.full_name||'U');
+    }
+  }
+}
+
+function applyNavAvatar(){
+  const navAv = document.getElementById('nav-av');
+  const compAv = document.getElementById('compose-av');
+  if(currentProfile?.avatar_url){
+    if(navAv) navAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
+    if(compAv) compAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
+  }
+}
+
+/* ── Edit Profile ── */
+function openEditProfile(){
+  populateStates('ep-state');
+  const ep = document.getElementById('ep-name');
+  const eb = document.getElementById('ep-bio');
+  if(ep) ep.value = currentProfile?.full_name||'';
+  if(eb) eb.value = currentProfile?.bio||'';
+  // Set state/district
+  const es = document.getElementById('ep-state');
+  if(es && currentProfile?.state){
+    Array.from(es.options).forEach(o=>{ if(o.value===currentProfile.state) o.selected=true; });
+    fillDistricts('ep-state','ep-district');
+    const ed = document.getElementById('ep-district');
+    if(ed && currentProfile?.district){
+      Array.from(ed.options).forEach(o=>{ if(o.value===currentProfile.district) o.selected=true; });
+    }
+  }
+  openModal('editprofile');
+}
+
+async function saveProfile(){
+  const name = v('ep-name'), bio = document.getElementById('ep-bio')?.value?.trim();
+  const state = v('ep-state'), district = v('ep-district');
+  if(!name){ msg('ep-msg',lang==='en'?'Name is required.':'Nama diperlukan.','err'); return; }
+  msg('ep-msg',lang==='en'?'Saving…':'Menyimpan…','');
+  const { error } = await sb.from('profiles').update({ full_name:name, bio, state, district }).eq('id', user.id);
+  if(error){ msg('ep-msg',error.message,'err'); return; }
+  currentProfile = {...currentProfile, full_name:name, bio, state, district};
+  loadProfileView();
+  closeModal('editprofile');
+  toast(lang==='en'?'Profile updated! ✅':'Profil dikemas kini! ✅','ok');
+}
+
+/* ── Comment with photo ── */
+async function sendCmt(postId){
+  const input = document.getElementById('ci-'+postId);
+  const fileIn = document.getElementById('cfi-'+postId);
+  const content = input?.value.trim();
+  const file = fileIn?.files[0];
+  if((!content && !file)||!user) return;
+
+  let photo_url = null;
+  if(file){
+    try { photo_url = await uploadFile(file,'comments'); }
+    catch(e){ toast('Image upload failed: '+e.message,'err'); return; }
+    fileIn.value='';
+    const prev = document.getElementById('cprev-'+postId);
+    if(prev) prev.innerHTML='';
+  }
+
+  await sb.from('comments').insert({
+    post_id:postId, user_id:user.id,
+    content:content||'', photo_url,
+    created_at:new Date().toISOString()
+  });
+  if(input) input.value='';
+  loadCmts(postId);
+}
+
+/* ── Patch cmt-in-row to add photo button ── */
+const _origRenderPostFn = renderPost;
+// Override the comment input row in rendered posts to include photo upload
+function buildCmtRow(postId, ini){
+  return `<div class="cmt-in-row">
+    <div class="avatar av32">${ini}</div>
+    <input class="cmt-in" id="ci-${postId}" placeholder="${lang==='en'?'Write a comment…':'Tulis komen…'}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendCmt('${postId}')}"/>
+    <label class="upload-btn" style="padding:5px 8px;border-radius:50%;width:34px;height:34px;justify-content:center;flex-shrink:0" title="Add photo">
+      🖼️<input type="file" id="cfi-${postId}" accept="image/*" style="display:none" onchange="previewCmtImg('${postId}',this)"/>
+    </label>
+    <button class="cmt-send" onclick="sendCmt('${postId}')">↑</button>
+  </div>
+  <div id="cprev-${postId}"></div>`;
+}
+
+function previewCmtImg(postId, input){
+  const prev = document.getElementById('cprev-'+postId);
+  if(!prev) return;
+  const file = input.files[0];
+  if(!file){ prev.innerHTML=''; return; }
+  const url = URL.createObjectURL(file);
+  prev.innerHTML = `<div style="position:relative;display:inline-block;margin-top:4px">
+    <img src="${url}" style="height:60px;border-radius:6px;object-fit:cover"/>
+    <div class="compose-thumb-rm" onclick="removeCmtImg('${postId}','${url}')">✕</div>
+  </div>`;
+}
+function removeCmtImg(postId, url){
+  const fi = document.getElementById('cfi-'+postId);
+  if(fi) fi.value='';
+  URL.revokeObjectURL(url);
+  const prev = document.getElementById('cprev-'+postId);
+  if(prev) prev.innerHTML='';
+}
+
+/* ── Patch loadCmts to show comment photos ── */
+const _origLoadCmts = loadCmts;
+loadCmts = async function(id){
+  const {data} = await sb.from('comments')
+    .select('*,profiles(full_name,avatar_url)')
+    .eq('post_id',id)
+    .order('created_at',{ascending:true});
+  const cl = document.getElementById('cl-'+id); if(!cl) return;
+  if(!data||!data.length){
+    cl.innerHTML=`<p class="text-muted text-sm" style="padding:6px 0">${lang==='en'?'No comments yet.':'Tiada komen lagi.'}</p>`;
+    return;
+  }
+  const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
+  cl.innerHTML = data.map(c=>{
+    const avHtml = c.profiles?.avatar_url
+      ? `<img src="${esc(c.profiles.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`
+      : initials(c.profiles?.full_name||'U');
+    return `<div class="cmt-item">
+      <div class="avatar av32">${avHtml}</div>
+      <div style="flex:1;min-width:0">
+        <span class="cmt-who">${esc(c.profiles?.full_name||'User')}</span>
+        <span class="cmt-when">${timeAgo(c.created_at)}</span>
+        ${c.content ? `<div class="cmt-txt">${esc(c.content)}</div>` : ''}
+        ${c.photo_url ? `<div class="cmt-media" onclick="openLightbox('${esc(c.photo_url)}')"><img src="${esc(c.photo_url)}" alt="comment photo"/></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  // Re-render comment input with photo button
+  const inputRow = document.querySelector(`#cmts-${id} .cmt-in-row`);
+  if(inputRow){
+    inputRow.outerHTML = buildCmtRow(id, ini);
+  }
+};
+
+/* ── Patch toggleComments to use new buildCmtRow ── */
+const _origToggleCmt = toggleCmt;
+toggleCmt = function(id){
+  const el = document.getElementById('cmts-'+id);
+  if(el.classList.contains('hidden')){
+    el.classList.remove('hidden');
+    // Rebuild with photo button
+    const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
+    const inputRow = el.querySelector('.cmt-in-row');
+    if(inputRow) inputRow.outerHTML = buildCmtRow(id, ini);
+    loadCmts(id);
+  } else {
+    el.classList.add('hidden');
+  }
+};
+
+/* ── Patch onLogin to apply photos ── */
+const _origOnLogin = onLogin;
+onLogin = async function(u){
+  await _origOnLogin(u);
+  // Apply profile photos after login
+  setTimeout(()=>{
+    applyProfilePhotos();
+    applyNavAvatar();
+  }, 400);
+};
+
+/* ── Patch loadProfileView to show photos ── */
+const _origLoadProfileView = loadProfileView;
+loadProfileView = async function(){
+  await _origLoadProfileView();
+  applyProfilePhotos();
+};
+
+/* ─────────────────────────────────────
+   BOOT
+───────────────────────────────────── */
+init();
+setTimeout(()=>{ drawMalaysiaMap(); },600);
+document.getElementById('footer-year').textContent=new Date().getFullYear();
+
+/* ─────────────────────────────────────
+   MUSIC PLAYER
+───────────────────────────────────── */
+// Free-to-use ambient/lo-fi tracks from Pixabay CDN (royalty-free)
+const TRACKS = [
+  {
+    title: 'Ambient Horizon',
+    url: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe92c21.mp3'
+  },
+  {
+    title: 'Chill Lo-fi Beat',
+    url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3'
+  },
+  {
+    title: 'Digital Dreams',
+    url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_1a609c4e6a.mp3'
+  },
+  {
+    title: 'Soft Electronic',
+    url: 'https://cdn.pixabay.com/download/audio/2021/11/25/audio_4c94f5e9e3.mp3'
+  },
+];
+
+let audio = null;
+let trackIdx = 0;
+let isPlaying = false;
+let progTimer = null;
+
+function initPlayer(){
+  audio = new Audio();
+  audio.volume = 0.5;
+  audio.loop = false;
+  audio.addEventListener('ended', nextTrack);
+  audio.addEventListener('timeupdate', updateProgress);
+  audio.addEventListener('error', ()=>{ nextTrack(); });
+  loadTrack(trackIdx);
+}
+
+function loadTrack(idx){
+  if(!audio) return;
+  trackIdx = idx % TRACKS.length;
+  const t = TRACKS[trackIdx];
+  audio.src = t.url;
+  document.getElementById('mp-title').textContent = t.title;
+  document.getElementById('mp-bar').style.width = '0%';
+}
+
+function startWithMusic(){
+  document.getElementById('music-intro').style.display = 'none';
+  document.getElementById('music-player').classList.remove('hidden');
+  initPlayer();
+  audio.play().then(()=>{
+    isPlaying = true;
+    document.getElementById('mp-play').textContent = '⏸';
+    document.getElementById('mp-disc').classList.add('spinning');
+  }).catch(()=>{
+    // autoplay blocked — show player anyway
+    document.getElementById('music-player').classList.remove('hidden');
+  });
+}
+
+function startWithoutMusic(){
+  document.getElementById('music-intro').style.display = 'none';
+}
+
+function togglePlay(){
+  if(!audio) { initPlayer(); }
+  if(isPlaying){
+    audio.pause();
+    isPlaying = false;
+    document.getElementById('mp-play').textContent = '▶';
+    document.getElementById('mp-disc').classList.remove('spinning');
+  } else {
+    audio.play().then(()=>{
+      isPlaying = true;
+      document.getElementById('mp-play').textContent = '⏸';
+      document.getElementById('mp-disc').classList.add('spinning');
+    });
+  }
+}
+
+function nextTrack(){
+  const wasPlaying = isPlaying;
+  loadTrack(trackIdx + 1);
+  if(wasPlaying){
+    audio.play().then(()=>{
+      isPlaying = true;
+      document.getElementById('mp-play').textContent = '⏸';
+      document.getElementById('mp-disc').classList.add('spinning');
+    });
+  }
+}
+
+function prevTrack(){
+  const wasPlaying = isPlaying;
+  loadTrack(trackIdx === 0 ? TRACKS.length - 1 : trackIdx - 1);
+  if(wasPlaying){
+    audio.play().then(()=>{
+      isPlaying = true;
+      document.getElementById('mp-play').textContent = '⏸';
+      document.getElementById('mp-disc').classList.add('spinning');
+    });
+  }
+}
+
+function updateProgress(){
+  if(!audio || !audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('mp-bar').style.width = pct + '%';
+}
+
+function seekMusic(e){
+  if(!audio || !audio.duration) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+}
+
+function setVol(v){
+  if(audio) audio.volume = parseFloat(v);
+}
+
+function closePlayer(){
+  if(audio){ audio.pause(); audio.src=''; }
+  isPlaying = false;
+  document.getElementById('music-player').classList.add('hidden');
+}
+
+// Update language on intro overlay
+function updateMusicLang(){
+  const sub = document.getElementById('intro-sub');
+  const yes = document.getElementById('intro-yes');
+  if(sub) sub.textContent = lang==='bm' ? 'Selamat datang! Mahu mainkan muzik latar?' : 'Welcome! Play background music?';
+  if(yes) yes.textContent = lang==='bm' ? '🎵 Ya, mainkan muzik' : '🎵 Yes, play music';
+}
+
+</script>
+
+<!-- ═══════════════════ MUSIC INTRO OVERLAY ═══════════════════ -->
+<div id="music-intro" class="show">
+  <div class="intro-arc">
+    <span style="width:8px;height:8px;background:#00e5ff;animation-delay:0s"></span>
+    <span style="width:12px;height:12px;background:#44aaff;animation-delay:.1s"></span>
+    <span style="width:18px;height:18px;background:#7b2fff;animation-delay:.2s"></span>
+    <span style="width:22px;height:22px;background:#9b18ee;animation-delay:.3s"></span>
+    <span style="width:18px;height:18px;background:#b828dd;animation-delay:.4s"></span>
+    <span style="width:12px;height:12px;background:#d400ff;animation-delay:.5s"></span>
+    <span style="width:8px;height:8px;background:#c000ee;animation-delay:.6s"></span>
+  </div>
+  <div class="intro-title">Eastel Community</div>
+  <div class="intro-sub" id="intro-sub">Welcome! Play background music?</div>
+  <div class="intro-btns">
+    <button class="btn btn-primary" id="intro-yes" onclick="startWithMusic()" style="font-size:14px;padding:11px 26px">🎵 Yes, play music</button>
+    <button class="btn btn-ghost" onclick="startWithoutMusic()" style="font-size:14px;padding:11px 26px">No thanks</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ MUSIC PLAYER BAR ═══════════════════ -->
+<div id="music-player" class="hidden">
+  <div class="mp-disc" id="mp-disc">🎵</div>
+  <div class="mp-info">
+    <div class="mp-title" id="mp-title">Loading…</div>
+    <div class="mp-sub" id="mp-sub">Eastel Community</div>
+  </div>
+  <div class="mp-progress" id="mp-progress" onclick="seekMusic(event)">
+    <div class="mp-bar" id="mp-bar"></div>
+  </div>
+  <button class="mp-btn" id="mp-prev" onclick="prevTrack()" title="Previous">⏮</button>
+  <button class="mp-btn" id="mp-play" onclick="togglePlay()">▶</button>
+  <button class="mp-btn" id="mp-next" onclick="nextTrack()" title="Next">⏭</button>
+  <div class="mp-vol">
+    <span style="font-size:13px">🔊</span>
+    <input type="range" class="mp-vol-slider" id="mp-vol" min="0" max="1" step="0.05" value="0.5" oninput="setVol(this.value)"/>
+  </div>
+  <button class="mp-btn" onclick="closePlayer()" title="Close" style="font-size:11px;color:var(--muted)">✕</button>
+</div>
+
+</body>
+</html>
