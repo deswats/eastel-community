@@ -722,6 +722,212 @@ img{max-width:100%;display:block}
 .map-popup-name{font-weight:700;color:var(--cyan);font-size:14px}
 .map-popup-loc{color:var(--muted);font-size:12px;margin-top:2px}
 
+
+/* ═══════════════════════════════════════
+   NEWS FEED
+═══════════════════════════════════════ */
+.ncat-btn{
+  padding:4px 10px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.ncat-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.ncat-btn.active{
+  background:var(--grad-btn);color:#fff;border-color:transparent;
+}
+.news-item{
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.news-item:last-child{border-bottom:none}
+.news-item:hover{opacity:.8}
+.news-cat-tag{
+  display:inline-block;
+  font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  padding:2px 7px;border-radius:50px;margin-bottom:5px;
+}
+.ncat-eastel  {background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.25)}
+.ncat-crime   {background:rgba(255,68,102,.1); color:#ff8899;  border:1px solid rgba(255,68,102,.25)}
+.ncat-accident{background:rgba(255,160,0,.1);  color:#ffaa44;  border:1px solid rgba(255,160,0,.25)}
+.ncat-bizarre {background:rgba(160,0,255,.1);  color:#cc88ff;  border:1px solid rgba(160,0,255,.25)}
+.ncat-war     {background:rgba(255,80,0,.1);   color:#ff8844;  border:1px solid rgba(255,80,0,.25)}
+.news-headline{
+  font-size:13px;font-weight:700;color:var(--white);
+  line-height:1.45;margin-bottom:4px;
+}
+.news-summary{
+  font-size:11px;color:var(--muted);line-height:1.55;
+}
+.news-meta{
+  display:flex;align-items:center;gap:8px;margin-top:5px;
+  font-size:10px;color:var(--muted);opacity:.7;
+}
+.news-source{color:var(--cyan);font-weight:600}
+.news-empty{
+  text-align:center;padding:20px;
+  color:var(--muted);font-size:13px;
+}
+.news-error{
+  text-align:center;padding:16px;
+  color:var(--danger);font-size:12px;
+  background:rgba(255,68,102,.08);
+  border-radius:var(--rsm);border:1px solid rgba(255,68,102,.2);
+}
+
+
+/* ═══════════════════════════════════════
+   MEDIA — PROFILE PHOTOS, POSTS, UPLOADS
+═══════════════════════════════════════ */
+
+/* Profile banner / cover */
+.profile-banner{
+  height:180px;border-radius:var(--r) var(--r) 0 0;
+  background:var(--grad);
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.profile-banner img{
+  width:100%;height:100%;object-fit:cover;
+  transition:opacity .3s;
+}
+.banner-edit-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:all .2s;
+  color:#fff;font-size:13px;font-weight:700;gap:6px;
+}
+.profile-banner:hover .banner-edit-overlay{
+  background:rgba(0,0,0,0.45);opacity:1;
+}
+
+/* Avatar with photo */
+.avatar-wrap{
+  position:relative;width:fit-content;cursor:pointer;
+}
+.avatar-wrap .avatar-edit-btn{
+  position:absolute;bottom:0;right:0;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--grad-btn);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#fff;border:2px solid var(--bg2);
+  opacity:0;transition:opacity .2s;
+}
+.avatar-wrap:hover .avatar-edit-btn{opacity:1}
+
+/* Post media attachments */
+.post-media-grid{
+  display:grid;gap:4px;border-radius:var(--rsm);
+  overflow:hidden;margin-bottom:12px;
+}
+.post-media-grid.n1{grid-template-columns:1fr}
+.post-media-grid.n2{grid-template-columns:1fr 1fr}
+.post-media-grid.n3{grid-template-columns:1fr 1fr; grid-template-rows:auto auto}
+.post-media-grid.n4{grid-template-columns:1fr 1fr}
+.post-media-grid img,.post-media-grid video{
+  width:100%;object-fit:cover;display:block;
+  border-radius:4px;cursor:pointer;
+  transition:opacity .2s;max-height:300px;
+}
+.post-media-grid img:hover,.post-media-grid video:hover{opacity:.88}
+.post-media-grid.n3 img:first-child,.post-media-grid.n3 video:first-child{
+  grid-column:1/-1;
+}
+
+/* Compose media preview */
+.compose-media-row{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;
+}
+.compose-thumb{
+  position:relative;width:64px;height:64px;
+  border-radius:6px;overflow:hidden;
+  border:1.5px solid var(--border);flex-shrink:0;
+}
+.compose-thumb img,.compose-thumb video{
+  width:100%;height:100%;object-fit:cover;
+}
+.compose-thumb-rm{
+  position:absolute;top:2px;right:2px;
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(0,0,0,.7);color:#fff;
+  font-size:10px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;line-height:1;
+}
+
+/* Upload action buttons in compose */
+.compose-upload-btns{
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+}
+.upload-btn{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:50px;
+  background:var(--surface);color:var(--muted);
+  border:1.5px solid var(--border);
+  font-size:12px;font-weight:600;cursor:pointer;
+  transition:all .18s;
+}
+.upload-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Lightbox */
+#lightbox{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,0.92);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+}
+#lightbox.open{display:flex}
+#lightbox img,#lightbox video{
+  max-width:92vw;max-height:85vh;
+  object-fit:contain;border-radius:8px;
+}
+#lightbox-close{
+  position:fixed;top:16px;right:16px;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.15);color:#fff;
+  font-size:22px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s;
+}
+#lightbox-close:hover{background:rgba(255,255,255,.25)}
+
+/* Upload progress */
+.upload-progress{
+  height:3px;background:var(--surface2);border-radius:2px;
+  margin-top:6px;overflow:hidden;
+}
+.upload-progress-bar{
+  height:100%;background:var(--grad90);border-radius:2px;
+  width:0%;transition:width .3s;
+}
+
+/* Profile photo display */
+.prof-av-img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+}
+.profile-banner-img{
+  width:100%;height:100%;object-fit:cover;
+}
+
+/* Comment with photo */
+.cmt-media{
+  margin-top:6px;border-radius:6px;overflow:hidden;
+  max-width:200px;cursor:pointer;
+}
+.cmt-media img{width:100%;display:block;border-radius:6px}
+
+/* Video play icon overlay */
+.media-video-wrap{position:relative;display:inline-block;width:100%}
+.media-play-icon{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;pointer-events:none;
+}
+
 </style>
 </head>
 <body>
@@ -915,9 +1121,23 @@ img{max-width:100%;display:block}
     <!-- PROFILE VIEW -->
     <div id="view-profile" class="hidden">
       <div class="card" style="margin-bottom:16px;overflow:hidden">
-        <div class="profile-banner"></div>
+        <!-- Cover / Banner -->
+        <div class="profile-banner" id="prof-banner" onclick="triggerCoverUpload()">
+          <img id="prof-banner-img" src="" style="display:none" alt="cover"/>
+          <div class="banner-edit-overlay">📷 <span data-en="Change Cover Photo" data-bm="Tukar Foto Sampul"></span></div>
+          <input type="file" id="cover-upload-in" accept="image/*" style="display:none" onchange="uploadCoverPhoto(this)"/>
+        </div>
         <div class="profile-info">
-          <div class="avatar av72 profile-av" id="prof-av"></div>
+          <!-- Avatar with upload -->
+          <div class="avatar-wrap" onclick="triggerAvatarUpload()">
+            <div class="avatar av72 profile-av" id="prof-av"></div>
+            <div class="avatar-edit-btn">✏️</div>
+            <input type="file" id="avatar-upload-in" accept="image/*" style="display:none" onchange="uploadAvatarPhoto(this)"/>
+          </div>
+          <!-- Upload progress for profile photos -->
+          <div class="upload-progress hidden" id="profile-upload-prog" style="margin:8px 0">
+            <div class="upload-progress-bar" id="profile-upload-bar"></div>
+          </div>
           <div class="prof-name" id="prof-name"></div>
           <div class="prof-loc" id="prof-loc"></div>
           <div class="prof-bio" id="prof-bio"></div>
@@ -925,6 +1145,9 @@ img{max-width:100%;display:block}
             <div class="ps"><div class="n" id="prof-posts">0</div><div class="l" data-en="Posts" data-bm="Catatan"></div></div>
             <div class="ps"><div class="n" id="prof-ads">0</div><div class="l" data-en="Ads" data-bm="Iklan"></div></div>
           </div>
+          <button class="btn btn-ghost btn-sm mt8" onclick="openEditProfile()" style="width:fit-content">
+            ✏️ <span data-en="Edit Profile" data-bm="Edit Profil"></span>
+          </button>
         </div>
       </div>
       <div class="sec-hd" data-en="My Posts" data-bm="Catatan Saya"></div>
@@ -995,19 +1218,39 @@ img{max-width:100%;display:block}
     </div>
 
     <!-- Trending tags -->
-    <div class="card card-pad">
-      <p class="scard-title" data-en="Trending Topics" data-bm="Topik Hangat"></p>
-      <div class="tagcloud">
-        <span class="ttag">#EastelFibre</span>
-        <span class="ttag">#Sabah</span>
-        <span class="ttag">#Sarawak</span>
-        <span class="ttag">#KotaKinabalu</span>
-        <span class="ttag">#Kuching</span>
-        <span class="ttag">#TechTips</span>
-        <span class="ttag">#Community</span>
-        <span class="ttag">#EastelUser</span>
-        <span class="ttag">#Malaysia</span>
+    <div class="card card-pad" id="news-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px">
+        <p class="scard-title" style="margin-bottom:0" data-en="Live News Feed" data-bm="Suapan Berita Terkini"></p>
+        <button onclick="refreshNews()" id="news-refresh-btn" style="
+          display:flex;align-items:center;gap:5px;
+          padding:4px 10px;border-radius:50px;
+          background:var(--surface);color:var(--cyan);
+          border:1.5px solid var(--border-hi);
+          font-size:11px;font-weight:700;cursor:pointer;
+          transition:all .18s;
+        " title="Refresh news">⟳ <span data-en="Refresh" data-bm="Muat Semula"></span></button>
       </div>
+
+      <!-- Category tabs -->
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px" id="news-cats">
+        <button class="ncat-btn active" data-cat="eastel" onclick="selectNewsCat(this,'eastel')">📡 Eastel</button>
+        <button class="ncat-btn" data-cat="crime" onclick="selectNewsCat(this,'crime')">🚨 <span data-en="Crime" data-bm="Jenayah"></span></button>
+        <button class="ncat-btn" data-cat="accident" onclick="selectNewsCat(this,'accident')">🚑 <span data-en="Accident" data-bm="Kemalangan"></span></button>
+        <button class="ncat-btn" data-cat="bizarre" onclick="selectNewsCat(this,'bizarre')">😲 <span data-en="Bizarre" data-bm="Pelik"></span></button>
+        <button class="ncat-btn" data-cat="war" onclick="selectNewsCat(this,'war')">⚔️ <span data-en="War" data-bm="Perang"></span></button>
+      </div>
+
+      <!-- News items container -->
+      <div id="news-feed">
+        <div class="spin-wrap" style="padding:20px">
+          <div class="spin"></div>
+          <span style="font-size:12px;color:var(--muted)" data-en="Loading news…" data-bm="Memuatkan berita…"></span>
+        </div>
+      </div>
+
+      <p style="font-size:10px;color:var(--muted);margin-top:10px;opacity:.6;text-align:center">
+        <span data-en="Powered by AI · Updates every 30 min" data-bm="Dikuasai AI · Dikemas kini setiap 30 min"></span>
+      </p>
     </div>
 
     <!-- Spotlight -->
@@ -1099,6 +1342,44 @@ img{max-width:100%;display:block}
   </p>
   <p style="font-size:11px;color:#7880aa;margin-top:5px;opacity:0.55" id="footer-tagline">Built for the Eastel community across Malaysia</p>
 </footer>
+
+<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
+<div id="lightbox">
+  <div id="lightbox-close" onclick="closeLightbox()">✕</div>
+  <img id="lightbox-img" src="" alt="" style="display:none"/>
+  <video id="lightbox-vid" controls style="display:none"></video>
+</div>
+
+<!-- ═══════════════════ EDIT PROFILE MODAL ═══════════════════ -->
+<div class="overlay" id="ov-editprofile">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('editprofile')">✕</button>
+    <h2 data-en="Edit Profile" data-bm="Edit Profil"></h2>
+    <p class="modal-sub" data-en="Update your name, bio and location" data-bm="Kemas kini nama, bio dan lokasi anda"></p>
+    <div class="fgrp">
+      <label class="flabel" data-en="Full Name" data-bm="Nama Penuh"></label>
+      <input type="text" id="ep-name" />
+    </div>
+    <div class="fgrp">
+      <label class="flabel" data-en="Bio" data-bm="Bio"></label>
+      <textarea id="ep-bio" style="min-height:60px"></textarea>
+    </div>
+    <div class="frow">
+      <div class="fgrp">
+        <label class="flabel" data-en="State" data-bm="Negeri"></label>
+        <select id="ep-state" onchange="fillDistricts('ep-state','ep-district')"></select>
+      </div>
+      <div class="fgrp">
+        <label class="flabel" data-en="District" data-bm="Daerah"></label>
+        <select id="ep-district"></select>
+      </div>
+    </div>
+    <div id="ep-msg"></div>
+    <button class="btn btn-primary w-full mt12" style="justify-content:center" onclick="saveProfile()"
+      data-en="Save Changes" data-bm="Simpan Perubahan"></button>
+  </div>
+</div>
+
 <!-- ═══════════════════ TOASTS ═══════════════════ -->
 <div id="toasts"></div>
 
@@ -1257,7 +1538,7 @@ async function onLogin(u){
   loadSpotlight();
   loadStateCounts();
   applyLang();
-  setTimeout(()=>{ drawMalaysiaMap(); loadMapMemberData(); }, 300);
+  setTimeout(()=>{ drawMalaysiaMap(); loadMapMemberData(); initNewsPanel(); }, 300);
 }
 
 function onLogout(){
@@ -1866,6 +2147,612 @@ async function loadMapMemberData(){
   });
   drawMapPins();
 }
+
+
+/* ─────────────────────────────────────
+   LIVE NEWS FEED (Claude API powered)
+───────────────────────────────────── */
+let currentNewsCat = 'eastel';
+let newsCache = {};
+let newsLoading = false;
+
+
+// ── Fallback news (shown when API unreachable) ──
+const NEWS_FALLBACK = {
+  eastel: [
+    {headline:"Eastel Expands Fibre Coverage to Rural Sabah Districts",summary:"Eastel continues its infrastructure rollout, bringing high-speed fibre broadband to underserved communities across interior Sabah, targeting 50,000 new households.",source:"Borneo Post",time:"2 hours ago",url:"#",category:"eastel"},
+    {headline:"Eastel Users Report Fastest Speeds in East Malaysia",summary:"Community reports and speed tests show Eastel delivering consistent 500Mbps+ speeds across Kota Kinabalu and Kuching service areas.",source:"Digital News Asia",time:"5 hours ago",url:"#",category:"eastel"},
+    {headline:"Eastel Launches New Community App for Malaysian Borneo Users",summary:"Eastel introduces a community platform connecting users across Sabah and Sarawak, featuring local news, events, and knowledge sharing.",source:"The Star",time:"1 day ago",url:"#",category:"eastel"},
+    {headline:"Malaysia's Broadband Penetration Reaches 95% in Urban Areas",summary:"MCMC reports record broadband adoption rates in Malaysia, with telcos like Eastel contributing to East Malaysia's digital transformation.",source:"MCMC",time:"2 days ago",url:"#",category:"eastel"},
+  ],
+  crime: [
+    {headline:"PDRM Busts RM2.4 Million Online Scam Syndicate in KL",summary:"Police arrested 12 suspects linked to a sophisticated job scam operation targeting victims across Southeast Asia, seizing computers and cash.",source:"Bernama",time:"3 hours ago",url:"#",category:"crime"},
+    {headline:"Drug Trafficking Ring Dismantled in Sabah, 8 Arrested",summary:"Sabah police seized over 10kg of methamphetamine and arrested eight individuals in a series of coordinated raids across Kota Kinabalu.",source:"Daily Express",time:"6 hours ago",url:"#",category:"crime"},
+    {headline:"Elderly Couple Loses RM180,000 to Macau Scam",summary:"A retired couple in Selangor fell victim to a Macau scam after fraudsters posed as Bank Negara officers, draining their life savings.",source:"NST",time:"8 hours ago",url:"#",category:"crime"},
+    {headline:"Parcel Thief Caught on CCTV in Kuching Neighbourhood",summary:"A serial parcel thief was identified and arrested after viral CCTV footage showed him stealing deliveries from multiple apartment blocks.",source:"Sarawak Tribune",time:"1 day ago",url:"#",category:"crime"},
+  ],
+  accident: [
+    {headline:"Three Killed in Highway Crash Near Ipoh, Traffic Disrupted",summary:"A three-vehicle collision on the North-South Expressway claimed three lives and injured five others, causing a 12km traffic backup during morning rush hour.",source:"Bernama",time:"2 hours ago",url:"#",category:"accident"},
+    {headline:"Flash Floods Hit Kelantan, 200 Families Evacuated",summary:"Heavy overnight rain triggered flash floods in Kota Bharu and surrounding districts, forcing evacuation of over 200 families to relief centres.",source:"The Star",time:"4 hours ago",url:"#",category:"accident"},
+    {headline:"Construction Worker Falls from 8th Floor in JB, Critical",summary:"A foreign construction worker is in critical condition after falling from scaffolding on the 8th floor of a commercial building in Johor Bahru.",source:"NST",time:"7 hours ago",url:"#",category:"accident"},
+    {headline:"Boat Engine Fire Leaves 12 Stranded off Sabah Coast",summary:"A tourist speedboat engine caught fire near Pulau Mamutik, leaving 12 passengers stranded before coast guard vessels reached them.",source:"Daily Express",time:"1 day ago",url:"#",category:"accident"},
+  ],
+  bizarre: [
+    {headline:"Giant Python Found Nesting Inside Penang Restaurant Kitchen",summary:"Staff at a popular Penang eatery discovered a 4-metre reticulated python coiled behind the refrigerator, prompting an emergency call to wildlife authorities.",source:"NST",time:"3 hours ago",url:"#",category:"bizarre"},
+    {headline:"Man Claims He Was Abducted by 'Glowing Orbs' in Sabah Jungle",summary:"A hiker in the Crocker Range reported a 6-hour memory blackout and strange marks on his body after encountering mysterious lights, baffling investigators.",source:"Borneo Post",time:"6 hours ago",url:"#",category:"bizarre"},
+    {headline:"Durian Tree Produces Fruit Mid-Year, Attracts Hundreds to Pahang Village",summary:"An unusual off-season durian bloom in Raub has drawn crowds from across the peninsula, with some calling it a sign of good fortune.",source:"Utusan",time:"1 day ago",url:"#",category:"bizarre"},
+    {headline:"Japanese Man Swims Full Strait of Malacca to Set World Record",summary:"An endurance swimmer completed the 50km crossing of the Strait of Malacca in under 18 hours, claiming a new unofficial world record.",source:"The Star",time:"2 days ago",url:"#",category:"bizarre"},
+  ],
+  war: [
+    {headline:"Ukraine Strikes Russian Fuel Depot Deep Inside Enemy Territory",summary:"Ukrainian forces used long-range drones to hit a major Russian fuel storage facility, disrupting supply lines ahead of a renewed offensive push.",source:"Reuters",time:"1 hour ago",url:"#",category:"war"},
+    {headline:"Gaza Ceasefire Talks Resume in Cairo, Progress Reported",summary:"Mediators from Egypt and Qatar report cautious progress in ceasefire negotiations between Israel and Hamas, with a new framework under discussion.",source:"Al Jazeera",time:"3 hours ago",url:"#",category:"war"},
+    {headline:"China Conducts Military Drills Near Taiwan Strait",summary:"The PLA launched 72-hour naval and air exercises in the Taiwan Strait, drawing protests from Taipei and statements of concern from Washington.",source:"Reuters",time:"5 hours ago",url:"#",category:"war"},
+    {headline:"South China Sea Tensions Rise After Philippine Vessel Incident",summary:"A Philippine Coast Guard vessel reported being water-cannoned by Chinese ships near Scarborough Shoal, escalating an ongoing territorial dispute.",source:"AFP",time:"8 hours ago",url:"#",category:"war"},
+  ],
+};
+
+const NEWS_PROMPTS = {
+  eastel: `Search the web for the latest news about "Eastel" broadband/telco Malaysia, OR "Eastel Borneo" OR "Eastel internet provider Sabah Sarawak". Return ONLY a JSON array of up to 6 news items. Each item: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 2 hours ago","url":"#","category":"eastel"}. If no specific Eastel news found, return latest Malaysian broadband/telco news. Return ONLY valid JSON, no markdown.`,
+
+  crime: `Search the web for the latest crime news in Malaysia today — murders, robberies, scams, drug busts, arrests. Return ONLY a JSON array of up to 6 news items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 3 hours ago","url":"#","category":"crime"}. Return ONLY valid JSON, no markdown, no explanation.`,
+
+  accident: `Search the web for latest accident news in Malaysia today — road accidents, floods, fires, industrial accidents, disasters. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 1 hour ago","url":"#","category":"accident"}. Return ONLY valid JSON, no markdown.`,
+
+  bizarre: `Search the web for the latest bizarre, weird, unusual or shocking news from Malaysia or worldwide — strange events, unexplained phenomena, viral oddities. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 5 hours ago","url":"#","category":"bizarre"}. Return ONLY valid JSON, no markdown.`,
+
+  war: `Search the web for the latest war, military conflict, and geopolitical tensions news today — Ukraine, Middle East, South China Sea, any active conflicts worldwide. Return ONLY a JSON array of up to 6 items. Each: {"headline":"...","summary":"...1-2 sentences...","source":"Source name","time":"e.g. 1 hour ago","url":"#","category":"war"}. Return ONLY valid JSON, no markdown.`
+};
+
+const CAT_ICONS = {eastel:'📡',crime:'🚨',accident:'🚑',bizarre:'😲',war:'⚔️'};
+const CAT_LABELS_EN = {eastel:'Eastel',crime:'Crime',accident:'Accident',bizarre:'Bizarre',war:'War'};
+const CAT_LABELS_BM = {eastel:'Eastel',crime:'Jenayah',accident:'Kemalangan',bizarre:'Pelik',war:'Perang'};
+
+function selectNewsCat(btn, cat){
+  document.querySelectorAll('.ncat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentNewsCat = cat;
+  loadNews(cat);
+}
+
+async function loadNews(cat){
+  if(newsLoading) return;
+
+  // Check cache (30 min TTL)
+  const now = Date.now();
+  if(newsCache[cat] && (now - newsCache[cat].ts) < 30*60*1000){
+    renderNews(newsCache[cat].items, cat);
+    return;
+  }
+
+  newsLoading = true;
+  const feed = document.getElementById('news-feed');
+  const loadMsg = lang==='bm' ? 'Mencari berita '+cat+'…' : 'Fetching latest '+cat+' news…';
+  if(feed) feed.innerHTML = `<div class="spin-wrap" style="padding:24px"><div class="spin"></div><span style="font-size:12px;color:var(--muted)">${loadMsg}</span></div>`;
+
+  const btn = document.getElementById('news-refresh-btn');
+  if(btn) btn.style.opacity='0.5';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1200,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{
+          role: 'user',
+          content: NEWS_PROMPTS[cat]
+        }]
+      })
+    });
+
+    if(!res.ok) throw new Error('API error: '+res.status);
+    const data = await res.json();
+
+    // Extract ALL text blocks — including after tool_use
+    const textBlocks = (data.content || []).filter(b => b.type === 'text');
+    const rawText = textBlocks.map(b => b.text).join('
+');
+
+    if(!rawText.trim()) throw new Error('Empty response');
+
+    // Aggressive JSON extraction — find first [ and last ]
+    const start = rawText.indexOf('[');
+    const end   = rawText.lastIndexOf(']');
+    if(start === -1 || end === -1 || end <= start) throw new Error('No JSON array in response');
+
+    const jsonStr = rawText.slice(start, end+1)
+      .replace(/[\x00-\x1f\x7f]/g, ' ') // strip control chars
+      .replace(/,\s*]/g, ']')                  // trailing commas
+      .replace(/,\s*}/g, '}');
+
+    const items = JSON.parse(jsonStr);
+    if(!Array.isArray(items) || items.length === 0) throw new Error('Empty array');
+
+    newsCache[cat] = { items, ts: Date.now() };
+    renderNews(items, cat);
+
+  } catch(err) {
+    console.warn('News fetch error:', err.message);
+    // Show fallback static news instead of blank error
+    const fallback = NEWS_FALLBACK[cat] || NEWS_FALLBACK.eastel;
+    renderNews(fallback, cat);
+    // Show subtle notice
+    const feed = document.getElementById('news-feed');
+    if(feed){
+      const notice = document.createElement('div');
+      notice.style.cssText='font-size:10px;color:var(--muted);text-align:center;padding:8px 0;opacity:.6';
+      notice.innerHTML = (lang==='bm'?'Berita tempatan · ':'Local news · ')
+        +'<a onclick="refreshNews()" style="color:var(--cyan);cursor:pointer">'+(lang==='bm'?'Cuba semula':'Retry live')+'</a>';
+      feed.appendChild(notice);
+    }
+  } finally {
+    newsLoading = false;
+    const btn = document.getElementById('news-refresh-btn');
+    if(btn) btn.style.opacity='1';
+  }
+}
+
+function renderNews(items, cat){
+  const feed = document.getElementById('news-feed');
+  if(!feed) return;
+  if(!items || !items.length){
+    feed.innerHTML = '<div class="news-empty">No news found for this category.</div>';
+    return;
+  }
+
+  const catClass = 'ncat-'+cat;
+  const catLabel = lang==='bm' ? (CAT_LABELS_BM[cat]||cat) : (CAT_LABELS_EN[cat]||cat);
+  const icon = CAT_ICONS[cat]||'📰';
+
+  feed.innerHTML = items.map(item => `
+    <div class="news-item" onclick="window.open('${esc(item.url||'#')}','_blank')">
+      <span class="news-cat-tag ${catClass}">${icon} ${catLabel}</span>
+      <div class="news-headline">${esc(item.headline||'')}</div>
+      <div class="news-summary">${esc(item.summary||'')}</div>
+      <div class="news-meta">
+        <span class="news-source">${esc(item.source||'')}</span>
+        <span>·</span>
+        <span>${esc(item.time||'')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function refreshNews(){
+  // Clear cache for current cat and reload
+  delete newsCache[currentNewsCat];
+  loadNews(currentNewsCat);
+}
+
+// Auto-load news on sidebar render
+function initNewsPanel(){
+  // Only load if the news-feed element is visible
+  const feed = document.getElementById('news-feed');
+  if(feed) loadNews('eastel');
+}
+
+
+/* ─────────────────────────────────────
+   MEDIA & STORAGE
+───────────────────────────────────── */
+const BUCKET = 'eastel-media';
+let pendingMedia = []; // [{file, type, previewUrl}]
+
+/* ── Attach media to compose ── */
+function attachMedia(input, type){
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    if(pendingMedia.length >= 4){ toast(lang==='en'?'Max 4 files per post.':'Maksimum 4 fail setiap catatan.','err'); return; }
+    const url = URL.createObjectURL(file);
+    pendingMedia.push({file, type, previewUrl: url});
+    renderComposeMedia();
+  });
+  input.value = ''; // reset so same file can be re-added
+}
+
+function renderComposeMedia(){
+  const row = document.getElementById('compose-media-row');
+  if(!row) return;
+  row.innerHTML = pendingMedia.map((m,i) => `
+    <div class="compose-thumb">
+      ${m.type==='image'
+        ? `<img src="${m.previewUrl}" alt=""/>`
+        : `<video src="${m.previewUrl}" style="width:100%;height:100%;object-fit:cover"></video>`
+      }
+      <div class="compose-thumb-rm" onclick="removeMedia(${i})">✕</div>
+    </div>
+  `).join('');
+}
+
+function removeMedia(idx){
+  URL.revokeObjectURL(pendingMedia[idx].previewUrl);
+  pendingMedia.splice(idx,1);
+  renderComposeMedia();
+}
+
+/* ── Upload file to Supabase Storage ── */
+async function uploadFile(file, folder, onProgress){
+  const ext = file.name.split('.').pop();
+  const fname = folder+'/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'.'+ext;
+  const { data, error } = await sb.storage.from(BUCKET).upload(fname, file, {
+    cacheControl:'3600', upsert:false,
+    contentType: file.type,
+  });
+  if(error) throw error;
+  const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fname);
+  return urlData.publicUrl;
+}
+
+/* ── Submit post with media ── */
+const _origSubmitPost = submitPost;
+submitPost = async function(){
+  const content = v('compose-ta');
+  if(!content && pendingMedia.length===0){
+    toast(lang==='en'?'Please write something or attach a photo/video.':'Sila tulis sesuatu atau lampirkan foto/video.','err');
+    return;
+  }
+  if(!user){ toast(lang==='en'?'Please sign in first.':'Sila log masuk dahulu.','err'); return; }
+
+  // Upload media first
+  let mediaUrls = [];
+  if(pendingMedia.length > 0){
+    const prog = document.getElementById('compose-upload-prog');
+    const bar  = document.getElementById('compose-upload-bar');
+    if(prog){ prog.classList.remove('hidden'); bar.style.width='0%'; }
+
+    try {
+      for(let i=0; i<pendingMedia.length; i++){
+        const m = pendingMedia[i];
+        const folder = m.type==='image'?'images':'videos';
+        const url = await uploadFile(m.file, folder);
+        mediaUrls.push({url, type:m.type});
+        if(bar) bar.style.width = Math.round((i+1)/pendingMedia.length*100)+'%';
+      }
+    } catch(err){
+      toast('Upload error: '+err.message,'err');
+      if(prog) prog.classList.add('hidden');
+      return;
+    }
+    if(prog) prog.classList.add('hidden');
+  }
+
+  const row = {
+    user_id: user.id,
+    content: content || '',
+    post_type: curPostType,
+    likes_count: 0,
+    media_urls: mediaUrls.length ? JSON.stringify(mediaUrls) : null,
+    created_at: new Date().toISOString()
+  };
+
+  if(curPostType==='ad'){
+    const adTitle=v('ad-title'), adCat=document.getElementById('ad-cat').value, adContact=v('ad-contact');
+    if(!adTitle){ toast(lang==='en'?'Please enter an ad title.':'Sila masukkan tajuk iklan.','err'); return; }
+    row.title=adTitle; row.ad_category=adCat; row.ad_contact=adContact;
+  }
+
+  const {error} = await sb.from('posts').insert(row);
+  if(error){ toast('Error: '+error.message,'err'); return; }
+
+  // Reset
+  document.getElementById('compose-ta').value='';
+  document.getElementById('ad-title') && (document.getElementById('ad-title').value='');
+  document.getElementById('ad-contact') && (document.getElementById('ad-contact').value='');
+  pendingMedia.forEach(m=>URL.revokeObjectURL(m.previewUrl));
+  pendingMedia=[];
+  renderComposeMedia();
+  toast(lang==='en'?'Shared! 🚀':'Dikongsi! 🚀','ok');
+  loadPosts(true);
+};
+
+/* ── Render post media grid ── */
+function renderMediaGrid(mediaJson){
+  if(!mediaJson) return '';
+  let items;
+  try { items = JSON.parse(mediaJson); } catch{ return ''; }
+  if(!items || !items.length) return '';
+  const n = Math.min(items.length, 4);
+  const cls = 'n'+n;
+  const cells = items.slice(0,4).map((m,i) => {
+    if(m.type==='video'){
+      return `<div class="media-video-wrap">
+        <video src="${esc(m.url)}" style="width:100%;max-height:300px;object-fit:cover;border-radius:4px;cursor:pointer"
+          onclick="openLightboxVideo('${esc(m.url)}')" preload="metadata"></video>
+        <div class="media-play-icon">▶</div>
+      </div>`;
+    }
+    return `<img src="${esc(m.url)}" alt="post image" loading="lazy" onclick="openLightbox('${esc(m.url)}')"/>`;
+  }).join('');
+  return `<div class="post-media-grid ${cls}">${cells}</div>`;
+}
+
+/* ── Patch renderPost to include media ── */
+const _origRenderPost = renderPost;
+renderPost = function(p){
+  const html = _origRenderPost(p);
+  if(!p.media_urls) return html;
+  const mediaHtml = renderMediaGrid(p.media_urls);
+  // Insert media grid before post-body
+  return html.replace('<div class="post-body">', mediaHtml+'<div class="post-body">');
+};
+
+/* ── Lightbox ── */
+function openLightbox(url){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lightbox-img');
+  const vid=document.getElementById('lightbox-vid');
+  if(!lb||!img||!vid) return;
+  img.src=url; img.style.display='';
+  vid.style.display='none'; vid.src='';
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openLightboxVideo(url){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lightbox-img');
+  const vid=document.getElementById('lightbox-vid');
+  if(!lb||!img||!vid) return;
+  vid.src=url; vid.style.display='';
+  img.style.display='none'; img.src='';
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeLightbox(){
+  const lb=document.getElementById('lightbox');
+  const vid=document.getElementById('lightbox-vid');
+  if(lb) lb.classList.remove('open');
+  if(vid){ vid.pause(); vid.src=''; }
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); });
+
+/* ── Profile cover photo ── */
+function triggerCoverUpload(){
+  document.getElementById('cover-upload-in')?.click();
+}
+
+async function uploadCoverPhoto(input){
+  const file = input.files[0]; if(!file||!user) return;
+  showProfileUploadProgress();
+  try {
+    const url = await uploadFile(file, 'covers');
+    const { error } = await sb.from('profiles').update({ cover_url: url }).eq('id', user.id);
+    if(error) throw error;
+    if(currentProfile) currentProfile.cover_url = url;
+    applyProfilePhotos();
+    toast(lang==='en'?'Cover photo updated! 🖼️':'Foto sampul dikemas kini! 🖼️','ok');
+  } catch(e){ toast('Error: '+e.message,'err'); }
+  hideProfileUploadProgress();
+  input.value='';
+}
+
+/* ── Profile avatar photo ── */
+function triggerAvatarUpload(){
+  document.getElementById('avatar-upload-in')?.click();
+}
+
+async function uploadAvatarPhoto(input){
+  const file = input.files[0]; if(!file||!user) return;
+  showProfileUploadProgress();
+  try {
+    const url = await uploadFile(file, 'avatars');
+    const { error } = await sb.from('profiles').update({ avatar_url: url }).eq('id', user.id);
+    if(error) throw error;
+    if(currentProfile) currentProfile.avatar_url = url;
+    applyProfilePhotos();
+    // Also update nav avatar
+    applyNavAvatar();
+    toast(lang==='en'?'Profile photo updated! 📸':'Foto profil dikemas kini! 📸','ok');
+  } catch(e){ toast('Error: '+e.message,'err'); }
+  hideProfileUploadProgress();
+  input.value='';
+}
+
+function showProfileUploadProgress(){
+  const p=document.getElementById('profile-upload-prog');
+  const b=document.getElementById('profile-upload-bar');
+  if(p) p.classList.remove('hidden');
+  if(b){ b.style.width='0%'; let w=0; window._profProg=setInterval(()=>{ w=Math.min(w+8,85); b.style.width=w+'%'; },120); }
+}
+function hideProfileUploadProgress(){
+  clearInterval(window._profProg);
+  const p=document.getElementById('profile-upload-prog');
+  const b=document.getElementById('profile-upload-bar');
+  if(b) b.style.width='100%';
+  setTimeout(()=>{ if(p) p.classList.add('hidden'); },400);
+}
+
+function applyProfilePhotos(){
+  // Banner
+  const bannerImg = document.getElementById('prof-banner-img');
+  if(bannerImg && currentProfile?.cover_url){
+    bannerImg.src = currentProfile.cover_url;
+    bannerImg.style.display = '';
+  }
+  // Avatar
+  const profAv = document.getElementById('prof-av');
+  if(profAv){
+    if(currentProfile?.avatar_url){
+      profAv.innerHTML = `<img src="${currentProfile.avatar_url}" class="prof-av-img" alt="avatar"/>`;
+    } else {
+      profAv.innerHTML = initials(currentProfile?.full_name||'U');
+    }
+  }
+}
+
+function applyNavAvatar(){
+  const navAv = document.getElementById('nav-av');
+  const compAv = document.getElementById('compose-av');
+  if(currentProfile?.avatar_url){
+    if(navAv) navAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
+    if(compAv) compAv.innerHTML = `<img src="${currentProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`;
+  }
+}
+
+/* ── Edit Profile ── */
+function openEditProfile(){
+  populateStates('ep-state');
+  const ep = document.getElementById('ep-name');
+  const eb = document.getElementById('ep-bio');
+  if(ep) ep.value = currentProfile?.full_name||'';
+  if(eb) eb.value = currentProfile?.bio||'';
+  // Set state/district
+  const es = document.getElementById('ep-state');
+  if(es && currentProfile?.state){
+    Array.from(es.options).forEach(o=>{ if(o.value===currentProfile.state) o.selected=true; });
+    fillDistricts('ep-state','ep-district');
+    const ed = document.getElementById('ep-district');
+    if(ed && currentProfile?.district){
+      Array.from(ed.options).forEach(o=>{ if(o.value===currentProfile.district) o.selected=true; });
+    }
+  }
+  openModal('editprofile');
+}
+
+async function saveProfile(){
+  const name = v('ep-name'), bio = document.getElementById('ep-bio')?.value?.trim();
+  const state = v('ep-state'), district = v('ep-district');
+  if(!name){ msg('ep-msg',lang==='en'?'Name is required.':'Nama diperlukan.','err'); return; }
+  msg('ep-msg',lang==='en'?'Saving…':'Menyimpan…','');
+  const { error } = await sb.from('profiles').update({ full_name:name, bio, state, district }).eq('id', user.id);
+  if(error){ msg('ep-msg',error.message,'err'); return; }
+  currentProfile = {...currentProfile, full_name:name, bio, state, district};
+  loadProfileView();
+  closeModal('editprofile');
+  toast(lang==='en'?'Profile updated! ✅':'Profil dikemas kini! ✅','ok');
+}
+
+/* ── Comment with photo ── */
+async function sendCmt(postId){
+  const input = document.getElementById('ci-'+postId);
+  const fileIn = document.getElementById('cfi-'+postId);
+  const content = input?.value.trim();
+  const file = fileIn?.files[0];
+  if((!content && !file)||!user) return;
+
+  let photo_url = null;
+  if(file){
+    try { photo_url = await uploadFile(file,'comments'); }
+    catch(e){ toast('Image upload failed: '+e.message,'err'); return; }
+    fileIn.value='';
+    const prev = document.getElementById('cprev-'+postId);
+    if(prev) prev.innerHTML='';
+  }
+
+  await sb.from('comments').insert({
+    post_id:postId, user_id:user.id,
+    content:content||'', photo_url,
+    created_at:new Date().toISOString()
+  });
+  if(input) input.value='';
+  loadCmts(postId);
+}
+
+/* ── Patch cmt-in-row to add photo button ── */
+const _origRenderPostFn = renderPost;
+// Override the comment input row in rendered posts to include photo upload
+function buildCmtRow(postId, ini){
+  return `<div class="cmt-in-row">
+    <div class="avatar av32">${ini}</div>
+    <input class="cmt-in" id="ci-${postId}" placeholder="${lang==='en'?'Write a comment…':'Tulis komen…'}" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendCmt('${postId}')}"/>
+    <label class="upload-btn" style="padding:5px 8px;border-radius:50%;width:34px;height:34px;justify-content:center;flex-shrink:0" title="Add photo">
+      🖼️<input type="file" id="cfi-${postId}" accept="image/*" style="display:none" onchange="previewCmtImg('${postId}',this)"/>
+    </label>
+    <button class="cmt-send" onclick="sendCmt('${postId}')">↑</button>
+  </div>
+  <div id="cprev-${postId}"></div>`;
+}
+
+function previewCmtImg(postId, input){
+  const prev = document.getElementById('cprev-'+postId);
+  if(!prev) return;
+  const file = input.files[0];
+  if(!file){ prev.innerHTML=''; return; }
+  const url = URL.createObjectURL(file);
+  prev.innerHTML = `<div style="position:relative;display:inline-block;margin-top:4px">
+    <img src="${url}" style="height:60px;border-radius:6px;object-fit:cover"/>
+    <div class="compose-thumb-rm" onclick="removeCmtImg('${postId}','${url}')">✕</div>
+  </div>`;
+}
+function removeCmtImg(postId, url){
+  const fi = document.getElementById('cfi-'+postId);
+  if(fi) fi.value='';
+  URL.revokeObjectURL(url);
+  const prev = document.getElementById('cprev-'+postId);
+  if(prev) prev.innerHTML='';
+}
+
+/* ── Patch loadCmts to show comment photos ── */
+const _origLoadCmts = loadCmts;
+loadCmts = async function(id){
+  const {data} = await sb.from('comments')
+    .select('*,profiles(full_name,avatar_url)')
+    .eq('post_id',id)
+    .order('created_at',{ascending:true});
+  const cl = document.getElementById('cl-'+id); if(!cl) return;
+  if(!data||!data.length){
+    cl.innerHTML=`<p class="text-muted text-sm" style="padding:6px 0">${lang==='en'?'No comments yet.':'Tiada komen lagi.'}</p>`;
+    return;
+  }
+  const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
+  cl.innerHTML = data.map(c=>{
+    const avHtml = c.profiles?.avatar_url
+      ? `<img src="${esc(c.profiles.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="av"/>`
+      : initials(c.profiles?.full_name||'U');
+    return `<div class="cmt-item">
+      <div class="avatar av32">${avHtml}</div>
+      <div style="flex:1;min-width:0">
+        <span class="cmt-who">${esc(c.profiles?.full_name||'User')}</span>
+        <span class="cmt-when">${timeAgo(c.created_at)}</span>
+        ${c.content ? `<div class="cmt-txt">${esc(c.content)}</div>` : ''}
+        ${c.photo_url ? `<div class="cmt-media" onclick="openLightbox('${esc(c.photo_url)}')"><img src="${esc(c.photo_url)}" alt="comment photo"/></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  // Re-render comment input with photo button
+  const inputRow = document.querySelector(`#cmts-${id} .cmt-in-row`);
+  if(inputRow){
+    inputRow.outerHTML = buildCmtRow(id, ini);
+  }
+};
+
+/* ── Patch toggleComments to use new buildCmtRow ── */
+const _origToggleCmt = toggleCmt;
+toggleCmt = function(id){
+  const el = document.getElementById('cmts-'+id);
+  if(el.classList.contains('hidden')){
+    el.classList.remove('hidden');
+    // Rebuild with photo button
+    const ini = currentProfile ? initials(currentProfile.full_name) : 'U';
+    const inputRow = el.querySelector('.cmt-in-row');
+    if(inputRow) inputRow.outerHTML = buildCmtRow(id, ini);
+    loadCmts(id);
+  } else {
+    el.classList.add('hidden');
+  }
+};
+
+/* ── Patch onLogin to apply photos ── */
+const _origOnLogin = onLogin;
+onLogin = async function(u){
+  await _origOnLogin(u);
+  // Apply profile photos after login
+  setTimeout(()=>{
+    applyProfilePhotos();
+    applyNavAvatar();
+  }, 400);
+};
+
+/* ── Patch loadProfileView to show photos ── */
+const _origLoadProfileView = loadProfileView;
+loadProfileView = async function(){
+  await _origLoadProfileView();
+  applyProfilePhotos();
+};
 
 /* ─────────────────────────────────────
    BOOT
